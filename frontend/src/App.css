@@ -1,0 +1,113 @@
+.App {
+  height: 100vh;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.main-layout {
+  display: flex;
+  height: 100vh;
+  gap: 20px;
+  padding: 20px;
+}
+
+.video-section {
+  flex: 2;
+  display: flex;
+  flex-direction: column;
+}
+
+.video-section h2 {
+  margin-bottom: 15px;
+  color: #333;
+}
+
+.url-input {
+  width: 100%;
+  padding: 12px;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  font-size: 16px;
+  margin-bottom: 15px;
+}
+
+.url-input:focus {
+  border-color: #4CAF50;
+  outline: none;
+}
+
+.extract-btn {
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+  margin-bottom: 20px;
+  width: fit-content;
+}
+
+.extract-btn:hover {
+  background-color: #45a049;
+}
+
+.video-placeholder {
+  flex: 1;
+  border: 2px dashed #ddd;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+}
+
+.placeholder-text {
+  color: #888;
+  font-size: 18px;
+}
+
+.content-panel {
+  flex: 1;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  padding: 20px;
+  overflow-y: auto;
+}
+
+.vocabulary-section, .grammar-section {
+  margin-bottom: 30px;
+}
+
+.vocabulary-section h3, .grammar-section h3 {
+  color: #2c3e50;
+  margin-bottom: 15px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid #3498db;
+}
+
+.content-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.content-item {
+  background-color: white;
+  padding: 15px;
+  border-radius: 8px;
+  border-left: 4px solid #3498db;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.content-item strong {
+  color: #2c3e50;
+  display: block;
+  margin-bottom: 5px;
+  font-size: 16px;
+}
+
+.content-item p {
+  color: #7f8c8d;
+  margin: 0;
+  line-height: 1.4;
+}

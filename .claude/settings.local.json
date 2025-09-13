@@ -1,0 +1,25 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(mkdir:*)",
+      "Bash(npx create-react-app:*)",
+      "Bash(python:*)",
+      "Bash(venv\\Scripts\\activate:*)",
+      "Bash(pip install:*)",
+      "Bash(.\\venv\\Scripts\\activate)",
+      "Bash(call venv\\Scripts\\activate.bat)",
+      "Bash(source:*)",
+      "Bash(npm start)",
+      "Bash(npm install)",
+      "Bash(GENERATE_SOURCEMAP=false npm start)",
+      "Bash(PORT=3001 npm start)",
+      "Bash(npm install:*)",
+      "Bash(tasklist:*)",
+      "Bash(netstat:*)",
+      "Bash(findstr:*)",
+      "Bash(chmod:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
