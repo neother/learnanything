@@ -1,0 +1,250 @@
+{
+  "video_id": "RBgjzSk_38M",
+  "learning_timestamp": 1757948183.837643,
+  "type": "learning_content",
+  "source": "ai_extracted_content",
+  "statistics": {
+    "vocabulary_count": 8,
+    "grammar_count": 4,
+    "total_learning_items": 12
+  },
+  "vocabulary": [
+    {
+      "word": "must",
+      "definition": "have to do something",
+      "level": "A2",
+      "timestamp": 0,
+      "end_time": 7,
+      "word_timestamp": 0,
+      "sentence_duration": 7,
+      "context_type": "real_transcript",
+      "playback_mode": "smart_buffered_with_punct_detection",
+      "translation": "must",
+      "sentence": "in this video let's talk about the difference between should must and half-",
+      "sentence_start_time": 0.03,
+      "sentence_end_time": 5.788146186440678,
+      "definition_zh": "",
+      "usage": "",
+      "examples": [],
+      "synonyms": [],
+      "collocations": [],
+      "pos": []
+    },
+    {
+      "word": "talk",
+      "definition": "English definition of talk",
+      "level": "A1",
+      "timestamp": 0,
+      "end_time": 6,
+      "word_timestamp": 0,
+      "sentence_duration": 6,
+      "context_type": "real_transcript",
+      "playback_mode": "smart_buffered_with_punct_detection",
+      "translation": "talk",
+      "sentence": "in this video let's talk about the difference between should must and half-",
+      "sentence_start_time": 0.03,
+      "sentence_end_time": 5.788146186440678,
+      "definition_zh": "talk的中文意思",
+      "usage": "需要手动添加用法说明",
+      "examples": [
+        {
+          "en": "Example sentence with talk.",
+          "zh": "包含talk的例句。",
+          "level": "A1"
+        }
+      ],
+      "synonyms": [],
+      "collocations": [],
+      "pos": [
+        "unknown"
+      ]
+    },
+    {
+      "word": "about",
+      "definition": "concerning; approximately",
+      "level": "A1",
+      "timestamp": 0,
+      "end_time": 6,
+      "word_timestamp": 0,
+      "sentence_duration": 6,
+      "context_type": "real_transcript",
+      "playback_mode": "smart_buffered_with_punct_detection",
+      "translation": "关于",
+      "sentence": "in this video let's talk about the difference between should must and half-",
+      "sentence_start_time": 0.03,
+      "sentence_end_time": 5.788146186440678,
+      "definition_zh": "关于，大约",
+      "usage": "介词：表示主题或话题（about something）；副词：表示大约的数量或时间（about 10 minutes）",
+      "examples": [
+        {
+          "en": "This book is about history.",
+          "zh": "这本书是关于历史的。",
+          "level": "A1"
+        },
+        {
+          "en": "He arrived at about six o'clock.",
+          "zh": "他大约六点钟到的。",
+          "level": "A2"
+        }
+      ],
+      "synonyms": [
+        "concerning",
+        "regarding",
+        "approximately"
+      ],
+      "collocations": [
+        "about time",
+        "about to",
+        "think about",
+        "talk about"
+      ],
+      "pos": [
+        "prep",
+        "adv"
+      ]
+    },
+    {
+      "word": "verb",
+      "definition": "an action word",
+      "level": "A2",
+      "timestamp": 45,
+      "end_time": 51,
+      "word_timestamp": 46,
+      "sentence_duration": 5,
+      "context_type": "real_transcript",
+      "playback_mode": "simple_buffered",
+      "translation": "verb",
+      "sentence": "have to now all three of these are modal verbsand",
+      "sentence_start_time": 46.095169491525425,
+      "sentence_end_time": 50.52451271186441,
+      "definition_zh": "",
+      "usage": "",
+      "examples": [],
+      "synonyms": [],
+      "collocations": [],
+      "pos": []
+    },
+    {
+      "word": "obligation",
+      "definition": "something you have to do",
+      "level": "A2",
+      "timestamp": 49,
+      "end_time": 58,
+      "word_timestamp": 50,
+      "sentence_duration": 8,
+      "context_type": "real_transcript",
+      "playback_mode": "smart_buffered_with_punct_detection",
+      "translation": "obligation",
+      "sentence": "we use them to talk about obligation or to give advice first let's talk about",
+      "sentence_start_time": 50.52451271186441,
+      "sentence_end_time": 57.168527542372885,
+      "definition_zh": "",
+      "usage": "",
+      "examples": [],
+      "synonyms": [],
+      "collocations": [],
+      "pos": []
+    },
+    {
+      "word": "advice",
+      "definition": "helpful suggestions from others",
+      "level": "A2",
+      "timestamp": 49,
+      "end_time": 58,
+      "word_timestamp": 50,
+      "sentence_duration": 8,
+      "context_type": "real_transcript",
+      "playback_mode": "smart_buffered_with_punct_detection",
+      "translation": "advice",
+      "sentence": "we use them to talk about obligation or to give advice first let's talk about",
+      "sentence_start_time": 50.52451271186441,
+      "sentence_end_time": 57.168527542372885,
+      "definition_zh": "",
+      "usage": "",
+      "examples": [],
+      "synonyms": [],
+      "collocations": [],
+      "pos": []
+    },
+    {
+      "word": "give",
+      "definition": "English definition of give",
+      "level": "A1",
+      "timestamp": 49,
+      "end_time": 58,
+      "word_timestamp": 50,
+      "sentence_duration": 8,
+      "context_type": "real_transcript",
+      "playback_mode": "smart_buffered_with_punct_detection",
+      "translation": "给",
+      "sentence": "we use them to talk about obligation or to give advice first let's talk about",
+      "sentence_start_time": 50.52451271186441,
+      "sentence_end_time": 57.168527542372885,
+      "definition_zh": "give的中文意思",
+      "usage": "需要手动添加用法说明",
+      "examples": [
+        {
+          "en": "Example sentence with give.",
+          "zh": "包含give的例句。",
+          "level": "A1"
+        }
+      ],
+      "synonyms": [],
+      "collocations": [],
+      "pos": [
+        "unknown"
+      ]
+    },
+    {
+      "word": "base",
+      "definition": "the bottom part of something",
+      "level": "A2",
+      "timestamp": 95,
+      "end_time": 102,
+      "word_timestamp": 97,
+      "sentence_duration": 7,
+      "context_type": "real_transcript",
+      "playback_mode": "smart_buffered_with_punct_detection",
+      "translation": "base",
+      "sentence": "a base verb the base verb is simply the infinitive without-",
+      "sentence_start_time": 97.47555084745765,
+      "sentence_end_time": 102.34782838983054,
+      "definition_zh": "",
+      "usage": "",
+      "examples": [],
+      "synonyms": [],
+      "collocations": [],
+      "pos": []
+    }
+  ],
+  "grammar": [
+    {
+      "concept": "Articles (a, an, the)",
+      "explanation": "Words used before nouns to specify or generalize",
+      "level": "A1",
+      "example": "",
+      "timestamp": 26
+    },
+    {
+      "concept": "Comparatives and Superlatives",
+      "explanation": "Used to compare things and show the highest degree",
+      "level": "A2",
+      "example": "more ",
+      "timestamp": 36
+    },
+    {
+      "concept": "Present/Past Simple (to be)",
+      "explanation": "The verb 'to be' used to describe states, locations, and identities",
+      "level": "A1",
+      "example": "is",
+      "timestamp": 135
+    },
+    {
+      "concept": "Present Continuous",
+      "explanation": "Used to describe actions happening now or around now",
+      "level": "A1",
+      "example": "now ",
+      "timestamp": 153
+    }
+  ]
+}

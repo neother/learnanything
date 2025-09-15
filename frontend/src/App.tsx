@@ -42,11 +42,15 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [userLevel, setUserLevel] = useState("A2");
   const [subtitleText, setSubtitleText] = useState("");
-  const [currentPlayingWord, setCurrentPlayingWord] = useState<string | null>(null);
-  const [playbackTimer, setPlaybackTimer] = useState<NodeJS.Timeout | null>(null);
-  const [aiTeacherResponse, setAiTeacherResponse] = useState<string>('');
+  const [currentPlayingWord, setCurrentPlayingWord] = useState<string | null>(
+    null
+  );
+  const [playbackTimer, setPlaybackTimer] = useState<NodeJS.Timeout | null>(
+    null
+  );
+  const [aiTeacherResponse, setAiTeacherResponse] = useState<string>("");
   const [showAiTeacher, setShowAiTeacher] = useState<boolean>(false);
-  const [selectedWord, setSelectedWord] = useState<string>('');
+  const [selectedWord, setSelectedWord] = useState<string>("");
   const playerRef = useRef<HTMLDivElement>(null);
 
   const getYouTubeVideoId = (url: string): string => {
@@ -55,7 +59,7 @@ function App() {
     const patterns = [
       /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com|youtu\.be)\/(?:watch\?v=|embed\/|v\/)?([a-zA-Z0-9_-]{11})/,
       /(?:https?:\/\/)?(?:www\.)?youtube\.com\/watch\?.*v=([a-zA-Z0-9_-]{11})/,
-      /(?:https?:\/\/)?youtu\.be\/([a-zA-Z0-9_-]{11})/
+      /(?:https?:\/\/)?youtu\.be\/([a-zA-Z0-9_-]{11})/,
     ];
 
     for (const pattern of patterns) {
@@ -83,10 +87,10 @@ function App() {
     }
   }, []);
 
-  // Create YouTube player when API is ready
+  // Create YouTube player when API is ready (only once)
   useEffect(() => {
     const videoId = getYouTubeVideoId(videoUrl);
-    if (isPlayerReady && videoId && playerRef.current) {
+    if (isPlayerReady && videoId && playerRef.current && !player) {
       console.log("Creating YouTube player for:", videoId);
 
       try {
@@ -114,19 +118,32 @@ function App() {
             },
             onStateChange: (event: any) => {
               console.log("Player state changed:", event.data);
-            }
-          }
+            },
+          },
         });
       } catch (error) {
         console.error("Error creating YouTube player:", error);
       }
     }
-  }, [isPlayerReady, videoUrl]);
+  }, [isPlayerReady, videoUrl, player]);
+
+  // Load new video when URL changes (using existing player)
+  useEffect(() => {
+    const videoId = getYouTubeVideoId(videoUrl);
+    if (player && videoId && player.cueVideoById) {
+      console.log("Cueing new video (without autoplay):", videoId);
+      try {
+        player.cueVideoById(videoId); // Cue video but don't start playing
+      } catch (error) {
+        console.error("Error cueing video:", error);
+      }
+    }
+  }, [player, videoUrl]);
 
   // Cleanup on unmount
   useEffect(() => {
     return () => {
-      if (player && typeof player.destroy === 'function') {
+      if (player && typeof player.destroy === "function") {
         try {
           player.destroy();
         } catch (error) {
@@ -139,8 +156,8 @@ function App() {
   // Helper function to check if player is valid and ready
   const isPlayerReadyCheck = (playerObj: any): boolean => {
     if (!playerObj) return false;
-    if (typeof playerObj.seekTo !== 'function') return false;
-    if (typeof playerObj.getPlayerState !== 'function') return false;
+    if (typeof playerObj.seekTo !== "function") return false;
+    if (typeof playerObj.getPlayerState !== "function") return false;
     return true;
   };
 
@@ -150,7 +167,7 @@ function App() {
       return;
     }
 
-    if (typeof item.timestamp !== 'number') {
+    if (typeof item.timestamp !== "number") {
       console.warn("Invalid timestamp for item:", item);
       return;
     }
@@ -158,7 +175,10 @@ function App() {
     // Stop any current playback
     stopCurrentPlayback();
 
-    const wordKey = 'word' in item ? `${item.word}-${item.timestamp}` : `${item.concept}-${item.timestamp}`;
+    const wordKey =
+      "word" in item
+        ? `${item.word}-${item.timestamp}`
+        : `${item.concept}-${item.timestamp}`;
     setCurrentPlayingWord(wordKey);
 
     try {
@@ -166,7 +186,7 @@ function App() {
       player.playVideo();
 
       // If we have end time, auto-stop at the end
-      if (typeof item.end_time === 'number') {
+      if (typeof item.end_time === "number") {
         const startTime = item.timestamp;
         const endTime = item.end_time;
         const duration = (endTime - startTime) * 1000;
@@ -206,11 +226,15 @@ function App() {
     setCurrentPlayingWord(null);
   };
 
-  const callAiTeacher = async (word: string, definition: string, sentence: string) => {
+  const callAiTeacher = async (
+    word: string,
+    definition: string,
+    sentence: string
+  ) => {
     try {
       console.log("Calling AI Teacher for word:", word);
 
-      const response = await fetch("http://192.168.0.170:8000/api/ai-teacher", {
+      const response = await fetch("http://192.168.0.66:8000/api/ai-teacher", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -218,7 +242,7 @@ function App() {
         body: JSON.stringify({
           word,
           definition,
-          sentence
+          sentence,
         }),
       });
 
@@ -246,7 +270,7 @@ function App() {
     try {
       console.log("Requesting content extraction for:", videoUrl);
       const response = await fetch(
-        "http://192.168.0.170:8000/api/extract-content",
+        "http://192.168.0.66:8000/api/extract-content",
         {
           method: "POST",
           headers: {
@@ -294,14 +318,14 @@ function App() {
   // Get level color for CEFR levels
   const getLevelColor = (level: string) => {
     const levelColors: { [key: string]: string } = {
-      'A1': '#28a745', // Green
-      'A2': '#17a2b8', // Cyan
-      'B1': '#007bff', // Blue
-      'B2': '#6610f2', // Purple
-      'C1': '#fd7e14', // Orange
-      'C2': '#dc3545'  // Red
+      A1: "#28a745", // Green
+      A2: "#17a2b8", // Cyan
+      B1: "#007bff", // Blue
+      B2: "#6610f2", // Purple
+      C1: "#fd7e14", // Orange
+      C2: "#dc3545", // Red
     };
-    return levelColors[level.toUpperCase()] || '#6c757d';
+    return levelColors[level.toUpperCase()] || "#6c757d";
   };
 
   // Render vocabulary item with timestamp, translation on same row, and subtitle below
@@ -312,7 +336,9 @@ function App() {
     return (
       <div
         key={index}
-        className={`content-item ${item.timestamp !== undefined ? "clickable" : ""} ${isPlaying ? "flashing" : ""}`}
+        className={`content-item ${
+          item.timestamp !== undefined ? "clickable" : ""
+        } ${isPlaying ? "flashing" : ""}`}
         onClick={() => item.timestamp !== undefined && seekToTimestamp(item)}
         style={{
           cursor: item.timestamp !== undefined ? "pointer" : "default",
@@ -320,36 +346,55 @@ function App() {
           borderRadius: "8px",
           border: "1px solid #e0e0e0",
           marginBottom: "8px",
-          transition: "all 0.2s ease"
+          transition: "all 0.2s ease",
         }}
       >
         {/* First row: Word + Translation + Timestamp + Level */}
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "4px" }}>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            marginBottom: "4px",
+          }}
+        >
           <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-            <strong style={{ fontSize: "16px", color: "#2c3e50" }}>{item.word}</strong>
+            <strong style={{ fontSize: "16px", color: "#2c3e50" }}>
+              {item.word}
+            </strong>
             {item.translation && (
               <span style={{ color: "#6c757d", fontSize: "14px" }}>
                 ({item.translation})
               </span>
             )}
             {item.timestamp !== undefined && (
-              <span style={{
-                backgroundColor: "#e74c3c",
-                color: "white",
-                padding: "2px 6px",
-                borderRadius: "4px",
-                fontSize: "11px",
-                fontWeight: "bold",
-                marginLeft: "4px"
-              }}>
-                {Math.floor(item.timestamp / 60)}:{(item.timestamp % 60).toString().padStart(2, '0')}
+              <span
+                style={{
+                  backgroundColor: "#e74c3c",
+                  color: "white",
+                  padding: "2px 6px",
+                  borderRadius: "4px",
+                  fontSize: "11px",
+                  fontWeight: "bold",
+                  marginLeft: "4px",
+                }}
+              >
+                {Math.floor(item.timestamp / 60)}:
+                {(item.timestamp % 60).toString().padStart(2, "0")}
+                {item.end_time !== undefined && (
+                  <>
+                    {" - "}
+                    {Math.floor(item.end_time / 60)}:
+                    {(item.end_time % 60).toString().padStart(2, "0")}
+                  </>
+                )}
               </span>
             )}
             {/* AI Teacher Button */}
             <button
               onClick={(e) => {
                 e.stopPropagation();
-                callAiTeacher(item.word, item.definition, item.sentence || '');
+                callAiTeacher(item.word, item.definition, item.sentence || "");
               }}
               style={{
                 backgroundColor: "#28a745",
@@ -359,21 +404,26 @@ function App() {
                 borderRadius: "4px",
                 fontSize: "11px",
                 cursor: "pointer",
-                marginLeft: "4px"
+                marginLeft: "4px",
               }}
               title="AI老师帮助"
             >
               🎓 AI
             </button>
           </div>
-          <span className="level-badge" style={{
-            backgroundColor: getLevelColor(item.level),
-            color: "white",
-            padding: "2px 6px",
-            borderRadius: "4px",
-            fontSize: "12px",
-            fontWeight: "bold"
-          }}>{item.level}</span>
+          <span
+            className="level-badge"
+            style={{
+              backgroundColor: getLevelColor(item.level),
+              color: "white",
+              padding: "2px 6px",
+              borderRadius: "4px",
+              fontSize: "12px",
+              fontWeight: "bold",
+            }}
+          >
+            {item.level}
+          </span>
         </div>
 
         {/* Second row: Definition */}
@@ -383,21 +433,25 @@ function App() {
 
         {/* Third row: Subtitle sentence with highlighted word */}
         {item.sentence && (
-          <div style={{
-            padding: "8px",
-            backgroundColor: "#f8f9fa",
-            borderRadius: "4px",
-            fontSize: "13px",
-            fontStyle: "italic",
-            color: "#666",
-            border: "1px solid #e9ecef"
-          }}>
-            <span dangerouslySetInnerHTML={{
-              __html: item.sentence.replace(
-                new RegExp(`\\b${item.word}\\b`, 'gi'),
-                `<mark style="background-color: #fff3cd; padding: 1px 2px; border-radius: 2px; font-weight: bold;">${item.word}</mark>`
-              )
-            }} />
+          <div
+            style={{
+              padding: "8px",
+              backgroundColor: "#f8f9fa",
+              borderRadius: "4px",
+              fontSize: "13px",
+              fontStyle: "italic",
+              color: "#666",
+              border: "1px solid #e9ecef",
+            }}
+          >
+            <span
+              dangerouslySetInnerHTML={{
+                __html: item.sentence.replace(
+                  new RegExp(`\\b${item.word}\\b`, "gi"),
+                  `<mark style="background-color: #fff3cd; padding: 1px 2px; border-radius: 2px; font-weight: bold;">${item.word}</mark>`
+                ),
+              }}
+            />
           </div>
         )}
       </div>
@@ -412,7 +466,9 @@ function App() {
     return (
       <div
         key={index}
-        className={`content-item ${item.timestamp !== undefined ? "clickable" : ""}`}
+        className={`content-item ${
+          item.timestamp !== undefined ? "clickable" : ""
+        }`}
         onClick={() => item.timestamp !== undefined && seekToTimestamp(item)}
         style={{
           cursor: item.timestamp !== undefined ? "pointer" : "default",
@@ -421,18 +477,20 @@ function App() {
           padding: "12px",
           borderRadius: "8px",
           border: "1px solid #e0e0e0",
-          marginBottom: "8px"
+          marginBottom: "8px",
         }}
       >
         <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
           <strong>{item.concept}</strong>
           <span className="level-badge">{item.level}</span>
           {isPlaying && (
-            <span style={{
-              color: "#28a745",
-              fontSize: "12px",
-              fontWeight: "bold"
-            }}>
+            <span
+              style={{
+                color: "#28a745",
+                fontSize: "12px",
+                fontWeight: "bold",
+              }}
+            >
               🔊 Playing
             </span>
           )}
@@ -447,10 +505,19 @@ function App() {
   return (
     <div className="App">
       {/* Header */}
-      <header style={{ padding: "10px 20px", background: "#f8f9fa", borderBottom: "1px solid #ddd" }}>
-        <h1 style={{ margin: "0", fontSize: "24px", color: "#333" }}>🎓 Immersive Language Learning</h1>
+      <header
+        style={{
+          padding: "10px 20px",
+          background: "#f8f9fa",
+          borderBottom: "1px solid #ddd",
+        }}
+      >
+        <h1 style={{ margin: "0", fontSize: "24px", color: "#333" }}>
+          🎓 Immersive Language Learning
+        </h1>
         <p style={{ margin: "5px 0 0 0", color: "#666", fontSize: "14px" }}>
-          Learn languages through YouTube videos with vocabulary and grammar extraction!
+          Learn languages through YouTube videos with vocabulary and grammar
+          extraction!
         </p>
       </header>
 
@@ -478,34 +545,50 @@ function App() {
               {loading ? "Processing..." : "Extract Content"}
             </button>
             <button
-              onClick={() => setVideoUrl("https://www.youtube.com/watch?v=_lLkyJJm_o4")}
+              onClick={() =>
+                setVideoUrl("https://www.youtube.com/watch?v=_lLkyJJm_o4")
+              }
               className="extract-btn"
               style={{ backgroundColor: "#007bff" }}
             >
-              Test Video
+              Test Video 1
+            </button>
+            <button
+              onClick={() =>
+                setVideoUrl("https://www.youtube.com/watch?v=RBgjzSk_38M")
+              }
+              className="extract-btn"
+              style={{ backgroundColor: "#28a745" }}
+            >
+              Test Video 2
             </button>
           </div>
 
           {/* Video Player */}
           <div className="video-placeholder">
             {videoUrl && getYouTubeVideoId(videoUrl) ? (
-              <div ref={playerRef} style={{ width: "100%", height: "100%" }}></div>
+              <div
+                ref={playerRef}
+                style={{ width: "100%", height: "100%" }}
+              ></div>
             ) : (
               <div className="placeholder-text">
                 Enter a YouTube URL above to load the video
               </div>
             )}
             {!player && isPlayerReady && (
-              <div style={{
-                position: "absolute",
-                top: "10px",
-                right: "10px",
-                background: "rgba(0,0,0,0.7)",
-                color: "white",
-                padding: "5px 10px",
-                borderRadius: "5px",
-                fontSize: "12px"
-              }}>
+              <div
+                style={{
+                  position: "absolute",
+                  top: "10px",
+                  right: "10px",
+                  background: "rgba(0,0,0,0.7)",
+                  color: "white",
+                  padding: "5px 10px",
+                  borderRadius: "5px",
+                  fontSize: "12px",
+                }}
+              >
                 YouTube API Ready
               </div>
             )}
@@ -519,8 +602,15 @@ function App() {
             <h3>📚 Vocabulary ({filteredVocabulary.length})</h3>
             <div className="content-list">
               {filteredVocabulary.length === 0 ? (
-                <div style={{ color: "#888", textAlign: "center", padding: "20px" }}>
-                  No vocabulary extracted yet. Click "Extract Content" to analyze a video!
+                <div
+                  style={{
+                    color: "#888",
+                    textAlign: "center",
+                    padding: "20px",
+                  }}
+                >
+                  No vocabulary extracted yet. Click "Extract Content" to
+                  analyze a video!
                 </div>
               ) : (
                 filteredVocabulary.map(renderVocabularyItem)
@@ -533,8 +623,15 @@ function App() {
             <h3>📝 Grammar ({filteredGrammar.length})</h3>
             <div className="content-list">
               {filteredGrammar.length === 0 ? (
-                <div style={{ color: "#888", textAlign: "center", padding: "20px" }}>
-                  No grammar concepts extracted yet. Click "Extract Content" to analyze a video!
+                <div
+                  style={{
+                    color: "#888",
+                    textAlign: "center",
+                    padding: "20px",
+                  }}
+                >
+                  No grammar concepts extracted yet. Click "Extract Content" to
+                  analyze a video!
                 </div>
               ) : (
                 filteredGrammar.map(renderGrammarItem)
@@ -546,36 +643,42 @@ function App() {
 
       {/* AI Teacher Modal */}
       {showAiTeacher && (
-        <div style={{
-          position: "fixed",
-          top: "0",
-          left: "0",
-          right: "0",
-          bottom: "0",
-          backgroundColor: "rgba(0,0,0,0.5)",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          zIndex: 1000
-        }}>
-          <div style={{
-            backgroundColor: "white",
-            padding: "20px",
-            borderRadius: "12px",
-            maxWidth: "600px",
-            maxHeight: "80vh",
-            overflow: "auto",
-            margin: "20px",
-            boxShadow: "0 4px 20px rgba(0,0,0,0.15)"
-          }}>
-            <div style={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              marginBottom: "15px",
-              borderBottom: "2px solid #f0f0f0",
-              paddingBottom: "10px"
-            }}>
+        <div
+          style={{
+            position: "fixed",
+            top: "0",
+            left: "0",
+            right: "0",
+            bottom: "0",
+            backgroundColor: "rgba(0,0,0,0.5)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            zIndex: 1000,
+          }}
+        >
+          <div
+            style={{
+              backgroundColor: "white",
+              padding: "20px",
+              borderRadius: "12px",
+              maxWidth: "600px",
+              maxHeight: "80vh",
+              overflow: "auto",
+              margin: "20px",
+              boxShadow: "0 4px 20px rgba(0,0,0,0.15)",
+            }}
+          >
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                marginBottom: "15px",
+                borderBottom: "2px solid #f0f0f0",
+                paddingBottom: "10px",
+              }}
+            >
               <h3 style={{ margin: "0", color: "#2c3e50" }}>
                 🎓 AI老师：{selectedWord}
               </h3>
@@ -588,18 +691,20 @@ function App() {
                   padding: "8px 12px",
                   borderRadius: "6px",
                   cursor: "pointer",
-                  fontSize: "14px"
+                  fontSize: "14px",
                 }}
               >
                 关闭
               </button>
             </div>
-            <div style={{
-              whiteSpace: "pre-line",
-              lineHeight: "1.6",
-              color: "#333",
-              fontSize: "14px"
-            }}>
+            <div
+              style={{
+                whiteSpace: "pre-line",
+                lineHeight: "1.6",
+                color: "#333",
+                fontSize: "14px",
+              }}
+            >
               {aiTeacherResponse}
             </div>
           </div>
