@@ -35,7 +35,19 @@
       "Bash(./venv/bin/pip list)",
       "Bash(pip3 install:*)",
       "Bash(pkill:*)",
-      "Bash(./start-dev.sh:*)"
+      "Bash(./start-dev.sh:*)",
+      "Bash(.start-dev.bat)",
+      "Bash(start-dev.bat)",
+      "Bash(taskkill:*)",
+      "Bash(ipconfig)",
+      "Bash(cmd /c:*)",
+      "Bash(venvScripts:*)",
+      "Bash(call venvScriptsactivate.bat)",
+      "Bash(dir:*)",
+      "Bash(del \"E:\\learnanything\\backend\\backend\\cache\\subtitles\\_lLkyJJm_o4_proc.json\")",
+      "Bash(del nul)",
+      "Bash(rm:*)",
+      "Bash(git add:*)"
     ],
     "deny": [],
     "ask": []

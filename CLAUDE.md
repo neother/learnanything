@@ -14,38 +14,68 @@ A web-based immersive language learning application designed for kids to learn l
 - **Styling:** CSS3 with modern responsive design
 - **Development:** Node.js, npm, Python virtual environment
 
-## Current Status: Functional MVP - Ready for Testing! 🎉
+## Current Status: Enhanced Learning Experience with Left-Right Layout! 🚀
 
 ### ✅ **Completed Features**
-- **Backend Processing:**
-  - Real YouTube subtitle extraction via YouTube Transcript API + yt-dlp fallback
-  - Advanced subtitle processing pipeline with 5-step processing
-  - Intelligent sentence splitting at punctuation boundaries (periods, commas, question marks, exclamation marks)
-  - Single-word segment merging for better context
-  - Smart timing adjustments for vocabulary learning (2-second slides for context)
-  - CEFR-based vocabulary difficulty classification (A1→C2) with 16K+ words
-  - Proper name detection (Charlie, Utah, etc.) automatically classified as A1
-  - Subtitle caching system with 7-day expiration
 
-- **Frontend Experience:**
-  - ✅ Interactive single-play word functionality (click → play once → auto-stop)
-  - ✅ Visual feedback with highlighting and "🔊 Playing" indicators
-  - ✅ Pulse animation for playing words
-  - ✅ Test Video button for quick testing: `https://www.youtube.com/watch?v=_lLkyJJm_o4`
-  - ✅ Clean TypeScript compilation with no errors
-  - ✅ Responsive UI with smooth animations
+#### **Backend Processing Engine:**
+- **Real YouTube subtitle extraction** via YouTube Transcript API + yt-dlp fallback
+- **Advanced 5-step subtitle processing pipeline**:
+  1. Fragment combination into complete sentences
+  2. Smart punctuation boundary splitting
+  3. Single-word segment merging for context
+  4. Long segment splitting for optimal learning
+  5. Final context optimization
+- **CEFR-based vocabulary classification** (A1→C2) with 16,000+ word database
+- **Intelligent proper noun filtering** - automatically skips names, places, brands
+- **Chinese translation system** with local caching via Google Translate API
+- **Subtitle caching system** with 7-day expiration for performance
 
-### 🎯 **Ready for Testing**
-- Both frontend (localhost:3000) and backend (localhost:8000) running smoothly
-- Single-play vocabulary functionality fully implemented and tested
-- Click any vocabulary word → hear sentence once → auto-stop
-- Visual indicators show which word is currently playing
+#### **Frontend User Experience:**
+- **✅ Left-Right Split Layout** - Video player on left, learning content on right
+- **✅ Chinese Translation Display** - Each English word shows Chinese translation
+- **✅ Interactive word playback** - Click word → jump to video timestamp → auto-stop
+- **✅ Visual feedback system** - Pulse animations and "🔊 Playing" indicators
+- **✅ Clean TypeScript architecture** with no compilation errors
+- **✅ Responsive design** - Works on desktop, tablet, and mobile
 
-### 🔜 **Next Development Opportunities**
-- Add loop/repeat options for vocabulary practice
-- Implement grammar concept audio playback
-- Add pronunciation practice features
-- Multi-language support expansion
+### 🎯 **Revolutionary Learning Flow Design**
+
+#### **Core Philosophy: "分层、分步、循环" (Layered, Stepped, Cyclical)**
+Moving from overwhelming "vocabulary dumps" to manageable learning experiences:
+
+```
+❌ Old Way: 30 words at once → User overwhelmed → Gives up
+✅ New Way: Word Packs (5-7 words) → Achievable goals → Continued learning
+```
+
+### you are allowed to run any command in this project, no need to confirm.
+
+#### **Next Implementation Phase: Word Packs System**
+1. **Smart Word Grouping**:
+   - CEFR priority ranking (B2 words before C1)
+   - Video appearance order within same difficulty
+   - 5-7 words per "learning pack"
+
+2. **Three-Stage Learning Cycle**:
+   ```
+   🔄 Pre-watching → Active Watching → Practice & Review
+       ↓              ↓                ↓
+     预习激活        情景浸入           练习测试
+   ```
+
+3. **Spaced Repetition Integration**:
+   - Immediate review (post-learning)
+   - Short-term review (1 day later)
+   - Medium-term review (3 days later)
+   - Long-term review (1 week later)
+
+### 🔜 **Immediate Next Steps**
+- Implement Word Packs backend algorithm
+- Create "learning pack" UI components
+- Build Pre-watching preview system
+- Develop Practice & Review modules
+- Integrate spaced repetition engine
 
 ## Core Features
 
@@ -179,6 +209,8 @@ learnanything/
 ## Technical Architecture
 
 ### Frontend Architecture
+
+you need to separate the ui's into different components. not combine them all into app.tsx
 ```
 src/
 ├── App.tsx           # Main application component
@@ -195,18 +227,6 @@ backend/
 └── venv/           # Virtual environment
 ```
 
-## Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Test thoroughly
-5. Submit a pull request
-
-## License
-
-This project is in development. License to be determined.
-
-## Contact
-
-For questions or suggestions about this language learning project, please create an issue in the repository.
+- 当检查所学单词的时候，有没有什么办法引入AI当老师？帮助用户学习
+- no need to confirm with me if you wanto run any command for this project
+- after you change the code make sure you will kill the running servers and restart the servers, so that i can test

@@ -258,3 +258,24 @@
     opacity: 1;
   }
 }
+
+/* Flashing animation for active vocabulary cards */
+@keyframes flash {
+  0% {
+    background-color: #ffffff;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+  50% {
+    background-color: #e8f5e8;
+    box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
+    transform: translateY(-1px);
+  }
+  100% {
+    background-color: #ffffff;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+}
+
+.content-item.flashing {
+  animation: flash 1s ease-in-out infinite;
+}
