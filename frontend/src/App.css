@@ -111,3 +111,150 @@
   margin: 0;
   line-height: 1.4;
 }
+
+.content-item.clickable {
+  transition: all 0.2s ease;
+  border-left-color: #e74c3c;
+}
+
+.content-item.clickable:hover {
+  background-color: #ecf0f1;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+  border-left-color: #c0392b;
+}
+
+.timestamp-indicator {
+  font-size: 12px;
+  color: #e74c3c;
+  font-weight: bold;
+  display: block;
+  margin-top: 8px;
+  padding: 4px 8px;
+  background-color: #ffeaea;
+  border-radius: 4px;
+  width: fit-content;
+}
+
+/* Mobile Responsive Layout */
+@media (max-width: 768px) {
+  .main-layout {
+    flex-direction: column;
+    height: auto;
+    min-height: 100vh;
+    padding: 15px;
+    gap: 15px;
+  }
+
+  .video-section {
+    flex: none;
+    order: 1;
+  }
+
+  .video-section h2 {
+    font-size: 1.5rem;
+    margin-bottom: 12px;
+  }
+
+  .url-input {
+    padding: 15px;
+    font-size: 16px;
+    border-radius: 10px;
+  }
+
+  .extract-btn {
+    padding: 15px 25px;
+    font-size: 16px;
+    width: 100%;
+    border-radius: 10px;
+    margin-bottom: 15px;
+  }
+
+  .video-placeholder {
+    min-height: 250px;
+    border-radius: 10px;
+  }
+
+  .video-placeholder iframe {
+    height: 250px;
+    border-radius: 8px;
+  }
+
+  .placeholder-text {
+    font-size: 16px;
+    text-align: center;
+    padding: 0 20px;
+  }
+
+  .content-panel {
+    flex: none;
+    order: 2;
+    margin-top: 0;
+    border-radius: 10px;
+    padding: 15px;
+    max-height: none;
+  }
+
+  .vocabulary-section h3, .grammar-section h3 {
+    font-size: 1.3rem;
+    margin-bottom: 12px;
+  }
+
+  .content-item {
+    padding: 12px;
+    border-radius: 10px;
+  }
+
+  .content-item strong {
+    font-size: 15px;
+  }
+
+  .content-item p {
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  .timestamp-indicator {
+    font-size: 11px;
+    padding: 3px 6px;
+    margin-top: 6px;
+  }
+}
+
+/* Tablet Layout */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .main-layout {
+    gap: 15px;
+    padding: 15px;
+  }
+
+  .video-section {
+    flex: 1.5;
+  }
+
+  .content-panel {
+    flex: 1;
+    padding: 18px;
+  }
+
+  .url-input {
+    font-size: 15px;
+  }
+
+  .extract-btn {
+    font-size: 15px;
+  }
+}
+
+/* Pulse animation for playing indicators */
+@keyframes pulse {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.6;
+  }
+  100% {
+    opacity: 1;
+  }
+}

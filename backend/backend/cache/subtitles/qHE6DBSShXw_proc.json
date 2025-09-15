@@ -1,0 +1,1035 @@
+{
+  "video_id": "qHE6DBSShXw",
+  "processing_timestamp": 1757896186.431466,
+  "type": "ui_ready_processed_data",
+  "source": "youtube_transcript_api_processed",
+  "statistics": {
+    "raw_segments_count": 119,
+    "processed_segments_count": 70,
+    "compression_ratio": "119/70 = 1.70x",
+    "total_duration": 308.08,
+    "average_segment_duration": 7.098071428571428,
+    "vocabulary_count": 4,
+    "grammar_count": 4
+  },
+  "ui_segments": [
+    {
+      "index": 0,
+      "text": "[Music] joe",
+      "start": 0.0,
+      "duration": 9.440000000000001,
+      "end": 9.440000000000001,
+      "original_segments": 2,
+      "sentence_complete": false,
+      "break_reason": "duration_limit",
+      "word_count": 2,
+      "readability_score": "A2"
+    },
+    {
+      "index": 1,
+      "text": "and bella stories number one",
+      "start": 5.839,
+      "duration": 6.481,
+      "end": 12.32,
+      "original_segments": 1,
+      "sentence_complete": false,
+      "break_reason": "duration_limit",
+      "word_count": 5,
+      "readability_score": "A2"
+    },
+    {
+      "index": 2,
+      "text": "back to school [Music]",
+      "start": 9.44,
+      "duration": 6.319000000000001,
+      "end": 15.759,
+      "original_segments": 2,
+      "sentence_complete": false,
+      "break_reason": "duration_limit",
+      "word_count": 4,
+      "readability_score": "A2"
+    },
+    {
+      "index": 3,
+      "text": "the summer was over and it was time to go back to school",
+      "start": 13.679,
+      "duration": 7.121,
+      "end": 20.8,
+      "original_segments": 2,
+      "sentence_complete": false,
+      "break_reason": "duration_limit",
+      "word_count": 13,
+      "readability_score": "A2"
+    },
+    {
+      "index": 4,
+      "text": "there's so much to organize grown mom",
+      "start": 17.44,
+      "duration": 6.48,
+      "end": 23.92,
+      "original_segments": 1,
+      "sentence_complete": false,
+      "break_reason": "duration_limit",
+      "word_count": 7,
+      "readability_score": "A2"
+    },
+    {
+      "index": 5,
+      "text": "i can't believe the holidays are over i don't know why you're complaining said",
+      "start": 20.8,
+      "duration": 7.360000000000003,
+      "end": 28.160000000000004,
+      "original_segments": 2,
+      "sentence_complete": false,
+      "break_reason": "duration_limit",
+      "word_count": 14,
+      "readability_score": "A2"
+    },
+    {
+      "index": 6,
+      "text": "joe who was ten you don't even go to school but we have",
+      "start": 26.24,
+      "duration": 6.879999999999999,
+      "end": 33.12,
+      "original_segments": 2,
+      "sentence_complete": false,
+      "break_reason": "duration_limit",
+      "word_count": 13,
+      "readability_score": "A2"
+    },
+    {
+      "index": 7,
+      "text": "to get you two out of bed each morning said dad and out the door with your",
+      "start": 31.199,
+      "duration": 5.920999999999996,
+      "end": 37.12,
+      "original_segments": 2,
+      "sentence_complete": false,
+      "break_reason": "word_limit",
+      "word_count": 17,
+      "readability_score": "A2"
+    },
+    {
+      "index": 8,
+      "text": "homework and clean uniform and a good breakfast inside you before",
+      "start": 35.2,
+      "duration": 7.279999999999994,
+      "end": 42.48,
+      "original_segments": 2,
+      "sentence_complete": true,
+      "break_reason": "natural_break",
+      "word_count": 11,
+      "readability_score": "A2"
+    },
+    {
+      "index": 9,
+      "text": "we go to work joe was looking forward to school he",
+      "start": 39.44,
+      "duration": 8.32,
+      "end": 47.76,
+      "original_segments": 2,
+      "sentence_complete": false,
+      "break_reason": "duration_limit",
+      "word_count": 11,
+      "readability_score": "A2"
+    },
+    {
+      "index": 10,
+      "text": "wanted to see his friends again the only thing was this year his little",
+      "start": 45.36,
+      "duration": 5.439999999999998,
+      "end": 50.8,
+      "original_segments": 2,
+      "sentence_complete": false,
+      "break_reason": "word_limit",
+      "word_count": 14,
+      "readability_score": "A2"
+    },
+    {
+      "index": 11,
+      "text": "sister bella who was four was going to school too",
+      "start": 49.84,
+      "duration": 7.999999999999993,
+      "end": 57.839999999999996,
+      "original_segments": 2,
+      "sentence_complete": false,
+      "break_reason": "duration_limit",
+      "word_count": 10,
+      "readability_score": "A2"
+    },
+    {
+      "index": 12,
+      "text": "joe wasn't sure about that i hope bella won't be a nuisance",
+      "start": 54.32,
+      "duration": 8.000000000000007,
+      "end": 62.32000000000001,
+      "original_segments": 2,
+      "sentence_complete": false,
+      "break_reason": "duration_limit",
+      "word_count": 12,
+      "readability_score": "A2"
+    },
+    {
+      "index": 13,
+      "text": "he said to mom oh she'll soon make friends",
+      "start": 59.359,
+      "duration": 6.000999999999998,
+      "end": 65.36,
+      "original_segments": 2,
+      "sentence_complete": false,
+      "break_reason": "duration_limit",
+      "word_count": 9,
+      "readability_score": "A2"
+    },
+    {
+      "index": 14,
+      "text": "said mum you'll hardly notice she's there",
+      "start": 62.96,
+      "duration": 7.359999999999992,
+      "end": 70.32,
+      "original_segments": 2,
+      "sentence_complete": false,
+      "break_reason": "duration_limit",
+      "word_count": 7,
+      "readability_score": "A2"
+    },
+    {
+      "index": 15,
+      "text": "joe wasn't sure about that bella was very excited",
+      "start": 66.88,
+      "duration": 7.1200000000000045,
+      "end": 74.0,
+      "original_segments": 2,
+      "sentence_complete": false,
+      "break_reason": "duration_limit",
+      "word_count": 9,
+      "readability_score": "A2"
+    },
+    {
+      "index": 16,
+      "text": "she kept showing everyone her new pencil case and bag and water bottle",
+      "start": 72.0,
+      "duration": 6.959999999999994,
+      "end": 78.96,
+      "original_segments": 2,
+      "sentence_complete": false,
+      "break_reason": "duration_limit",
+      "word_count": 13,
+      "readability_score": "A2"
+    },
+    {
+      "index": 17,
+      "text": "and joe felt he'd seen them a hundred times",
+      "start": 76.72,
+      "duration": 7.0390000000000015,
+      "end": 83.759,
+      "original_segments": 2,
+      "sentence_complete": false,
+      "break_reason": "duration_limit",
+      "word_count": 9,
+      "readability_score": "A2"
+    },
+    {
+      "index": 18,
+      "text": "finally the morning came the alarm went off and joe",
+      "start": 80.72,
+      "duration": 6.399000000000001,
+      "end": 87.119,
+      "original_segments": 2,
+      "sentence_complete": false,
+      "break_reason": "duration_limit",
+      "word_count": 10,
+      "readability_score": "A2"
+    },
+    {
+      "index": 19,
+      "text": "and bella tumbled out of bed and into their new uniform",
+      "start": 84.64,
+      "duration": 7.119,
+      "end": 91.759,
+      "original_segments": 2,
+      "sentence_complete": false,
+      "break_reason": "duration_limit",
+      "word_count": 11,
+      "readability_score": "A2"
+    },
+    {
+      "index": 20,
+      "text": "mom shoveled cereal into bowls and",
+      "start": 89.28,
+      "duration": 3.0400000000000063,
+      "end": 92.32000000000001,
+      "original_segments": 1,
+      "sentence_complete": true,
+      "break_reason": "natural_break",
+      "word_count": 6,
+      "readability_score": "A2"
+    },
+    {
+      "index": 21,
+      "text": "everyone gulped it down then dad yelled i'm late",
+      "start": 91.759,
+      "duration": 7.600999999999999,
+      "end": 99.36,
+      "original_segments": 2,
+      "sentence_complete": false,
+      "break_reason": "duration_limit",
+      "word_count": 9,
+      "readability_score": "A2"
+    },
+    {
+      "index": 22,
+      "text": "and ran to get the bus and mum looked at her watch come on kids",
+      "start": 96.24,
+      "duration": 9.730000000000018,
+      "end": 105.97000000000001,
+      "original_segments": 2,
+      "sentence_complete": false,
+      "break_reason": "duration_limit",
+      "word_count": 15,
+      "readability_score": "A2"
+    },
+    {
+      "index": 23,
+      "text": "let's be quick i've got work too",
+      "start": 102.96,
+      "duration": 6.5,
+      "end": 109.46,
+      "original_segments": 1,
+      "sentence_complete": false,
+      "break_reason": "duration_limit",
+      "word_count": 7,
+      "readability_score": "A2"
+    },
+    {
+      "index": 24,
+      "text": "[Music] [Applause]",
+      "start": 105.97,
+      "duration": 6.670000000000002,
+      "end": 112.64,
+      "original_segments": 2,
+      "sentence_complete": false,
+      "break_reason": "duration_limit",
+      "word_count": 2,
+      "readability_score": "A2"
+    },
+    {
+      "index": 25,
+      "text": "when they arrived at the playground there were children and parents everywhere",
+      "start": 110.88,
+      "duration": 7.919000000000011,
+      "end": 118.799,
+      "original_segments": 3,
+      "sentence_complete": false,
+      "break_reason": "segment_limit",
+      "word_count": 12,
+      "readability_score": "A2"
+    },
+    {
+      "index": 26,
+      "text": "joe waved at one of his friends hey",
+      "start": 115.28,
+      "duration": 6.799000000000007,
+      "end": 122.07900000000001,
+      "original_segments": 1,
+      "sentence_complete": false,
+      "break_reason": "duration_limit",
+      "word_count": 8,
+      "readability_score": "A2"
+    },
+    {
+      "index": 27,
+      "text": "finn how are you bella had been looking forward to school",
+      "start": 118.799,
+      "duration": 8.240999999999985,
+      "end": 127.03999999999999,
+      "original_segments": 2,
+      "sentence_complete": false,
+      "break_reason": "duration_limit",
+      "word_count": 11,
+      "readability_score": "A2"
+    },
+    {
+      "index": 28,
+      "text": "but now with big kids running everywhere and all the noise she wasn't sure",
+      "start": 124.56,
+      "duration": 9.120000000000005,
+      "end": 133.68,
+      "original_segments": 2,
+      "sentence_complete": false,
+      "break_reason": "duration_limit",
+      "word_count": 14,
+      "readability_score": "A2"
+    },
+    {
+      "index": 29,
+      "text": "she took tight hold of mom's skirt",
+      "start": 130.239,
+      "duration": 7.200999999999993,
+      "end": 137.44,
+      "original_segments": 1,
+      "sentence_complete": false,
+      "break_reason": "duration_limit",
+      "word_count": 7,
+      "readability_score": "A2"
+    },
+    {
+      "index": 30,
+      "text": "mum she whispered mum was talking to another parent",
+      "start": 133.68,
+      "duration": 8.079999999999984,
+      "end": 141.76,
+      "original_segments": 2,
+      "sentence_complete": false,
+      "break_reason": "duration_limit",
+      "word_count": 9,
+      "readability_score": "A2"
+    },
+    {
+      "index": 31,
+      "text": "and didn't notice but joe did",
+      "start": 138.48,
+      "duration": 6.560000000000002,
+      "end": 145.04,
+      "original_segments": 1,
+      "sentence_complete": false,
+      "break_reason": "duration_limit",
+      "word_count": 6,
+      "readability_score": "A2"
+    },
+    {
+      "index": 32,
+      "text": "what's up bella bella's bottom lip was wobbling",
+      "start": 141.76,
+      "duration": 8.319999999999993,
+      "end": 150.07999999999998,
+      "original_segments": 2,
+      "sentence_complete": false,
+      "break_reason": "duration_limit",
+      "word_count": 8,
+      "readability_score": "A2"
+    },
+    {
+      "index": 33,
+      "text": "i don't want to go to school after all",
+      "start": 146.56,
+      "duration": 8.159999999999997,
+      "end": 154.72,
+      "original_segments": 1,
+      "sentence_complete": false,
+      "break_reason": "duration_limit",
+      "word_count": 9,
+      "readability_score": "A2"
+    },
+    {
+      "index": 34,
+      "text": "i want to go home joe thought quickly",
+      "start": 150.08,
+      "duration": 7.1200000000000045,
+      "end": 157.20000000000002,
+      "original_segments": 1,
+      "sentence_complete": false,
+      "break_reason": "duration_limit",
+      "word_count": 8,
+      "readability_score": "A2"
+    },
+    {
+      "index": 35,
+      "text": "if you go home bella then nobody will see your new pencil case",
+      "start": 154.72,
+      "duration": 9.119999999999976,
+      "end": 163.83999999999997,
+      "original_segments": 2,
+      "sentence_complete": false,
+      "break_reason": "duration_limit",
+      "word_count": 13,
+      "readability_score": "A2"
+    },
+    {
+      "index": 36,
+      "text": "that's true bella admitted",
+      "start": 160.16,
+      "duration": 6.400000000000006,
+      "end": 166.56,
+      "original_segments": 1,
+      "sentence_complete": false,
+      "break_reason": "duration_limit",
+      "word_count": 4,
+      "readability_score": "A2"
+    },
+    {
+      "index": 37,
+      "text": "also mom has given you a box of raisins for your snack",
+      "start": 163.84,
+      "duration": 7.9199999999999875,
+      "end": 171.76,
+      "original_segments": 2,
+      "sentence_complete": false,
+      "break_reason": "duration_limit",
+      "word_count": 12,
+      "readability_score": "A2"
+    },
+    {
+      "index": 38,
+      "text": "bella loved raisins all right",
+      "start": 168.239,
+      "duration": 7.681000000000012,
+      "end": 175.92000000000002,
+      "original_segments": 1,
+      "sentence_complete": false,
+      "break_reason": "duration_limit",
+      "word_count": 5,
+      "readability_score": "A2"
+    },
+    {
+      "index": 39,
+      "text": "she said i'll stay mom took bella to her new classroom joe",
+      "start": 171.76,
+      "duration": 9.52000000000001,
+      "end": 181.28,
+      "original_segments": 2,
+      "sentence_complete": false,
+      "break_reason": "duration_limit",
+      "word_count": 12,
+      "readability_score": "A2"
+    },
+    {
+      "index": 40,
+      "text": "was so busy that he did not have time to think about bella",
+      "start": 179.519,
+      "duration": 5.520999999999987,
+      "end": 185.04,
+      "original_segments": 2,
+      "sentence_complete": false,
+      "break_reason": "word_limit",
+      "word_count": 13,
+      "readability_score": "A2"
+    },
+    {
+      "index": 41,
+      "text": "until the head teacher mrs smails put her head around the classroom door",
+      "start": 182.4,
+      "duration": 7.279999999999973,
+      "end": 189.67999999999998,
+      "original_segments": 2,
+      "sentence_complete": false,
+      "break_reason": "duration_limit",
+      "word_count": 13,
+      "readability_score": "A2"
+    },
+    {
+      "index": 42,
+      "text": "could you come with me a moment joe she said joe was a bit worried what could she",
+      "start": 187.519,
+      "duration": 6.800000000000011,
+      "end": 194.31900000000002,
+      "original_segments": 3,
+      "sentence_complete": false,
+      "break_reason": "segment_limit",
+      "word_count": 18,
+      "readability_score": "A2"
+    },
+    {
+      "index": 43,
+      "text": "want we're having a problem with bella mrs males explained",
+      "start": 193.2,
+      "duration": 7.600000000000023,
+      "end": 200.8,
+      "original_segments": 3,
+      "sentence_complete": false,
+      "break_reason": "segment_limit",
+      "word_count": 10,
+      "readability_score": "A2"
+    },
+    {
+      "index": 44,
+      "text": "she doesn't like a new teacher and now",
+      "start": 198.319,
+      "duration": 5.280000000000001,
+      "end": 203.599,
+      "original_segments": 1,
+      "sentence_complete": true,
+      "break_reason": "natural_break",
+      "word_count": 8,
+      "readability_score": "A2"
+    },
+    {
+      "index": 45,
+      "text": "she says she won't stay in her classroom bella was hiding under",
+      "start": 200.8,
+      "duration": 7.199999999999989,
+      "end": 208.0,
+      "original_segments": 2,
+      "sentence_complete": false,
+      "break_reason": "duration_limit",
+      "word_count": 12,
+      "readability_score": "A2"
+    },
+    {
+      "index": 46,
+      "text": "a table in the dressing-up area she had her head buried under the",
+      "start": 206.0,
+      "duration": 5.360000000000014,
+      "end": 211.36,
+      "original_segments": 2,
+      "sentence_complete": false,
+      "break_reason": "word_limit",
+      "word_count": 13,
+      "readability_score": "A2"
+    },
+    {
+      "index": 47,
+      "text": "costumes and she was howling joe crawled under the table",
+      "start": 209.599,
+      "duration": 9.28000000000003,
+      "end": 218.87900000000002,
+      "original_segments": 2,
+      "sentence_complete": false,
+      "break_reason": "duration_limit",
+      "word_count": 10,
+      "readability_score": "A2"
+    },
+    {
+      "index": 48,
+      "text": "what's the matter bella he asked i don't like her",
+      "start": 215.28,
+      "duration": 7.439999999999998,
+      "end": 222.72,
+      "original_segments": 2,
+      "sentence_complete": false,
+      "break_reason": "duration_limit",
+      "word_count": 10,
+      "readability_score": "A2"
+    },
+    {
+      "index": 49,
+      "text": "said better pointing at her teacher she's a wolf",
+      "start": 220.159,
+      "duration": 9.12100000000001,
+      "end": 229.28,
+      "original_segments": 2,
+      "sentence_complete": false,
+      "break_reason": "duration_limit",
+      "word_count": 9,
+      "readability_score": "A2"
+    },
+    {
+      "index": 50,
+      "text": "what said joe it's just my name",
+      "start": 225.12,
+      "duration": 6.8799999999999955,
+      "end": 232.0,
+      "original_segments": 1,
+      "sentence_complete": false,
+      "break_reason": "duration_limit",
+      "word_count": 7,
+      "readability_score": "A2"
+    },
+    {
+      "index": 51,
+      "text": "said the teacher impatiently i'm mrs wolfe",
+      "start": 229.28,
+      "duration": 7.840000000000003,
+      "end": 237.12,
+      "original_segments": 2,
+      "sentence_complete": false,
+      "break_reason": "duration_limit",
+      "word_count": 7,
+      "readability_score": "A2"
+    },
+    {
+      "index": 52,
+      "text": "she's not really a wolf said jota bella",
+      "start": 233.76,
+      "duration": 6.639999999999986,
+      "end": 240.39999999999998,
+      "original_segments": 1,
+      "sentence_complete": false,
+      "break_reason": "duration_limit",
+      "word_count": 8,
+      "readability_score": "A2"
+    },
+    {
+      "index": 53,
+      "text": "she hasn't got a tail how do you",
+      "start": 237.12,
+      "duration": 6.318999999999988,
+      "end": 243.439,
+      "original_segments": 1,
+      "sentence_complete": false,
+      "break_reason": "duration_limit",
+      "word_count": 8,
+      "readability_score": "A2"
+    },
+    {
+      "index": 54,
+      "text": "know joe groaned he'd known bella would cause problems at",
+      "start": 240.4,
+      "duration": 6.639999999999986,
+      "end": 247.04,
+      "original_segments": 2,
+      "sentence_complete": false,
+      "break_reason": "duration_limit",
+      "word_count": 10,
+      "readability_score": "A2"
+    },
+    {
+      "index": 55,
+      "text": "school and she's got big teeth said bella",
+      "start": 245.439,
+      "duration": 9.281000000000006,
+      "end": 254.72,
+      "original_segments": 2,
+      "sentence_complete": false,
+      "break_reason": "duration_limit",
+      "word_count": 8,
+      "readability_score": "A2"
+    },
+    {
+      "index": 56,
+      "text": "then joe had an idea even if she is a wolf he said",
+      "start": 251.36,
+      "duration": 7.759999999999991,
+      "end": 259.12,
+      "original_segments": 2,
+      "sentence_complete": false,
+      "break_reason": "duration_limit",
+      "word_count": 13,
+      "readability_score": "A2"
+    },
+    {
+      "index": 57,
+      "text": "then maybe she's a good wolf lots of wolves are",
+      "start": 256.079,
+      "duration": 6.2409999999999854,
+      "end": 262.32,
+      "original_segments": 2,
+      "sentence_complete": false,
+      "break_reason": "duration_limit",
+      "word_count": 10,
+      "readability_score": "A2"
+    },
+    {
+      "index": 58,
+      "text": "it's only in fairy tales that they are wicked bella wiped her eyes and looked at mrs",
+      "start": 260.56,
+      "duration": 6.71999999999997,
+      "end": 267.28,
+      "original_segments": 3,
+      "sentence_complete": false,
+      "break_reason": "segment_limit",
+      "word_count": 17,
+      "readability_score": "A2"
+    },
+    {
+      "index": 59,
+      "text": "wolfe she does have nice eyes",
+      "start": 265.84,
+      "duration": 7.759999999999991,
+      "end": 273.59999999999997,
+      "original_segments": 2,
+      "sentence_complete": false,
+      "break_reason": "duration_limit",
+      "word_count": 6,
+      "readability_score": "A2"
+    },
+    {
+      "index": 60,
+      "text": "thank you said mrs wolf smiling why",
+      "start": 270.56,
+      "duration": 6.399999999999977,
+      "end": 276.96,
+      "original_segments": 1,
+      "sentence_complete": true,
+      "break_reason": "natural_break",
+      "word_count": 7,
+      "readability_score": "A2"
+    },
+    {
+      "index": 61,
+      "text": "don't you come out and listen to a story",
+      "start": 273.6,
+      "duration": 6.240000000000009,
+      "end": 279.84000000000003,
+      "original_segments": 1,
+      "sentence_complete": false,
+      "break_reason": "duration_limit",
+      "word_count": 9,
+      "readability_score": "A2"
+    },
+    {
+      "index": 62,
+      "text": "bella loved stories she crawled out and",
+      "start": 276.96,
+      "duration": 5.759999999999991,
+      "end": 282.71999999999997,
+      "original_segments": 1,
+      "sentence_complete": true,
+      "break_reason": "natural_break",
+      "word_count": 7,
+      "readability_score": "A2"
+    },
+    {
+      "index": 63,
+      "text": "gave her hand to mrs wolf",
+      "start": 279.84,
+      "duration": 6.160000000000025,
+      "end": 286.0,
+      "original_segments": 1,
+      "sentence_complete": false,
+      "break_reason": "duration_limit",
+      "word_count": 6,
+      "readability_score": "A2"
+    },
+    {
+      "index": 64,
+      "text": "i don't think she is a wolf after all",
+      "start": 282.72,
+      "duration": 6.478999999999985,
+      "end": 289.199,
+      "original_segments": 1,
+      "sentence_complete": false,
+      "break_reason": "duration_limit",
+      "word_count": 9,
+      "readability_score": "A2"
+    },
+    {
+      "index": 65,
+      "text": "she whispered to joe otherwise she'd",
+      "start": 286.0,
+      "duration": 6.160000000000025,
+      "end": 292.16,
+      "original_segments": 1,
+      "sentence_complete": false,
+      "break_reason": "duration_limit",
+      "word_count": 6,
+      "readability_score": "A2"
+    },
+    {
+      "index": 66,
+      "text": "have claws",
+      "start": 289.199,
+      "duration": 2.9610000000000127,
+      "end": 292.16,
+      "original_segments": 1,
+      "sentence_complete": false,
+      "break_reason": "pause_gap",
+      "word_count": 2,
+      "readability_score": "A2"
+    },
+    {
+      "index": 67,
+      "text": "joe went back to his classroom grinning it was going",
+      "start": 294.08,
+      "duration": 7.0,
+      "end": 301.08,
+      "original_segments": 1,
+      "sentence_complete": false,
+      "break_reason": "unknown",
+      "word_count": 10,
+      "readability_score": "A2"
+    },
+    {
+      "index": 68,
+      "text": "to be interesting",
+      "start": 301.08,
+      "duration": 7.0,
+      "end": 308.08,
+      "original_segments": 1,
+      "sentence_complete": false,
+      "break_reason": "unknown",
+      "word_count": 3,
+      "readability_score": "A2"
+    },
+    {
+      "index": 69,
+      "text": "having his little sister in school",
+      "start": 298.8,
+      "duration": 7.0,
+      "end": 305.8,
+      "original_segments": 1,
+      "sentence_complete": false,
+      "break_reason": "unknown",
+      "word_count": 6,
+      "readability_score": "A2"
+    }
+  ],
+  "vocabulary": [
+    {
+      "word": "bella",
+      "definition": "a word that means bella",
+      "level": "A2",
+      "timestamp": 3,
+      "end_time": 12,
+      "word_timestamp": 5,
+      "sentence_duration": 8,
+      "context_type": "real_transcript",
+      "playback_mode": "smart_buffered_with_punct_detection"
+    },
+    {
+      "word": "said",
+      "definition": "a word that means said",
+      "level": "A1",
+      "timestamp": 20,
+      "end_time": 30,
+      "word_timestamp": 20,
+      "sentence_duration": 9,
+      "context_type": "real_transcript",
+      "playback_mode": "smart_buffered_with_punct_detection"
+    },
+    {
+      "word": "classroom",
+      "definition": "a word that means classroom",
+      "level": "A2",
+      "timestamp": 171,
+      "end_time": 183,
+      "word_timestamp": 171,
+      "sentence_duration": 12,
+      "context_type": "real_transcript",
+      "playback_mode": "smart_buffered_with_punct_detection"
+    },
+    {
+      "word": "wolf",
+      "definition": "a word that means wolf",
+      "level": "A2",
+      "timestamp": 219,
+      "end_time": 231,
+      "word_timestamp": 220,
+      "sentence_duration": 11,
+      "context_type": "real_transcript",
+      "playback_mode": "smart_buffered_with_punct_detection"
+    }
+  ],
+  "grammar": [
+    {
+      "concept": "Negative Forms",
+      "explanation": "Used to make sentences negative using contractions",
+      "level": "A1",
+      "example": "can't",
+      "timestamp": 37
+    },
+    {
+      "concept": "Present Continuous",
+      "explanation": "Used to describe actions happening now or around now",
+      "level": "A1",
+      "example": "now ",
+      "timestamp": 52
+    },
+    {
+      "concept": "Present/Past Simple (to be)",
+      "explanation": "The verb 'to be' used to describe states, locations, and identities",
+      "level": "A1",
+      "example": "was",
+      "timestamp": 69
+    },
+    {
+      "concept": "Modal Verbs",
+      "explanation": "Used to express ability, possibility, permission, and obligation",
+      "level": "A2",
+      "example": "could",
+      "timestamp": 116
+    }
+  ],
+  "raw_segments_sample": [
+    {
+      "text": "[Music]",
+      "start": 0.0,
+      "duration": 4.569
+    },
+    {
+      "text": "joe",
+      "start": 5.359,
+      "duration": 4.081
+    },
+    {
+      "text": "and bella stories number one",
+      "start": 5.839,
+      "duration": 6.481
+    },
+    {
+      "text": "back to school",
+      "start": 9.44,
+      "duration": 2.88
+    },
+    {
+      "text": "[Music]",
+      "start": 12.36,
+      "duration": 3.399
+    },
+    {
+      "text": "the summer was over and it was time to",
+      "start": 13.679,
+      "duration": 3.761
+    },
+    {
+      "text": "go back to school",
+      "start": 15.759,
+      "duration": 5.041
+    },
+    {
+      "text": "there's so much to organize grown mom",
+      "start": 17.44,
+      "duration": 6.48
+    },
+    {
+      "text": "i can't believe the holidays are over",
+      "start": 20.8,
+      "duration": 5.44
+    },
+    {
+      "text": "i don't know why you're complaining said",
+      "start": 23.92,
+      "duration": 4.24
+    },
+    {
+      "text": "joe who was ten",
+      "start": 26.24,
+      "duration": 4.959
+    },
+    {
+      "text": "you don't even go to school but we have",
+      "start": 28.16,
+      "duration": 4.96
+    },
+    {
+      "text": "to get you two out of bed each morning",
+      "start": 31.199,
+      "duration": 4.001
+    },
+    {
+      "text": "said dad and out the door with your",
+      "start": 33.12,
+      "duration": 4.0
+    },
+    {
+      "text": "homework and clean uniform",
+      "start": 35.2,
+      "duration": 4.24
+    },
+    {
+      "text": "and a good breakfast inside you before",
+      "start": 37.12,
+      "duration": 5.36
+    },
+    {
+      "text": "we go to work",
+      "start": 39.44,
+      "duration": 3.04
+    },
+    {
+      "text": "joe was looking forward to school he",
+      "start": 42.96,
+      "duration": 4.8
+    },
+    {
+      "text": "wanted to see his friends again",
+      "start": 45.36,
+      "duration": 4.48
+    },
+    {
+      "text": "the only thing was this year his little",
+      "start": 47.76,
+      "duration": 3.04
+    }
+  ]
+}

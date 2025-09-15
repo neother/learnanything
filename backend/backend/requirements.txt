@@ -1,0 +1,19 @@
+# Immersive Language Learning App - Backend Dependencies
+# FastAPI backend for processing YouTube videos and extracting vocabulary/grammar
+
+# Core FastAPI framework
+fastapi==0.116.1
+
+# ASGI server for FastAPI
+uvicorn==0.33.0
+
+# Handle multipart form data
+python-multipart==0.0.20
+
+# AI processing dependencies:
+youtube-transcript-api==0.6.2  # For extracting YouTube subtitles
+yt-dlp>=2024.1.0       # Alternative robust YouTube subtitle extraction
+aiohttp>=3.8.0         # For async HTTP requests to external APIs
+openai>=1.0.0          # For AI-powered content extraction (optional)
+# spacy                  # For natural language processing (future)
+# nltk                   # For language analysis (future)
