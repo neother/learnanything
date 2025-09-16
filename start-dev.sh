@@ -8,6 +8,7 @@ echo ""
 
 # Stop processes running on ports 3000 and 8000
 echo "Checking for existing processes on ports 3000 and 8000..."
+pkill -f "uvicorn\|npm start" || true
 for PORT in 3000 8000; do
   if command -v lsof > /dev/null; then
     PID=$(lsof -ti tcp:$PORT)
@@ -24,7 +25,7 @@ done
 
 echo ""
 echo "Starting backend (FastAPI with uvicorn)..."
-cd backend
+cd backend/backend
 
 # Check if we're in a virtual environment, if not try to activate one
 if [ -z "$VIRTUAL_ENV" ]; then
@@ -45,10 +46,10 @@ fi
 
 # Start the backend with more detailed logging
 echo "Starting backend server..."
-python3 -m uvicorn main:app --host 0.0.0.0 --port 8000 --reload --log-level debug > ../backend.log 2>&1 &
+python3 -m uvicorn main:app --host 0.0.0.0 --port 8000 --reload --log-level debug > ../../backend.log 2>&1 &
 BACKEND_PID=$!
 
-cd ..
+cd ../..
 echo "Waiting for backend to start..."
 
 # Wait for up to 15 seconds for the backend to start
@@ -89,8 +90,8 @@ if [ ! -d "node_modules" ]; then
     npm install
 fi
 
-# Start frontend in background
-npm start > /dev/null 2>&1 &
+# Start frontend in background without opening browser
+BROWSER=none npm start > /dev/null 2>&1 &
 FRONTEND_PID=$!
 
 cd ..

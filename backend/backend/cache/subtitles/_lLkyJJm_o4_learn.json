@@ -1,0 +1,233 @@
+{
+  "video_id": "_lLkyJJm_o4",
+  "learning_timestamp": 1757952245.7789671,
+  "type": "learning_content",
+  "source": "ai_extracted_content",
+  "statistics": {
+    "vocabulary_count": 5,
+    "grammar_count": 4,
+    "total_learning_items": 9
+  },
+  "vocabulary": [
+    {
+      "word": "campus",
+      "definition": "a word that means campus",
+      "level": "A2",
+      "timestamp": 12,
+      "end_time": 18,
+      "word_timestamp": 14,
+      "sentence_duration": 6,
+      "context_type": "real_transcript",
+      "playback_mode": "smart_buffered_with_punct_detection",
+      "translation": "校园",
+      "sentence": "Charlie Kerr was shot dead during a campus debate.",
+      "sentence_start_time": 12.48,
+      "sentence_end_time": 18.48,
+      "definition_zh": "",
+      "usage": "",
+      "examples": [],
+      "synonyms": [],
+      "collocations": [],
+      "pos": []
+    },
+    {
+      "word": "people",
+      "definition": "persons; human beings in general",
+      "level": "A1",
+      "timestamp": 21,
+      "end_time": 27,
+      "word_timestamp": 22,
+      "sentence_duration": 5,
+      "context_type": "real_transcript",
+      "playback_mode": "smart_buffered_with_punct_detection",
+      "translation": "人们",
+      "sentence": "all I hear is screaming and I see people running and all I'm saying is, \"Please God,",
+      "sentence_start_time": 22.32,
+      "sentence_end_time": 25.85025641025641,
+      "definition_zh": "人们，人民",
+      "usage": "名词：表示一群人或人类整体，通常用复数形式",
+      "examples": [
+        {
+          "en": "Many people like music.",
+          "zh": "很多人喜欢音乐。",
+          "level": "A1"
+        },
+        {
+          "en": "Chinese people are very friendly.",
+          "zh": "中国人很友好。",
+          "level": "A2"
+        }
+      ],
+      "synonyms": [
+        "persons",
+        "individuals",
+        "folks"
+      ],
+      "collocations": [
+        "young people",
+        "business people",
+        "local people"
+      ],
+      "pos": [
+        "n"
+      ]
+    },
+    {
+      "word": "about",
+      "definition": "concerning; approximately",
+      "level": "A1",
+      "timestamp": 106,
+      "end_time": 113,
+      "word_timestamp": 107,
+      "sentence_duration": 6,
+      "context_type": "real_transcript",
+      "playback_mode": "smart_buffered_with_punct_detection",
+      "translation": "关于",
+      "sentence": "he was asked this question about gun violence in the US.",
+      "sentence_start_time": 107.44,
+      "sentence_end_time": 111.91999999999999,
+      "definition_zh": "关于，大约",
+      "usage": "介词：表示主题或话题（about something）；副词：表示大约的数量或时间（about 10 minutes）",
+      "examples": [
+        {
+          "en": "This book is about history.",
+          "zh": "这本书是关于历史的。",
+          "level": "A1"
+        },
+        {
+          "en": "He arrived at about six o'clock.",
+          "zh": "他大约六点钟到的。",
+          "level": "A2"
+        }
+      ],
+      "synonyms": [
+        "concerning",
+        "regarding",
+        "approximately"
+      ],
+      "collocations": [
+        "about time",
+        "about to",
+        "think about",
+        "talk about"
+      ],
+      "pos": [
+        "prep",
+        "adv"
+      ]
+    },
+    {
+      "word": "from",
+      "definition": "indicating the point in space at which a journey, motion, or action starts",
+      "level": "A1",
+      "timestamp": 174,
+      "end_time": 182,
+      "word_timestamp": 174,
+      "sentence_duration": 8,
+      "context_type": "real_transcript",
+      "playback_mode": "smart_buffered_with_punct_detection",
+      "translation": "从",
+      "sentence": "I was watching from pretty close up and I heard a pop and I thought no that that nobody's shooting firecrackers,",
+      "sentence_start_time": 176.55925000000002,
+      "sentence_end_time": 184.85233333333335,
+      "definition_zh": "从，来自",
+      "usage": "介词：表示起点、来源或出发地",
+      "examples": [
+        {
+          "en": "I come from China.",
+          "zh": "我来自中国。",
+          "level": "A1"
+        },
+        {
+          "en": "The train goes from Beijing to Shanghai.",
+          "zh": "火车从北京开往上海。",
+          "level": "A2"
+        }
+      ],
+      "synonyms": [
+        "out of",
+        "starting at"
+      ],
+      "collocations": [
+        "from now on",
+        "from time to time",
+        "come from"
+      ],
+      "pos": [
+        "prep"
+      ]
+    },
+    {
+      "word": "said",
+      "definition": "past tense of say; uttered",
+      "level": "A1",
+      "timestamp": 299,
+      "end_time": 305,
+      "word_timestamp": 300,
+      "sentence_duration": 6,
+      "context_type": "real_transcript",
+      "playback_mode": "smart_buffered_with_punct_detection",
+      "translation": "说",
+      "sentence": "President Trump has said he would not be back in the White House without Charlie Kirk.",
+      "sentence_start_time": 300.16,
+      "sentence_end_time": 304.99484375,
+      "definition_zh": "说过的，据说的",
+      "usage": "动词：say的过去式和过去分词，表示说话的动作已完成",
+      "examples": [
+        {
+          "en": "He said hello to me.",
+          "zh": "他对我说你好。",
+          "level": "A1"
+        },
+        {
+          "en": "She said she would come.",
+          "zh": "她说她会来的。",
+          "level": "A2"
+        }
+      ],
+      "synonyms": [
+        "told",
+        "spoke",
+        "mentioned"
+      ],
+      "collocations": [
+        "said that",
+        "as said",
+        "well said"
+      ],
+      "pos": [
+        "v"
+      ]
+    }
+  ],
+  "grammar": [
+    {
+      "concept": "Negative Forms",
+      "explanation": "Used to make sentences negative using contractions",
+      "level": "A1",
+      "example": "don't",
+      "timestamp": 25
+    },
+    {
+      "concept": "Comparatives and Superlatives",
+      "explanation": "Used to compare things and show the highest degree",
+      "level": "A2",
+      "example": " ",
+      "timestamp": 52
+    },
+    {
+      "concept": "Future Tense",
+      "explanation": "Used to express future actions, plans, and predictions",
+      "level": "A2",
+      "example": "",
+      "timestamp": 58
+    },
+    {
+      "concept": "Modal Verbs",
+      "explanation": "Used to express ability, possibility, permission, and obligation",
+      "level": "A2",
+      "example": "can",
+      "timestamp": 80
+    }
+  ]
+}

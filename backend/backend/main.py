@@ -735,8 +735,8 @@ def split_by_sentence_punctuation(segment):
     start_time = segment['start']
     duration = segment.get('duration', 0)
 
-    # Look for sentence boundaries: punctuation (including comma) followed by space and capital letter
-    sentence_breaks = list(re.finditer(r'([.!?,])\s+([A-Z])', text))
+    # Look for sentence boundaries: punctuation (including comma) followed by space and letter
+    sentence_breaks = list(re.finditer(r'([.!?,])\s+([A-Za-z])', text))
 
     if not sentence_breaks:
         return [segment]  # No sentence breaks found
@@ -926,7 +926,7 @@ def post_process_subtitles(raw_subtitle_segments: list, pause_gap_threshold: flo
         buffer.append(segment)
 
         # Check for sentence ending punctuation (at end OR mid-text followed by capital letter)
-        has_punctuation_end = bool(re.search(r'[.!?]$', text.strip()))
+        has_punctuation_end = bool(re.search(r'[.!?,]$', text.strip()))
         has_punctuation_mid = bool(re.search(r'[.!?,]\s+[A-Z]', text.strip()))
         has_punctuation = has_punctuation_end or has_punctuation_mid
 
@@ -956,12 +956,12 @@ def post_process_subtitles(raw_subtitle_segments: list, pause_gap_threshold: flo
         # Calculate current buffer stats
         if buffer:
             buffer_duration = (start + duration) - float(buffer[0].get('start', 0))
-            buffer_too_long_time = buffer_duration > 6.0  # Further reduced to 6s for better splits
+            buffer_too_long_time = buffer_duration > 8.0  # Further reduced to 8s for better splits
 
             # Check word count - important for no-punctuation scenarios
             combined_text = " ".join([seg.get('text', '').strip() for seg in buffer]).strip()
             word_count = len(combined_text.split())
-            buffer_too_long_words = word_count >= 12  # Max 12 words per segment for better learning
+            buffer_too_long_words = word_count >= 15  # Max 15 words per segment - optimal for kids learning
         else:
             buffer_too_long_time = False
             buffer_too_long_words = False
@@ -976,6 +976,7 @@ def post_process_subtitles(raw_subtitle_segments: list, pause_gap_threshold: flo
             combined_text = " ".join([seg.get('text', '').strip() for seg in buffer]).strip()
 
             # Calculate timing: start of first segment to end of last segment
+            # CRITICAL: Preserve original YouTube timing boundaries for video accuracy
             first_segment = buffer[0]
             last_segment = buffer[-1]
 
@@ -1015,8 +1016,8 @@ def post_process_subtitles(raw_subtitle_segments: list, pause_gap_threshold: flo
 
     print(f"STEP 2 complete: {len(combined_segments)} combined -> {len(sentence_split_segments)} sentence-split segments")
 
-    # STEP 3: Merge single-word segments with next segment (single words lack context)
-    print(f"STEP 3: Merging single-word segments for better context")
+    # STEP 3: Recursively merge incomplete segments until complete sentences are formed
+    print(f"STEP 3: Recursively merging incomplete segments for complete sentences")
     context_merged_segments = []
     i = 0
     while i < len(sentence_split_segments):
@@ -1024,37 +1025,65 @@ def post_process_subtitles(raw_subtitle_segments: list, pause_gap_threshold: flo
         current_text = current_segment.get('text', '').strip()
         word_count = len(current_text.split())
 
-        # If current segment has only 1 word and there's a next segment, merge them
-        if word_count <= 1 and i < len(sentence_split_segments) - 1:
-            next_segment = sentence_split_segments[i + 1]
+        # Check if segment is incomplete (no sentence-ending punctuation including comma)
+        is_incomplete = not bool(re.search(r'[.!?,]\s*$', current_text))
 
-            # Merge current single word with next segment
-            merged_text = f"{current_text} {next_segment.get('text', '').strip()}".strip()
+        # If current segment is incomplete, keep merging with next segments until complete
+        if (word_count <= 1 or is_incomplete) and i < len(sentence_split_segments) - 1:
+            # Start building complete sentence
+            merged_segments = [current_segment]
+            merged_text = current_text
+            j = i + 1
 
-            # Calculate combined timing
-            current_start = current_segment.get('start', 0)
-            current_duration = current_segment.get('duration', 0)
-            next_start = next_segment.get('start', 0)
-            next_duration = next_segment.get('duration', 0)
+            # Keep adding segments until we find a complete sentence or run out
+            while j < len(sentence_split_segments):
+                next_segment = sentence_split_segments[j]
+                next_text = next_segment.get('text', '').strip()
+                merged_text = f"{merged_text} {next_text}".strip()
+                merged_segments.append(next_segment)
 
-            # Combined segment spans from start of current to end of next
-            combined_end = next_start + next_duration
-            combined_duration = combined_end - current_start
+                # Check if we now have a complete sentence (including comma)
+                has_complete_punctuation = bool(re.search(r'[.!?,]\s*$', merged_text))
+                if has_complete_punctuation:
+                    break
+                j += 1
 
+            # Create merged segment from all collected segments
+            # CRITICAL FIX: Preserve original timing boundaries to maintain video accuracy
+            first_segment = merged_segments[0]
+            last_segment = merged_segments[-1]
+
+            # Use the actual start time from the original segments, not calculated times
+            combined_start = float(first_segment.get('start', 0))
+            last_start = float(last_segment.get('start', 0))
+            last_duration = float(last_segment.get('duration', 0))
+            combined_end = last_start + last_duration
+            combined_duration = combined_end - combined_start
+
+            # Create the final merged segment with original segment mapping for word timing
             merged_segment = {
                 'text': merged_text,
-                'start': current_start,
+                'start': combined_start,
                 'duration': combined_duration,
                 'end': combined_end,
-                'original_segments': current_segment.get('original_segments', 1) + next_segment.get('original_segments', 1),
-                'sentence_complete': next_segment.get('sentence_complete', False),
-                'break_reason': f"single_word_merged_with_{next_segment.get('break_reason', 'unknown')}",
-                'merge_info': 'single_word_merged_with_next'
+                'original_segments': sum(seg.get('original_segments', 1) for seg in merged_segments),
+                'sentence_complete': bool(re.search(r'[.!?,]\s*$', merged_text)),
+                'break_reason': f"recursive_merge_{len(merged_segments)}_segments",
+                'merge_info': f'incomplete_merged_with_{len(merged_segments)}_segments',
+                # CRITICAL: Store original segment mappings for accurate word timing
+                'original_segment_mapping': [
+                    {
+                        'text': seg.get('text', ''),
+                        'start': seg.get('start', 0),
+                        'end': seg.get('end', seg.get('start', 0) + seg.get('duration', 0)),
+                        'duration': seg.get('duration', 0)
+                    } for seg in merged_segments
+                ]
             }
 
             context_merged_segments.append(merged_segment)
-            print(f"Merged single word '{current_text}' with next segment -> '{merged_text[:50]}...'")
-            i += 2  # Skip both current and next segment
+            print(f"Recursively merged {len(merged_segments)} incomplete segments -> '{merged_text[:50]}...'")
+            i = j + 1  # Skip all merged segments
         else:
             # Keep segment as-is
             context_merged_segments.append(current_segment)
@@ -1090,11 +1119,11 @@ def post_process_subtitles(raw_subtitle_segments: list, pause_gap_threshold: flo
             # Merge current single word with next segment
             merged_text = f"{current_text} {next_segment.get('text', '').strip()}".strip()
 
-            # Calculate combined timing
-            current_start = current_segment.get('start', 0)
-            current_duration = current_segment.get('duration', 0)
-            next_start = next_segment.get('start', 0)
-            next_duration = next_segment.get('duration', 0)
+            # Calculate combined timing - preserve original boundaries
+            current_start = float(current_segment.get('start', 0))
+            current_duration = float(current_segment.get('duration', 0))
+            next_start = float(next_segment.get('start', 0))
+            next_duration = float(next_segment.get('duration', 0))
 
             # Combined segment spans from start of current to end of next
             combined_end = next_start + next_duration
@@ -1123,16 +1152,59 @@ def post_process_subtitles(raw_subtitle_segments: list, pause_gap_threshold: flo
     print(f"Post-processing complete: {len(raw_subtitle_segments)} raw -> {len(final_merged_segments)} final segments")
     return final_merged_segments
 
-def save_processed_subtitles(video_id: str, processed_segments: list, raw_segments: list, vocabulary: list = None, grammar: list = None):
+def save_learning_content(video_id: str, vocabulary: list = None, grammar: list = None):
     """
-    Save processed subtitles with ALL UI display information to _proc file.
+    Save vocabulary and grammar learning content to separate _learn.json file.
+
+    Args:
+        video_id: YouTube video ID
+        vocabulary: Extracted vocabulary with timestamps
+        grammar: Extracted grammar concepts with timestamps
+    """
+    try:
+        script_dir = Path(__file__).parent
+        cache_dir = script_dir / "cache" / "subtitles"
+        cache_dir.mkdir(parents=True, exist_ok=True)
+
+        # Create learning content file with _learn suffix
+        learn_file = cache_dir / f"{video_id}_learn.json"
+
+        learning_data = {
+            "video_id": video_id,
+            "learning_timestamp": time.time(),
+            "type": "learning_content",
+            "source": "ai_extracted_content",
+
+            # Learning statistics
+            "statistics": {
+                "vocabulary_count": len(vocabulary) if vocabulary else 0,
+                "grammar_count": len(grammar) if grammar else 0,
+                "total_learning_items": (len(vocabulary) if vocabulary else 0) + (len(grammar) if grammar else 0)
+            },
+
+            # Learning content - separate from subtitle processing
+            "vocabulary": vocabulary or [],
+            "grammar": grammar or []
+        }
+
+        # Save to JSON file
+        with open(learn_file, 'w', encoding='utf-8') as f:
+            json.dump(learning_data, f, indent=2, ensure_ascii=False)
+
+        print(f"Saved learning content to: {learn_file}")
+        print(f"Learning content: {len(vocabulary or [])} vocabulary + {len(grammar or [])} grammar concepts")
+
+    except Exception as e:
+        print(f"Failed to save learning content: {e}")
+
+def save_processed_subtitles(video_id: str, processed_segments: list, raw_segments: list):
+    """
+    Save processed subtitles with UI display information to _proc file (WITHOUT learning content).
 
     Args:
         video_id: YouTube video ID
         processed_segments: Post-processed subtitle segments
         raw_segments: Original raw subtitle segments
-        vocabulary: Extracted vocabulary with timestamps
-        grammar: Extracted grammar concepts with timestamps
     """
     try:
         script_dir = Path(__file__).parent
@@ -1159,33 +1231,26 @@ def save_processed_subtitles(video_id: str, processed_segments: list, raw_segmen
             }
             ui_segments.append(ui_segment)
 
-        # Comprehensive data for UI display
+        # Comprehensive data for UI display (subtitle processing only)
         subtitle_data = {
             "video_id": video_id,
             "processing_timestamp": time.time(),
             "type": "ui_ready_processed_data",
             "source": "youtube_transcript_api_processed",
 
-            # Statistics
+            # Statistics (subtitle processing only)
             "statistics": {
                 "raw_segments_count": len(raw_segments),
                 "processed_segments_count": len(processed_segments),
                 "compression_ratio": f"{len(raw_segments)}/{len(processed_segments)} = {len(raw_segments)/len(processed_segments):.2f}x",
                 "total_duration": max([seg.get('end', 0) for seg in processed_segments], default=0),
-                "average_segment_duration": sum([seg.get('duration', 0) for seg in processed_segments]) / len(processed_segments) if processed_segments else 0,
-                "vocabulary_count": len(vocabulary) if vocabulary else 0,
-                "grammar_count": len(grammar) if grammar else 0
+                "average_segment_duration": sum([seg.get('duration', 0) for seg in processed_segments]) / len(processed_segments) if processed_segments else 0
             },
 
             # UI-ready processed segments with complete information
-            "ui_segments": ui_segments,
+            "ui_segments": ui_segments
 
-            # Learning content
-            "vocabulary": vocabulary or [],
-            "grammar": grammar or [],
-
-            # Raw segments sample for debugging (first 20 only to save space)
-            "raw_segments_sample": raw_segments[:20]
+            # Learning content moved to separate _learn.json file
         }
 
         # Save to JSON file
@@ -1194,7 +1259,6 @@ def save_processed_subtitles(video_id: str, processed_segments: list, raw_segmen
 
         print(f"Saved UI-ready processed data to: {proc_file}")
         print(f"Statistics: {len(raw_segments)} raw -> {len(processed_segments)} processed segments")
-        print(f"UI data: {len(vocabulary or [])} vocabulary + {len(grammar or [])} grammar concepts")
 
     except Exception as e:
         print(f"Failed to save processed subtitles: {e}")
@@ -1395,91 +1459,33 @@ def find_word_in_transcript(transcript: list, word: str) -> float:
     return None
 
 def get_sentence_containing_word(transcript: list, word: str, timestamp: float) -> tuple:
-    """Get the complete sentence containing the word by first finding where the word actually appears
+    """Get the sentence containing the word from processed segments
     Returns: (sentence_text, start_time, end_time)"""
 
-    # First, find the transcript chunk that actually contains the word
-    word_chunk_index = None
     word_lower = word.lower()
 
-    for i, chunk in enumerate(transcript):
-        chunk_text = chunk['text'].lower()
-        if word_lower in chunk_text:
-            word_chunk_index = i
-            break
+    # Find the processed segment that contains this word
+    for segment in transcript:
+        segment_text = segment.get('text', '').lower()
+        if word_lower in segment_text:
+            # Use the processed segment directly - it's already a complete learning unit
+            sentence = segment.get('text', '').strip()
+            start_time = segment.get('start', timestamp)
+            end_time = segment.get('end', start_time + segment.get('duration', 3.0))
 
-    # If word not found in any chunk, fallback to timestamp-based approach
-    if word_chunk_index is None:
-        for i, chunk in enumerate(transcript):
-            chunk_start = chunk['start']
-            chunk_end = chunk_start + chunk.get('duration', 3.0)
-            if chunk_start <= timestamp <= chunk_end:
-                word_chunk_index = i
-                break
+            return (sentence, start_time, end_time)
 
-    if word_chunk_index is None:
-        return (f"Context sentence containing '{word}'", timestamp, timestamp + 5)
+    # Fallback: if word not found, find segment by timestamp
+    for segment in transcript:
+        segment_start = segment.get('start', 0)
+        segment_end = segment.get('end', segment_start + segment.get('duration', 3.0))
 
-    # Start building the sentence from the word-containing chunk
-    sentence_parts = []
-    chunk_indices = []
+        if segment_start <= timestamp <= segment_end:
+            sentence = segment.get('text', '').strip()
+            return (sentence, segment_start, segment_end)
 
-    # Look backwards to find the start of the sentence
-    start_index = word_chunk_index
-    for i in range(word_chunk_index, -1, -1):
-        chunk_text = transcript[i]['text'].strip()
-        sentence_parts.insert(0, chunk_text)
-        chunk_indices.insert(0, i)
-
-        # Check if this chunk ends with sentence-ending punctuation
-        if i < word_chunk_index and re.search(r'[.!?]\s*$', chunk_text):
-            start_index = i + 1
-            sentence_parts = sentence_parts[1:]  # Remove the chunk that ended the previous sentence
-            chunk_indices = chunk_indices[1:]
-            break
-
-        # Don't go too far back (max 5 chunks)
-        if word_chunk_index - i >= 5:
-            start_index = i
-            break
-
-    # Look forwards to find the end of the sentence
-    end_index = word_chunk_index
-    for i in range(word_chunk_index + 1, len(transcript)):
-        chunk_text = transcript[i]['text'].strip()
-        sentence_parts.append(chunk_text)
-        chunk_indices.append(i)
-
-        # Check if this chunk ends with sentence-ending punctuation
-        if re.search(r'[.!?]\s*$', chunk_text):
-            end_index = i
-            break
-
-        # Don't go too far forward (max 5 chunks from target)
-        if i - word_chunk_index >= 5:
-            end_index = i
-            break
-
-    # Calculate sentence start and end times
-    sentence_start_time = transcript[chunk_indices[0]]['start'] if chunk_indices else timestamp
-    sentence_end_time = transcript[chunk_indices[-1]]['start'] + transcript[chunk_indices[-1]].get('duration', 3.0) if chunk_indices else timestamp + 5
-
-    # Join all parts to form complete sentence
-    sentence = ' '.join(sentence_parts).strip()
-
-    # Clean up the sentence
-    sentence = re.sub(r'\s+', ' ', sentence)  # Multiple spaces to single space
-    sentence = sentence.replace('\n', ' ')    # Remove newlines
-
-    # Ensure sentence ends with punctuation if it doesn't already
-    if sentence and not re.search(r'[.!?]\s*$', sentence):
-        sentence += '.'
-
-    # Verify the word is actually in the sentence
-    if word_lower not in sentence.lower():
-        return (f"Context sentence containing '{word}' (word not found in transcript)", sentence_start_time, sentence_end_time)
-
-    return (sentence if sentence else f"Context sentence containing '{word}'", sentence_start_time, sentence_end_time)
+    # Final fallback
+    return (f"Context sentence containing '{word}'", timestamp, timestamp + 5)
 
 def find_word_timestamps_smart(transcript: list, words: list) -> dict:
     """Find word timestamps with smart position detection for better UX"""
@@ -1522,12 +1528,26 @@ def get_smart_timing(text: str, word: str, entry: dict) -> dict:
         total_words = len(words_in_chunk)
         position_ratio = word_position / max(1, total_words - 1) if total_words > 1 else 0.5
 
+        # CRITICAL FIX: Check for original segment mapping to get accurate word timing
         start_time = entry['start']
         duration = entry.get('duration', 3)
+
+        # If this is a merged segment, find the original segment containing the word
+        if 'original_segment_mapping' in entry:
+            for orig_segment in entry['original_segment_mapping']:
+                orig_text = orig_segment['text'].lower()
+                if word.lower() in orig_text:
+                    # Use the original segment's timing instead of merged timing
+                    start_time = orig_segment['start']
+                    duration = orig_segment['duration']
+                    print(f"Found word '{word}' in original segment at {start_time}s (was {entry['start']}s in merged)")
+                    break
+        else:
+            duration = entry.get('duration', 3)
         original_end = start_time + duration
 
         # Check if this is a no-punctuation scenario (no sentence endings)
-        has_punctuation = bool(re.search(r'[.!?]', text))
+        has_punctuation = bool(re.search(r'[.!?,]', text))
 
         if not has_punctuation:
             # No-punctuation scenario: Apply 2-second slide adjustments
@@ -1690,7 +1710,7 @@ def adaptive_vocabulary_selection(vocabulary: list, user_level: str = "A2", max_
             selected.extend(remaining_words[:words_to_take])
     return selected[:max_words]
 
-async def extract_vocabulary_from_transcript(transcript_text: str, transcript_data: list, user_level: str = "A2", max_words: int = 8):
+async def extract_vocabulary_from_transcript(transcript_text: str, transcript_data: list, user_level: str = "A2", max_words: int = 8, raw_segments: list = None):
     """Extract key vocabulary words from transcript text with real definitions"""
     # Extract all words and count frequency
     words = re.findall(r'\b[a-zA-Z]+\b', transcript_text.lower())
@@ -1726,7 +1746,10 @@ async def extract_vocabulary_from_transcript(transcript_text: str, transcript_da
     selected_words = interesting_words[:max_words]
 
     # Find word timestamps with smart position detection for optimal UX
-    sentence_boundaries = find_word_timestamps_smart(transcript_data, selected_words)
+    # Use raw segments for accurate timing, fallback to processed data
+    timing_data_source = raw_segments if raw_segments else transcript_data
+    sentence_boundaries = find_word_timestamps_smart(timing_data_source, selected_words)
+    print(f"DEBUG: Using {'raw' if raw_segments else 'processed'} segments for word timing")
     print(f"DEBUG: Found smart timestamps for {len(sentence_boundaries)} words:")
     for word, data in sentence_boundaries.items():
         print(f"  - {word}: timestamp={data['timestamp']}, position={data.get('position_type', 'unknown')}, mode={data['playback_mode']}")
@@ -1994,11 +2017,15 @@ async def extract_content(video_data: dict):
             transcript_text = " ".join([entry['text'] for entry in transcript])
 
             # Extract vocabulary and grammar from real transcript with adaptive selection
-            vocabulary = await extract_vocabulary_from_transcript(transcript_text, transcript, user_level)
+            # Pass both processed and raw data for accurate timing
+            vocabulary = await extract_vocabulary_from_transcript(transcript_text, transcript, user_level, 8, raw_segments)
             grammar = extract_grammar_from_transcript(transcript_text)
 
-            # Save processed subtitles with ALL UI information including vocabulary and grammar
-            save_processed_subtitles(video_id, transcript, raw_segments, vocabulary, grammar)
+            # Save processed subtitles (subtitle processing only)
+            save_processed_subtitles(video_id, transcript, raw_segments)
+
+            # Save learning content separately (vocabulary and grammar)
+            save_learning_content(video_id, vocabulary, grammar)
 
             # Add first 100 subtitles for debugging as requested - now showing post-processed sentences
             subtitle_debug = []
