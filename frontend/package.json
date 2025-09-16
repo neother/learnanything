@@ -3,10 +3,18 @@
   "version": "0.1.0",
   "description": "Frontend for the Immersive Language Learning App - helping kids learn languages through YouTube videos",
   "private": true,
-  "keywords": ["language-learning", "education", "react", "typescript", "youtube", "kids"],
+  "keywords": [
+    "language-learning",
+    "education",
+    "react",
+    "typescript",
+    "youtube",
+    "kids"
+  ],
   "author": "Language Learning Project",
   "dependencies": {
     "@craco/craco": "^7.1.0",
+    "@playwright/test": "^1.55.0",
     "@testing-library/dom": "^10.4.1",
     "@testing-library/jest-dom": "^6.8.0",
     "@testing-library/react": "^16.3.0",

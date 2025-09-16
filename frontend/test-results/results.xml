@@ -1,0 +1,50 @@
+<testsuites id="" name="" tests="1" failures="1" skipped="0" errors="0" time="18.767409">
+<testsuite name="authentication.spec.ts" timestamp="2025-09-16T06:22:52.899Z" hostname="chromium" tests="1" failures="1" skipped="0" time="17.061" errors="0">
+<testcase name="Authentication Flow › should show sign in button when not authenticated" classname="authentication.spec.ts" time="17.061">
+<failure message="authentication.spec.ts:15:7 should show sign in button when not authenticated" type="FAILURE">
+<![CDATA[  [chromium] › authentication.spec.ts:15:7 › Authentication Flow › should show sign in button when not authenticated 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator:  locator('button:has-text("Sign In")')
+    Expected: visible
+    Received: <element(s) not found>
+    Timeout:  10000ms
+
+    Call log:
+      - Expect "toBeVisible" with timeout 10000ms
+      - waiting for locator('button:has-text("Sign In")')
+
+
+      29 |     // Wait and check for sign in button
+      30 |     await page.waitForTimeout(2000);
+    > 31 |     await expect(page.locator('button:has-text("Sign In")')).toBeVisible({ timeout: 10000 });
+         |                                                              ^
+      32 |   });
+      33 |
+      34 |   test('should open authentication modal when sign in is clicked', async ({ page }) => {
+        at E:\learnanything\frontend\tests\e2e\authentication.spec.ts:31:62
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\..\test-results\authentication-Authenticat-47a5f-tton-when-not-authenticated-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\..\test-results\authentication-Authenticat-47a5f-tton-when-not-authenticated-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\..\test-results\authentication-Authenticat-47a5f-tton-when-not-authenticated-chromium\error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|authentication-Authenticat-47a5f-tton-when-not-authenticated-chromium\test-failed-1.png]]
+
+[[ATTACHMENT|authentication-Authenticat-47a5f-tton-when-not-authenticated-chromium\video.webm]]
+
+[[ATTACHMENT|authentication-Authenticat-47a5f-tton-when-not-authenticated-chromium\error-context.md]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+</testsuites>

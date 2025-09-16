@@ -15,5 +15,19 @@ youtube-transcript-api==0.6.2  # For extracting YouTube subtitles
 yt-dlp>=2024.1.0       # Alternative robust YouTube subtitle extraction
 aiohttp>=3.8.0         # For async HTTP requests to external APIs
 openai>=1.0.0          # For AI-powered content extraction (optional)
+
+# Authentication dependencies:
+python-jose[cryptography]==3.3.0  # For JWT token creation and validation
+passlib[bcrypt]==1.7.4             # For password hashing
+python-decouple==3.8               # For environment variable management
+
+# Database dependencies (SQLite for now):
+sqlalchemy==2.0.36                 # ORM for database operations
+alembic==1.13.3                    # Database migrations
+
+# Additional utilities:
+pydantic[email]==2.10.0            # Email validation
+googletrans==4.0.2                 # Translation service
+
 # spacy                  # For natural language processing (future)
 # nltk                   # For language analysis (future)

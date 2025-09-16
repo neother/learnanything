@@ -5,20 +5,36 @@
 
 .main-layout {
   display: flex;
-  height: 100vh;
-  gap: 20px;
-  padding: 20px;
+  height: calc(100vh - 80px); /* Subtract header height */
+  gap: 24px;
+  padding: 24px;
+  align-items: stretch; /* Make both sections same height */
+  max-width: 1400px;
+  margin: 0 auto; /* Center the layout */
 }
 
 .video-section {
-  flex: 2;
+  flex: 1.2; /* Give video section slightly more space */
   display: flex;
   flex-direction: column;
+  min-width: 450px; /* Minimum width for video */
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  border: 1px solid #e9ecef;
 }
 
 .video-section h2 {
-  margin-bottom: 15px;
-  color: #333;
+  margin: 0 0 20px 0;
+  color: #2c3e50;
+  font-size: 22px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border-bottom: 2px solid #f8f9fa;
+  padding-bottom: 12px;
 }
 
 .url-input {
@@ -53,12 +69,16 @@
 
 .video-placeholder {
   flex: 1;
-  border: 2px dashed #ddd;
-  border-radius: 8px;
+  border: 2px solid #e9ecef;
+  border-radius: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
   min-height: 400px;
+  background: #fafbfc;
+  position: relative;
+  overflow: hidden;
+  box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
 .placeholder-text {
@@ -67,11 +87,17 @@
 }
 
 .content-panel {
-  flex: 1;
-  background-color: #f8f9fa;
-  border-radius: 8px;
-  padding: 20px;
+  flex: 0.8; /* Slightly smaller than video section */
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  border-radius: 12px;
+  padding: 24px;
   overflow-y: auto;
+  height: 100%; /* Ensure full height */
+  display: flex;
+  flex-direction: column;
+  min-width: 380px; /* Minimum width for learning panel */
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  border: 1px solid #dee2e6;
 }
 
 .vocabulary-section, .grammar-section {
@@ -136,19 +162,115 @@
   width: fit-content;
 }
 
+/* Enhanced Video Controls Styling */
+.video-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 24px;
+  padding: 16px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  border: 1px solid #e9ecef;
+}
+
+.video-controls-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.video-url-input {
+  flex: 1;
+  padding: 12px 16px;
+  border: 2px solid #dee2e6;
+  border-radius: 8px;
+  font-size: 14px;
+  transition: all 0.2s ease;
+}
+
+.video-url-input:focus {
+  border-color: #007bff;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+}
+
+.level-select {
+  padding: 12px 16px;
+  border: 2px solid #dee2e6;
+  border-radius: 8px;
+  font-size: 14px;
+  background: white;
+  min-width: 140px;
+}
+
+.control-button {
+  padding: 12px 20px;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.control-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.control-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.control-button.primary {
+  background: #007bff;
+  color: white;
+}
+
+.control-button.primary:hover:not(:disabled) {
+  background: #0056b3;
+}
+
+.control-button.test1 {
+  background: #28a745;
+  color: white;
+}
+
+.control-button.test1:hover {
+  background: #1e7e34;
+}
+
+.control-button.test2 {
+  background: #17a2b8;
+  color: white;
+}
+
+.control-button.test2:hover {
+  background: #117a8b;
+}
+
 /* Mobile Responsive Layout */
 @media (max-width: 768px) {
   .main-layout {
     flex-direction: column;
     height: auto;
     min-height: 100vh;
-    padding: 15px;
-    gap: 15px;
+    padding: 16px;
+    gap: 16px;
+    max-width: none;
   }
 
   .video-section {
     flex: none;
     order: 1;
+    min-width: auto;
+    padding: 16px;
   }
 
   .video-section h2 {
@@ -190,9 +312,28 @@
     flex: none;
     order: 2;
     margin-top: 0;
-    border-radius: 10px;
-    padding: 15px;
+    border-radius: 12px;
+    padding: 16px;
     max-height: none;
+    min-width: auto;
+  }
+
+  .video-controls {
+    padding: 12px;
+  }
+
+  .video-controls-row {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .video-url-input, .level-select {
+    width: 100%;
+  }
+
+  .control-button {
+    width: 100%;
+    justify-content: center;
   }
 
   .vocabulary-section h3, .grammar-section h3 {
@@ -224,26 +365,213 @@
 /* Tablet Layout */
 @media (min-width: 769px) and (max-width: 1024px) {
   .main-layout {
-    gap: 15px;
-    padding: 15px;
+    gap: 20px;
+    padding: 20px;
   }
 
   .video-section {
-    flex: 1.5;
-  }
-
-  .content-panel {
-    flex: 1;
+    flex: 1.1;
+    min-width: 400px;
     padding: 18px;
   }
 
-  .url-input {
-    font-size: 15px;
+  .content-panel {
+    flex: 0.9;
+    padding: 18px;
+    min-width: 350px;
   }
 
-  .extract-btn {
-    font-size: 15px;
+  .video-controls {
+    padding: 14px;
   }
+
+  .video-url-input, .level-select {
+    font-size: 14px;
+  }
+
+  .control-button {
+    font-size: 13px;
+    padding: 10px 16px;
+  }
+}
+
+/* Large Screen Layout */
+@media (min-width: 1400px) {
+  .main-layout {
+    max-width: 1600px;
+    gap: 32px;
+    padding: 32px;
+  }
+
+  .video-section {
+    padding: 24px;
+  }
+
+  .content-panel {
+    padding: 28px;
+  }
+}
+
+/* Learning Panel Styling */
+.learning-panel-container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.learning-panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  padding-bottom: 12px;
+  border-bottom: 2px solid #dee2e6;
+}
+
+.learning-panel-title {
+  font-size: 20px;
+  font-weight: 600;
+  color: #2c3e50;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.learning-state-badge {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.learning-state-badge.preview {
+  background: #e3f2fd;
+  color: #1976d2;
+  border: 1px solid #bbdefb;
+}
+
+.learning-state-badge.cruising {
+  background: #f3e5f5;
+  color: #7b1fa2;
+  border: 1px solid #ce93d8;
+}
+
+.learning-state-badge.focus {
+  background: #fff3e0;
+  color: #f57c00;
+  border: 1px solid #ffcc02;
+}
+
+.learning-state-badge.summary {
+  background: #e8f5e8;
+  color: #388e3c;
+  border: 1px solid #a5d6a7;
+}
+
+/* Focus word cards */
+.focus-word-card {
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 16px;
+  border: 2px solid #e9ecef;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transition: all 0.2s ease;
+}
+
+.focus-word-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+  border-color: #007bff;
+}
+
+.focus-word-card.mastered {
+  opacity: 0.7;
+  background: #f8f9fa;
+  border-color: #28a745;
+}
+
+.focus-word-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.focus-word-main {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.focus-word-text {
+  font-size: 18px;
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+.focus-word-level {
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.mastery-button {
+  padding: 6px 12px;
+  border: 2px solid #28a745;
+  background: transparent;
+  color: #28a745;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.mastery-button:hover {
+  background: #28a745;
+  color: white;
+}
+
+.mastery-button.mastered {
+  background: #28a745;
+  color: white;
+  cursor: default;
+}
+
+/* Action buttons */
+.primary-action-button {
+  background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+  color: white;
+  border: none;
+  padding: 16px 32px;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  margin-top: 20px;
+  box-shadow: 0 4px 12px rgba(0, 123, 255, 0.3);
+}
+
+.primary-action-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 123, 255, 0.4);
+}
+
+.primary-action-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
 }
 
 /* Pulse animation for playing indicators */

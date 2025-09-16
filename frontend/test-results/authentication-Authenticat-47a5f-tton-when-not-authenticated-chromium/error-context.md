@@ -1,0 +1,726 @@
+# Page snapshot
+
+```yaml
+- generic:
+  - generic [ref=e2]:
+    - generic [ref=e4]:
+      - generic [ref=e5]: 🎓 Welcome to Smart Navigator
+      - generic [ref=e8]: Step 1/4
+    - generic [ref=e10]:
+      - generic [ref=e11]: 🎯
+      - heading "Welcome to Smart Navigator" [level=1] [ref=e12]
+      - paragraph [ref=e13]: Transform any YouTube video into your personal language course
+      - generic [ref=e14]:
+        - generic [ref=e15]:
+          - generic [ref=e16]: 🎬
+          - heading "Smart Video Learning" [level=3] [ref=e17]
+          - paragraph [ref=e18]: Automatic pausing at focus words with intelligent learning sessions
+        - generic [ref=e19]:
+          - generic [ref=e20]: 🎓
+          - heading "AI-Powered Tutor" [level=3] [ref=e21]
+          - paragraph [ref=e22]: Interactive conversations to deepen your vocabulary understanding
+        - generic [ref=e23]:
+          - generic [ref=e24]: 📊
+          - heading "Adaptive Learning" [level=3] [ref=e25]
+          - paragraph [ref=e26]: CEFR-based content that adapts to your current skill level
+      - generic [ref=e27]:
+        - button "Take 2-Min Assessment →" [ref=e28] [cursor=pointer]
+        - generic [ref=e29]: We'll customize your learning experience based on your current vocabulary level
+        - button "Skip assessment - Start with A2 level" [ref=e30] [cursor=pointer]
+      - generic [ref=e31]: Join thousands of learners improving their English with Smart Navigator
+  - iframe [active] [ref=e32]:
+    - generic [ref=f1e2]:
+      - generic [ref=f1e3]: "Compiled with problems:"
+      - button "Dismiss" [ref=f1e4] [cursor=pointer]: ×
+      - generic [ref=f1e5]:
+        - generic [ref=f1e6]:
+          - generic [ref=f1e7]: ERROR in src/services/smartSessionApi.ts:66:7
+          - generic [ref=f1e8]:
+            - generic [ref=f1e9]: "TS2322:"
+            - text: "Type '{ 'Content-Type': string; Authorization: string; } | { 'Content-Type': string; Authorization?: undefined; }' is not assignable to type 'HeadersInit | undefined'. Type '{ 'Content-Type': string; Authorization?: undefined; }' is not assignable to type 'HeadersInit | undefined'. Type '{ 'Content-Type': string; Authorization?: undefined; }' is not assignable to type 'Record<string, string>'. Property ''Authorization'' is incompatible with index signature. Type 'undefined' is not assignable to type 'string'."
+            - generic [ref=f1e10]:
+              - generic [ref=f1e11]: 64 |
+              - generic [ref=f1e12]: const
+              - text: response
+              - generic [ref=f1e13]: =
+              - generic [ref=f1e14]: await
+              - text: fetch(
+              - generic [ref=f1e15]: "`${API_BASE_URL}/api/smart-sessions/personalized`"
+              - generic [ref=f1e16]: ","
+              - text: "{"
+              - generic [ref=f1e17]: 65 |
+              - text: method
+              - generic [ref=f1e18]: ":"
+              - generic [ref=f1e19]: "'POST'"
+              - generic [ref=f1e20]: ","
+              - generic [ref=f1e22]: ">"
+              - generic [ref=f1e23]: 66 |
+              - text: headers
+              - generic [ref=f1e24]: ":"
+              - text: getAuthHeaders()
+              - generic [ref=f1e25]: ","
+              - generic [ref=f1e26]: "|"
+              - generic [ref=f1e28]: ^
+              - generic [ref=f1e30]: ^
+              - generic [ref=f1e32]: ^
+              - generic [ref=f1e34]: ^
+              - generic [ref=f1e36]: ^
+              - generic [ref=f1e38]: ^
+              - generic [ref=f1e40]: ^
+              - generic [ref=f1e41]: 67 |
+              - text: body
+              - generic [ref=f1e42]: ":"
+              - generic [ref=f1e43]: JSON
+              - generic [ref=f1e44]: .
+              - text: stringify(request)
+              - generic [ref=f1e45]: ","
+              - generic [ref=f1e46]: 68 |
+              - text: "})"
+              - generic [ref=f1e47]: ;
+              - generic [ref=f1e48]: 69 |
+        - generic [ref=f1e49]:
+          - generic [ref=f1e50]: ERROR in src/services/smartSessionApi.ts:86:7
+          - generic [ref=f1e51]:
+            - generic [ref=f1e52]: "TS2322:"
+            - text: "Type '{ 'Content-Type': string; Authorization: string; } | { 'Content-Type': string; Authorization?: undefined; }' is not assignable to type 'HeadersInit | undefined'."
+            - generic [ref=f1e53]:
+              - generic [ref=f1e54]: 84 |
+              - generic [ref=f1e55]: const
+              - text: response
+              - generic [ref=f1e56]: =
+              - generic [ref=f1e57]: await
+              - text: fetch(
+              - generic [ref=f1e58]: "`${API_BASE_URL}/api/smart-sessions/adaptive-series`"
+              - generic [ref=f1e59]: ","
+              - text: "{"
+              - generic [ref=f1e60]: 85 |
+              - text: method
+              - generic [ref=f1e61]: ":"
+              - generic [ref=f1e62]: "'POST'"
+              - generic [ref=f1e63]: ","
+              - generic [ref=f1e65]: ">"
+              - generic [ref=f1e66]: 86 |
+              - text: headers
+              - generic [ref=f1e67]: ":"
+              - text: getAuthHeaders()
+              - generic [ref=f1e68]: ","
+              - generic [ref=f1e69]: "|"
+              - generic [ref=f1e71]: ^
+              - generic [ref=f1e73]: ^
+              - generic [ref=f1e75]: ^
+              - generic [ref=f1e77]: ^
+              - generic [ref=f1e79]: ^
+              - generic [ref=f1e81]: ^
+              - generic [ref=f1e83]: ^
+              - generic [ref=f1e84]: 87 |
+              - text: body
+              - generic [ref=f1e85]: ":"
+              - generic [ref=f1e86]: JSON
+              - generic [ref=f1e87]: .
+              - text: stringify(request)
+              - generic [ref=f1e88]: ","
+              - generic [ref=f1e89]: 88 |
+              - text: "})"
+              - generic [ref=f1e90]: ;
+              - generic [ref=f1e91]: 89 |
+        - generic [ref=f1e92]:
+          - generic [ref=f1e93]: ERROR in src/services/smartSessionApi.ts:106:7
+          - generic [ref=f1e94]:
+            - generic [ref=f1e95]: "TS2322:"
+            - text: "Type '{ 'Content-Type': string; Authorization: string; } | { 'Content-Type': string; Authorization?: undefined; }' is not assignable to type 'HeadersInit | undefined'."
+            - generic [ref=f1e96]:
+              - generic [ref=f1e97]: 104 |
+              - generic [ref=f1e98]: const
+              - text: response
+              - generic [ref=f1e99]: =
+              - generic [ref=f1e100]: await
+              - text: fetch(
+              - generic [ref=f1e101]: "`${API_BASE_URL}/api/smart-sessions/spaced-repetition?review_type=${reviewType}`"
+              - generic [ref=f1e102]: ","
+              - text: "{"
+              - generic [ref=f1e103]: 105 |
+              - text: method
+              - generic [ref=f1e104]: ":"
+              - generic [ref=f1e105]: "'GET'"
+              - generic [ref=f1e106]: ","
+              - generic [ref=f1e108]: ">"
+              - generic [ref=f1e109]: 106 |
+              - text: headers
+              - generic [ref=f1e110]: ":"
+              - text: getAuthHeaders()
+              - generic [ref=f1e111]: ","
+              - generic [ref=f1e112]: "|"
+              - generic [ref=f1e114]: ^
+              - generic [ref=f1e116]: ^
+              - generic [ref=f1e118]: ^
+              - generic [ref=f1e120]: ^
+              - generic [ref=f1e122]: ^
+              - generic [ref=f1e124]: ^
+              - generic [ref=f1e126]: ^
+              - generic [ref=f1e127]: 107 |
+              - text: "})"
+              - generic [ref=f1e128]: ;
+              - generic [ref=f1e129]: 108 |
+              - generic [ref=f1e130]: 109 |
+              - generic [ref=f1e131]: if
+              - text: (
+              - generic [ref=f1e132]: "!"
+              - text: response
+              - generic [ref=f1e133]: .
+              - text: "ok) {"
+        - generic [ref=f1e134]:
+          - generic [ref=f1e135]: ERROR in src/services/smartSessionApi.ts:125:7
+          - generic [ref=f1e136]:
+            - generic [ref=f1e137]: "TS2322:"
+            - text: "Type '{ 'Content-Type': string; Authorization: string; } | { 'Content-Type': string; Authorization?: undefined; }' is not assignable to type 'HeadersInit | undefined'."
+            - generic [ref=f1e138]:
+              - generic [ref=f1e139]: 123 |
+              - generic [ref=f1e140]: const
+              - text: response
+              - generic [ref=f1e141]: =
+              - generic [ref=f1e142]: await
+              - text: fetch(
+              - generic [ref=f1e143]: "`${API_BASE_URL}/api/smart-sessions/optimize`"
+              - generic [ref=f1e144]: ","
+              - text: "{"
+              - generic [ref=f1e145]: 124 |
+              - text: method
+              - generic [ref=f1e146]: ":"
+              - generic [ref=f1e147]: "'POST'"
+              - generic [ref=f1e148]: ","
+              - generic [ref=f1e150]: ">"
+              - generic [ref=f1e151]: 125 |
+              - text: headers
+              - generic [ref=f1e152]: ":"
+              - text: getAuthHeaders()
+              - generic [ref=f1e153]: ","
+              - generic [ref=f1e154]: "|"
+              - generic [ref=f1e156]: ^
+              - generic [ref=f1e158]: ^
+              - generic [ref=f1e160]: ^
+              - generic [ref=f1e162]: ^
+              - generic [ref=f1e164]: ^
+              - generic [ref=f1e166]: ^
+              - generic [ref=f1e168]: ^
+              - generic [ref=f1e169]: 126 |
+              - text: body
+              - generic [ref=f1e170]: ":"
+              - generic [ref=f1e171]: JSON
+              - generic [ref=f1e172]: .
+              - text: stringify(request)
+              - generic [ref=f1e173]: ","
+              - generic [ref=f1e174]: 127 |
+              - text: "})"
+              - generic [ref=f1e175]: ;
+              - generic [ref=f1e176]: 128 |
+        - generic [ref=f1e177]:
+          - generic [ref=f1e178]: ERROR in src/services/smartSessionApi.ts:145:7
+          - generic [ref=f1e179]:
+            - generic [ref=f1e180]: "TS2322:"
+            - text: "Type '{ 'Content-Type': string; Authorization: string; } | { 'Content-Type': string; Authorization?: undefined; }' is not assignable to type 'HeadersInit | undefined'."
+            - generic [ref=f1e181]:
+              - generic [ref=f1e182]: 143 |
+              - generic [ref=f1e183]: const
+              - text: response
+              - generic [ref=f1e184]: =
+              - generic [ref=f1e185]: await
+              - text: fetch(
+              - generic [ref=f1e186]: "`${API_BASE_URL}/api/smart-sessions/recommendations`"
+              - generic [ref=f1e187]: ","
+              - text: "{"
+              - generic [ref=f1e188]: 144 |
+              - text: method
+              - generic [ref=f1e189]: ":"
+              - generic [ref=f1e190]: "'GET'"
+              - generic [ref=f1e191]: ","
+              - generic [ref=f1e193]: ">"
+              - generic [ref=f1e194]: 145 |
+              - text: headers
+              - generic [ref=f1e195]: ":"
+              - text: getAuthHeaders()
+              - generic [ref=f1e196]: ","
+              - generic [ref=f1e197]: "|"
+              - generic [ref=f1e199]: ^
+              - generic [ref=f1e201]: ^
+              - generic [ref=f1e203]: ^
+              - generic [ref=f1e205]: ^
+              - generic [ref=f1e207]: ^
+              - generic [ref=f1e209]: ^
+              - generic [ref=f1e211]: ^
+              - generic [ref=f1e212]: 146 |
+              - text: "})"
+              - generic [ref=f1e213]: ;
+              - generic [ref=f1e214]: 147 |
+              - generic [ref=f1e215]: 148 |
+              - generic [ref=f1e216]: if
+              - text: (
+              - generic [ref=f1e217]: "!"
+              - text: response
+              - generic [ref=f1e218]: .
+              - text: "ok) {"
+        - generic [ref=f1e219]:
+          - generic [ref=f1e220]: ERROR in src/services/smartSessionApi.ts:164:7
+          - generic [ref=f1e221]:
+            - generic [ref=f1e222]: "TS2322:"
+            - text: "Type '{ 'Content-Type': string; Authorization: string; } | { 'Content-Type': string; Authorization?: undefined; }' is not assignable to type 'HeadersInit | undefined'."
+            - generic [ref=f1e223]:
+              - generic [ref=f1e224]: 162 |
+              - generic [ref=f1e225]: const
+              - text: response
+              - generic [ref=f1e226]: =
+              - generic [ref=f1e227]: await
+              - text: fetch(
+              - generic [ref=f1e228]: "`${API_BASE_URL}/api/smart-sessions/user-analytics`"
+              - generic [ref=f1e229]: ","
+              - text: "{"
+              - generic [ref=f1e230]: 163 |
+              - text: method
+              - generic [ref=f1e231]: ":"
+              - generic [ref=f1e232]: "'GET'"
+              - generic [ref=f1e233]: ","
+              - generic [ref=f1e235]: ">"
+              - generic [ref=f1e236]: 164 |
+              - text: headers
+              - generic [ref=f1e237]: ":"
+              - text: getAuthHeaders()
+              - generic [ref=f1e238]: ","
+              - generic [ref=f1e239]: "|"
+              - generic [ref=f1e241]: ^
+              - generic [ref=f1e243]: ^
+              - generic [ref=f1e245]: ^
+              - generic [ref=f1e247]: ^
+              - generic [ref=f1e249]: ^
+              - generic [ref=f1e251]: ^
+              - generic [ref=f1e253]: ^
+              - generic [ref=f1e254]: 165 |
+              - text: "})"
+              - generic [ref=f1e255]: ;
+              - generic [ref=f1e256]: 166 |
+              - generic [ref=f1e257]: 167 |
+              - generic [ref=f1e258]: if
+              - text: (
+              - generic [ref=f1e259]: "!"
+              - text: response
+              - generic [ref=f1e260]: .
+              - text: "ok) {"
+        - generic [ref=f1e261]:
+          - generic [ref=f1e262]: ERROR in src/services/smartSessionApi.ts:183:7
+          - generic [ref=f1e263]:
+            - generic [ref=f1e264]: "TS2322:"
+            - text: "Type '{ 'Content-Type': string; Authorization: string; } | { 'Content-Type': string; Authorization?: undefined; }' is not assignable to type 'HeadersInit | undefined'."
+            - generic [ref=f1e265]:
+              - generic [ref=f1e266]: 181 |
+              - generic [ref=f1e267]: const
+              - text: response
+              - generic [ref=f1e268]: =
+              - generic [ref=f1e269]: await
+              - text: fetch(
+              - generic [ref=f1e270]: "`${API_BASE_URL}/api/analytics/summary`"
+              - generic [ref=f1e271]: ","
+              - text: "{"
+              - generic [ref=f1e272]: 182 |
+              - text: method
+              - generic [ref=f1e273]: ":"
+              - generic [ref=f1e274]: "'GET'"
+              - generic [ref=f1e275]: ","
+              - generic [ref=f1e277]: ">"
+              - generic [ref=f1e278]: 183 |
+              - text: headers
+              - generic [ref=f1e279]: ":"
+              - text: getAuthHeaders()
+              - generic [ref=f1e280]: ","
+              - generic [ref=f1e281]: "|"
+              - generic [ref=f1e283]: ^
+              - generic [ref=f1e285]: ^
+              - generic [ref=f1e287]: ^
+              - generic [ref=f1e289]: ^
+              - generic [ref=f1e291]: ^
+              - generic [ref=f1e293]: ^
+              - generic [ref=f1e295]: ^
+              - generic [ref=f1e296]: 184 |
+              - text: "})"
+              - generic [ref=f1e297]: ;
+              - generic [ref=f1e298]: 185 |
+              - generic [ref=f1e299]: 186 |
+              - generic [ref=f1e300]: if
+              - text: (
+              - generic [ref=f1e301]: "!"
+              - text: response
+              - generic [ref=f1e302]: .
+              - text: "ok) {"
+        - generic [ref=f1e303]:
+          - generic [ref=f1e304]: ERROR in src/services/smartSessionApi.ts:202:7
+          - generic [ref=f1e305]:
+            - generic [ref=f1e306]: "TS2322:"
+            - text: "Type '{ 'Content-Type': string; Authorization: string; } | { 'Content-Type': string; Authorization?: undefined; }' is not assignable to type 'HeadersInit | undefined'."
+            - generic [ref=f1e307]:
+              - generic [ref=f1e308]: 200 |
+              - generic [ref=f1e309]: const
+              - text: response
+              - generic [ref=f1e310]: =
+              - generic [ref=f1e311]: await
+              - text: fetch(
+              - generic [ref=f1e312]: "`${API_BASE_URL}/api/analytics/insights?days=${days}`"
+              - generic [ref=f1e313]: ","
+              - text: "{"
+              - generic [ref=f1e314]: 201 |
+              - text: method
+              - generic [ref=f1e315]: ":"
+              - generic [ref=f1e316]: "'GET'"
+              - generic [ref=f1e317]: ","
+              - generic [ref=f1e319]: ">"
+              - generic [ref=f1e320]: 202 |
+              - text: headers
+              - generic [ref=f1e321]: ":"
+              - text: getAuthHeaders()
+              - generic [ref=f1e322]: ","
+              - generic [ref=f1e323]: "|"
+              - generic [ref=f1e325]: ^
+              - generic [ref=f1e327]: ^
+              - generic [ref=f1e329]: ^
+              - generic [ref=f1e331]: ^
+              - generic [ref=f1e333]: ^
+              - generic [ref=f1e335]: ^
+              - generic [ref=f1e337]: ^
+              - generic [ref=f1e338]: 203 |
+              - text: "})"
+              - generic [ref=f1e339]: ;
+              - generic [ref=f1e340]: 204 |
+              - generic [ref=f1e341]: 205 |
+              - generic [ref=f1e342]: if
+              - text: (
+              - generic [ref=f1e343]: "!"
+              - text: response
+              - generic [ref=f1e344]: .
+              - text: "ok) {"
+        - generic [ref=f1e345]:
+          - generic [ref=f1e346]: ERROR in src/services/smartSessionApi.ts:227:7
+          - generic [ref=f1e347]:
+            - generic [ref=f1e348]: "TS2322:"
+            - text: "Type '{ 'Content-Type': string; Authorization: string; } | { 'Content-Type': string; Authorization?: undefined; }' is not assignable to type 'HeadersInit | undefined'."
+            - generic [ref=f1e349]:
+              - generic [ref=f1e350]: 225 |
+              - generic [ref=f1e351]: const
+              - text: response
+              - generic [ref=f1e352]: =
+              - generic [ref=f1e353]: await
+              - text: fetch(
+              - generic [ref=f1e354]: "`${API_BASE_URL}/api/analytics/sessions/start`"
+              - generic [ref=f1e355]: ","
+              - text: "{"
+              - generic [ref=f1e356]: 226 |
+              - text: method
+              - generic [ref=f1e357]: ":"
+              - generic [ref=f1e358]: "'POST'"
+              - generic [ref=f1e359]: ","
+              - generic [ref=f1e361]: ">"
+              - generic [ref=f1e362]: 227 |
+              - text: headers
+              - generic [ref=f1e363]: ":"
+              - text: getAuthHeaders()
+              - generic [ref=f1e364]: ","
+              - generic [ref=f1e365]: "|"
+              - generic [ref=f1e367]: ^
+              - generic [ref=f1e369]: ^
+              - generic [ref=f1e371]: ^
+              - generic [ref=f1e373]: ^
+              - generic [ref=f1e375]: ^
+              - generic [ref=f1e377]: ^
+              - generic [ref=f1e379]: ^
+              - generic [ref=f1e380]: 228 |
+              - text: body
+              - generic [ref=f1e381]: ":"
+              - generic [ref=f1e382]: JSON
+              - generic [ref=f1e383]: .
+              - text: "stringify({"
+              - generic [ref=f1e384]: 229 |
+              - text: video_url
+              - generic [ref=f1e385]: ":"
+              - text: videoUrl
+              - generic [ref=f1e386]: ","
+              - generic [ref=f1e387]: 230 |
+              - text: session_number
+              - generic [ref=f1e388]: ":"
+              - text: sessionNumber
+              - generic [ref=f1e389]: ","
+        - generic [ref=f1e390]:
+          - generic [ref=f1e391]: ERROR in src/services/smartSessionApi.ts:257:7
+          - generic [ref=f1e392]:
+            - generic [ref=f1e393]: "TS2322:"
+            - text: "Type '{ 'Content-Type': string; Authorization: string; } | { 'Content-Type': string; Authorization?: undefined; }' is not assignable to type 'HeadersInit | undefined'."
+            - generic [ref=f1e394]:
+              - generic [ref=f1e395]: 255 |
+              - generic [ref=f1e396]: const
+              - text: response
+              - generic [ref=f1e397]: =
+              - generic [ref=f1e398]: await
+              - text: fetch(
+              - generic [ref=f1e399]: "`${API_BASE_URL}/api/analytics/sessions/${sessionId}/complete`"
+              - generic [ref=f1e400]: ","
+              - text: "{"
+              - generic [ref=f1e401]: 256 |
+              - text: method
+              - generic [ref=f1e402]: ":"
+              - generic [ref=f1e403]: "'PUT'"
+              - generic [ref=f1e404]: ","
+              - generic [ref=f1e406]: ">"
+              - generic [ref=f1e407]: 257 |
+              - text: headers
+              - generic [ref=f1e408]: ":"
+              - text: getAuthHeaders()
+              - generic [ref=f1e409]: ","
+              - generic [ref=f1e410]: "|"
+              - generic [ref=f1e412]: ^
+              - generic [ref=f1e414]: ^
+              - generic [ref=f1e416]: ^
+              - generic [ref=f1e418]: ^
+              - generic [ref=f1e420]: ^
+              - generic [ref=f1e422]: ^
+              - generic [ref=f1e424]: ^
+              - generic [ref=f1e425]: 258 |
+              - text: body
+              - generic [ref=f1e426]: ":"
+              - generic [ref=f1e427]: JSON
+              - generic [ref=f1e428]: .
+              - text: "stringify({"
+              - generic [ref=f1e429]: 259 |
+              - text: words_mastered
+              - generic [ref=f1e430]: ":"
+              - text: wordsMastered
+              - generic [ref=f1e431]: ","
+              - generic [ref=f1e432]: 260 |
+              - text: completion_percentage
+              - generic [ref=f1e433]: ":"
+              - text: completionPercentage
+              - generic [ref=f1e434]: ","
+        - generic [ref=f1e435]:
+          - generic [ref=f1e436]: ERROR in src/services/smartSessionApi.ts:289:7
+          - generic [ref=f1e437]:
+            - generic [ref=f1e438]: "TS2322:"
+            - text: "Type '{ 'Content-Type': string; Authorization: string; } | { 'Content-Type': string; Authorization?: undefined; }' is not assignable to type 'HeadersInit | undefined'."
+            - generic [ref=f1e439]:
+              - generic [ref=f1e440]: 287 |
+              - generic [ref=f1e441]: const
+              - text: response
+              - generic [ref=f1e442]: =
+              - generic [ref=f1e443]: await
+              - text: fetch(
+              - generic [ref=f1e444]: "`${API_BASE_URL}/api/analytics/words/track`"
+              - generic [ref=f1e445]: ","
+              - text: "{"
+              - generic [ref=f1e446]: 288 |
+              - text: method
+              - generic [ref=f1e447]: ":"
+              - generic [ref=f1e448]: "'POST'"
+              - generic [ref=f1e449]: ","
+              - generic [ref=f1e451]: ">"
+              - generic [ref=f1e452]: 289 |
+              - text: headers
+              - generic [ref=f1e453]: ":"
+              - text: getAuthHeaders()
+              - generic [ref=f1e454]: ","
+              - generic [ref=f1e455]: "|"
+              - generic [ref=f1e457]: ^
+              - generic [ref=f1e459]: ^
+              - generic [ref=f1e461]: ^
+              - generic [ref=f1e463]: ^
+              - generic [ref=f1e465]: ^
+              - generic [ref=f1e467]: ^
+              - generic [ref=f1e469]: ^
+              - generic [ref=f1e470]: 290 |
+              - text: body
+              - generic [ref=f1e471]: ":"
+              - generic [ref=f1e472]: JSON
+              - generic [ref=f1e473]: .
+              - text: "stringify({"
+              - generic [ref=f1e474]: 291 |
+              - text: word
+              - generic [ref=f1e475]: ","
+              - generic [ref=f1e476]: 292 |
+              - text: cefr_level
+              - generic [ref=f1e477]: ":"
+              - text: cefrLevel
+              - generic [ref=f1e478]: ","
+        - generic [ref=f1e479]:
+          - generic [ref=f1e480]: ERROR in src/services/smartSessionApi.ts:318:7
+          - generic [ref=f1e481]:
+            - generic [ref=f1e482]: "TS2322:"
+            - text: "Type '{ 'Content-Type': string; Authorization: string; } | { 'Content-Type': string; Authorization?: undefined; }' is not assignable to type 'HeadersInit | undefined'."
+            - generic [ref=f1e483]:
+              - generic [ref=f1e484]: 316 |
+              - generic [ref=f1e485]: const
+              - text: response
+              - generic [ref=f1e486]: =
+              - generic [ref=f1e487]: await
+              - text: fetch(
+              - generic [ref=f1e488]: "`${API_BASE_URL}/api/analytics/words/${encodeURIComponent(word)}/master`"
+              - generic [ref=f1e489]: ","
+              - text: "{"
+              - generic [ref=f1e490]: 317 |
+              - text: method
+              - generic [ref=f1e491]: ":"
+              - generic [ref=f1e492]: "'PUT'"
+              - generic [ref=f1e493]: ","
+              - generic [ref=f1e495]: ">"
+              - generic [ref=f1e496]: 318 |
+              - text: headers
+              - generic [ref=f1e497]: ":"
+              - text: getAuthHeaders()
+              - generic [ref=f1e498]: ","
+              - generic [ref=f1e499]: "|"
+              - generic [ref=f1e501]: ^
+              - generic [ref=f1e503]: ^
+              - generic [ref=f1e505]: ^
+              - generic [ref=f1e507]: ^
+              - generic [ref=f1e509]: ^
+              - generic [ref=f1e511]: ^
+              - generic [ref=f1e513]: ^
+              - generic [ref=f1e514]: 319 |
+              - text: "})"
+              - generic [ref=f1e515]: ;
+              - generic [ref=f1e516]: 320 |
+              - generic [ref=f1e517]: 321 |
+              - generic [ref=f1e518]: if
+              - text: (
+              - generic [ref=f1e519]: "!"
+              - text: response
+              - generic [ref=f1e520]: .
+              - text: "ok) {"
+        - generic [ref=f1e521]:
+          - generic [ref=f1e522]: ERROR in src/services/smartSessionApi.ts:337:7
+          - generic [ref=f1e523]:
+            - generic [ref=f1e524]: "TS2322:"
+            - text: "Type '{ 'Content-Type': string; Authorization: string; } | { 'Content-Type': string; Authorization?: undefined; }' is not assignable to type 'HeadersInit | undefined'."
+            - generic [ref=f1e525]:
+              - generic [ref=f1e526]: 335 |
+              - generic [ref=f1e527]: const
+              - text: response
+              - generic [ref=f1e528]: =
+              - generic [ref=f1e529]: await
+              - text: fetch(
+              - generic [ref=f1e530]: "`${API_BASE_URL}/api/analytics/words/review?limit=${limit}`"
+              - generic [ref=f1e531]: ","
+              - text: "{"
+              - generic [ref=f1e532]: 336 |
+              - text: method
+              - generic [ref=f1e533]: ":"
+              - generic [ref=f1e534]: "'GET'"
+              - generic [ref=f1e535]: ","
+              - generic [ref=f1e537]: ">"
+              - generic [ref=f1e538]: 337 |
+              - text: headers
+              - generic [ref=f1e539]: ":"
+              - text: getAuthHeaders()
+              - generic [ref=f1e540]: ","
+              - generic [ref=f1e541]: "|"
+              - generic [ref=f1e543]: ^
+              - generic [ref=f1e545]: ^
+              - generic [ref=f1e547]: ^
+              - generic [ref=f1e549]: ^
+              - generic [ref=f1e551]: ^
+              - generic [ref=f1e553]: ^
+              - generic [ref=f1e555]: ^
+              - generic [ref=f1e556]: 338 |
+              - text: "})"
+              - generic [ref=f1e557]: ;
+              - generic [ref=f1e558]: 339 |
+              - generic [ref=f1e559]: 340 |
+              - generic [ref=f1e560]: if
+              - text: (
+              - generic [ref=f1e561]: "!"
+              - text: response
+              - generic [ref=f1e562]: .
+              - text: "ok) {"
+        - generic [ref=f1e563]:
+          - generic [ref=f1e564]: ERROR in src/services/smartSessionApi.ts:356:7
+          - generic [ref=f1e565]:
+            - generic [ref=f1e566]: "TS2322:"
+            - text: "Type '{ 'Content-Type': string; Authorization: string; } | { 'Content-Type': string; Authorization?: undefined; }' is not assignable to type 'HeadersInit | undefined'."
+            - generic [ref=f1e567]:
+              - generic [ref=f1e568]: 354 |
+              - generic [ref=f1e569]: const
+              - text: response
+              - generic [ref=f1e570]: =
+              - generic [ref=f1e571]: await
+              - text: fetch(
+              - generic [ref=f1e572]: "`${API_BASE_URL}/api/analytics/dashboard`"
+              - generic [ref=f1e573]: ","
+              - text: "{"
+              - generic [ref=f1e574]: 355 |
+              - text: method
+              - generic [ref=f1e575]: ":"
+              - generic [ref=f1e576]: "'GET'"
+              - generic [ref=f1e577]: ","
+              - generic [ref=f1e579]: ">"
+              - generic [ref=f1e580]: 356 |
+              - text: headers
+              - generic [ref=f1e581]: ":"
+              - text: getAuthHeaders()
+              - generic [ref=f1e582]: ","
+              - generic [ref=f1e583]: "|"
+              - generic [ref=f1e585]: ^
+              - generic [ref=f1e587]: ^
+              - generic [ref=f1e589]: ^
+              - generic [ref=f1e591]: ^
+              - generic [ref=f1e593]: ^
+              - generic [ref=f1e595]: ^
+              - generic [ref=f1e597]: ^
+              - generic [ref=f1e598]: 357 |
+              - text: "})"
+              - generic [ref=f1e599]: ;
+              - generic [ref=f1e600]: 358 |
+              - generic [ref=f1e601]: 359 |
+              - generic [ref=f1e602]: if
+              - text: (
+              - generic [ref=f1e603]: "!"
+              - text: response
+              - generic [ref=f1e604]: .
+              - text: "ok) {"
+        - generic [ref=f1e605]:
+          - generic [ref=f1e606]: ERROR in src/services/smartSessionApi.ts:408:7
+          - generic [ref=f1e607]:
+            - generic [ref=f1e608]: "TS2322:"
+            - text: "Type '{ 'Content-Type': string; Authorization: string; } | { 'Content-Type': string; Authorization?: undefined; }' is not assignable to type 'HeadersInit | undefined'."
+            - generic [ref=f1e609]:
+              - generic [ref=f1e610]: 406 |
+              - generic [ref=f1e611]: return
+              - text: fetch(
+              - generic [ref=f1e612]: "`${API_BASE_URL}/api/generate-sessions`"
+              - generic [ref=f1e613]: ","
+              - text: "{"
+              - generic [ref=f1e614]: 407 |
+              - text: method
+              - generic [ref=f1e615]: ":"
+              - generic [ref=f1e616]: "'POST'"
+              - generic [ref=f1e617]: ","
+              - generic [ref=f1e619]: ">"
+              - generic [ref=f1e620]: 408 |
+              - text: headers
+              - generic [ref=f1e621]: ":"
+              - text: getAuthHeaders()
+              - generic [ref=f1e622]: ","
+              - generic [ref=f1e623]: "|"
+              - generic [ref=f1e625]: ^
+              - generic [ref=f1e627]: ^
+              - generic [ref=f1e629]: ^
+              - generic [ref=f1e631]: ^
+              - generic [ref=f1e633]: ^
+              - generic [ref=f1e635]: ^
+              - generic [ref=f1e637]: ^
+              - generic [ref=f1e638]: 409 |
+              - text: body
+              - generic [ref=f1e639]: ":"
+              - generic [ref=f1e640]: JSON
+              - generic [ref=f1e641]: .
+              - text: "stringify({"
+              - generic [ref=f1e642]: 410 |
+              - text: vocabulary
+              - generic [ref=f1e643]: ":"
+              - text: vocabulary
+              - generic [ref=f1e644]: ","
+              - generic [ref=f1e645]: 411 |
+              - text: user_level
+              - generic [ref=f1e646]: ":"
+              - text: userLevel
+              - generic [ref=f1e647]: ","
+```

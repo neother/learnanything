@@ -49,9 +49,18 @@ if not exist node_modules (
     echo.
 )
 
-echo Frontend is starting - you will see logs below.
+echo Frontend is starting - you will see logs below and in frontend.log
 echo Press Ctrl+C to stop the server.
 echo Open http://localhost:3000 in your browser
+echo Log file location: %CD%\..\frontend.log
 echo.
 echo ========================================
-npm start
+
+REM Create fresh log file with timestamp header (override mode)
+echo [%date% %time%] Frontend server starting... > ..\frontend.log
+echo ================================================================================ >> ..\frontend.log
+
+REM Start npm - output will override the log file each time
+REM Using override mode (>) to clear previous sessions
+echo NOTE: Frontend logs will override frontend.log on each startup
+npm start >> ..\frontend.log 2>&1

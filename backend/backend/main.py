@@ -6,7 +6,7 @@ try:
     import yt_dlp
     YT_DLP_AVAILABLE = True
 except ImportError:
-    print("yt-dlp not available, will use YouTube Transcript API only")
+    pass  # Will be logged after logger initialization
     YT_DLP_AVAILABLE = False
 import re
 import random
@@ -22,24 +22,104 @@ from pathlib import Path
 from collections import Counter
 import hashlib
 import time
+import logging
+import sys
 try:
     from googletrans import Translator
     translator = Translator()
     TRANSLATION_ENABLED = True
 except ImportError:
-    print("Google Translate not available, translation disabled")
+    pass  # Will be logged after logger initialization
     translator = None
     TRANSLATION_ENABLED = False
 
+# Configure logging to output to both console and file
+def setup_logging():
+    """Setup logging configuration for both console and file output."""
+    # Create logs directory if it doesn't exist
+    log_dir = Path(__file__).parent.parent.parent  # Go up to project root
+    log_file = log_dir / "backend.log"
+
+    # Configure root logger
+    logger = logging.getLogger()
+    logger.setLevel(logging.INFO)
+
+    # Clear any existing handlers
+    logger.handlers.clear()
+
+    # Create formatters
+    file_formatter = logging.Formatter(
+        '%(asctime)s [%(levelname)s] %(name)s: %(message)s',
+        datefmt='%Y-%m-%d %H:%M:%S'
+    )
+    console_formatter = logging.Formatter(
+        '%(asctime)s [%(levelname)s] %(message)s',
+        datefmt='%H:%M:%S'
+    )
+
+    # File handler with UTF-8 encoding
+    file_handler = logging.FileHandler(log_file, mode='w', encoding='utf-8')
+    file_handler.setLevel(logging.INFO)
+    file_handler.setFormatter(file_formatter)
+
+    # Console handler with UTF-8 encoding
+    console_handler = logging.StreamHandler(sys.stdout)
+    console_handler.setLevel(logging.INFO)
+    console_handler.setFormatter(console_formatter)
+
+    # Add handlers to logger
+    logger.addHandler(file_handler)
+    logger.addHandler(console_handler)
+
+    # Configure uvicorn logger
+    uvicorn_logger = logging.getLogger("uvicorn")
+    uvicorn_logger.handlers = []
+    uvicorn_logger.addHandler(file_handler)
+    uvicorn_logger.addHandler(console_handler)
+
+    # Configure uvicorn.access logger
+    access_logger = logging.getLogger("uvicorn.access")
+    access_logger.handlers = []
+    access_logger.addHandler(file_handler)
+    access_logger.addHandler(console_handler)
+
+    logging.info("Logging system initialized - outputs to both console and backend.log")
+    return logger
+
+# Initialize logging
+logger = setup_logging()
+
+# Log initial import warnings
+if not YT_DLP_AVAILABLE:
+    logger.warning("yt-dlp not available, will use YouTube Transcript API only")
+if not TRANSLATION_ENABLED:
+    logger.warning("Google Translate not available, translation disabled")
+
 app = FastAPI(title="Language Learning API", version="1.0.0")
+
+# Initialize database on startup
+from database import init_db
+from routes.auth import router as auth_router
+from routes.analytics import router as analytics_router
+from routes.smart_sessions import router as smart_sessions_router
+
+@app.on_event("startup")
+async def startup_event():
+    init_db()
+    logging.info("Language Learning API started successfully")
 
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],  # Allow all origins for now
-    allow_credentials=False,  # Disable credentials to allow wildcard origin
+    allow_credentials=True,  # Enable credentials for JWT tokens
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Include routers
+app.include_router(auth_router)
+app.include_router(analytics_router)
+app.include_router(smart_sessions_router)
 
 # Translator initialized above with error handling
 
@@ -54,7 +134,7 @@ def load_translation_cache():
             with open(TRANSLATION_CACHE_FILE, 'r', encoding='utf-8') as f:
                 return json.load(f)
         except Exception as e:
-            print(f"Error loading translation cache: {e}")
+            logger.error(f"Error loading translation cache: {e}")
             return {}
     return {}
 
@@ -65,7 +145,7 @@ def save_translation_cache(cache):
         with open(TRANSLATION_CACHE_FILE, 'w', encoding='utf-8') as f:
             json.dump(cache, f, ensure_ascii=False, indent=2)
     except Exception as e:
-        print(f"Error saving translation cache: {e}")
+        logger.error(f"Error saving translation cache: {e}")
 
 # Global translation cache
 translation_cache = load_translation_cache()
@@ -112,9 +192,9 @@ def get_chinese_translation(word):
     if word_lower in hardcoded_translations:
         translation = hardcoded_translations[word_lower]
         try:
-            print(f"Using hardcoded translation '{word}' -> '{translation}'")
+            logger.debug(f"Using hardcoded translation '{word}' -> '{translation}'")
         except UnicodeEncodeError:
-            print(f"Using hardcoded translation '{word}' -> [Chinese characters]")
+            logger.debug(f"Using hardcoded translation '{word}' -> [Chinese characters]")
         return translation
 
     # Check cache first
@@ -134,11 +214,11 @@ def get_chinese_translation(word):
         translation_cache[word_lower] = translation
         save_translation_cache(translation_cache)
 
-        print(f"Translated '{word}' to '{translation}'")
+        logger.debug(f"Translated '{word}' to '{translation}'")
         return translation
 
     except Exception as e:
-        print(f"Translation error for '{word}': {e}")
+        logger.error(f"Translation error for '{word}': {e}")
         # Return the original word if translation fails
         return word
 
@@ -228,11 +308,11 @@ def get_cached_subtitles(video_id: str) -> dict:
             current_time = time.time()
             hours_since_cache = (current_time - cache_time) / 3600
 
-            print(f"Using cached subtitles for {video_id} (cached {hours_since_cache:.1f}h ago)")
+            logger.info(f"Using cached subtitles for {video_id} (cached {hours_since_cache:.1f}h ago)")
             return cached_data.get('subtitles', [])
 
         except Exception as e:
-            print(f"Error reading cache for {video_id}: {e}")
+            logger.error(f"Error reading cache for {video_id}: {e}")
             if cache_file.exists():
                 cache_file.unlink()  # Delete corrupted cache
 
@@ -255,10 +335,10 @@ def cache_subtitles(video_id: str, raw_subtitles: list):
         with open(cache_file, 'w', encoding='utf-8') as f:
             json.dump(cache_data, f, ensure_ascii=False, indent=2)
 
-        print(f"Cached PURE RAW subtitles for {video_id} ({len(raw_subtitles)} original segments)")
+        logger.info(f"Cached PURE RAW subtitles for {video_id} ({len(raw_subtitles)} original segments)")
 
     except Exception as e:
-        print(f"Error caching subtitles for {video_id}: {e}")
+        logger.error(f"Error caching subtitles for {video_id}: {e}")
 
 def extract_subtitles_with_ytdlp(video_url: str) -> list:
     """Extract subtitles using yt-dlp with multiple fallback methods"""
@@ -283,8 +363,8 @@ def extract_subtitles_with_ytdlp(video_url: str) -> list:
             subtitles_data = info.get('subtitles', {})
             auto_subtitles_data = info.get('automatic_captions', {})
 
-            print(f"Available manual subtitles: {list(subtitles_data.keys())}")
-            print(f"Available auto subtitles: {list(auto_subtitles_data.keys())}")
+            logger.debug(f"Available manual subtitles: {list(subtitles_data.keys())}")
+            logger.debug(f"Available auto subtitles: {list(auto_subtitles_data.keys())}")
 
             # Priority order: manual English subtitles, then auto English subtitles
             subtitle_sources = []
@@ -317,7 +397,7 @@ def extract_subtitles_with_ytdlp(video_url: str) -> list:
             if not best_subtitle:
                 best_subtitle = subtitle_sources[0]  # Use first available
 
-            print(f"Using subtitle format: {best_subtitle.get('ext')}")
+            logger.info(f"Using subtitle format: {best_subtitle.get('ext')}")
 
             # Download subtitle content
             import urllib.request
@@ -338,11 +418,11 @@ def extract_subtitles_with_ytdlp(video_url: str) -> list:
                 # Try to parse as generic format
                 transcript_entries = parse_generic_subtitles(subtitle_content)
 
-            print(f"Parsed {len(transcript_entries)} subtitle entries")
+            logger.info(f"Parsed {len(transcript_entries)} subtitle entries")
             return transcript_entries
 
     except Exception as e:
-        print(f"yt-dlp subtitle extraction failed: {e}")
+        logger.error(f"yt-dlp subtitle extraction failed: {e}")
         raise e
 
 def parse_vtt_subtitles(content: str) -> list:
@@ -429,7 +509,7 @@ def parse_srv3_subtitles(content: str) -> list:
                 })
 
     except Exception as e:
-        print(f"Error parsing srv3: {e}")
+        logger.error(f"Error parsing srv3: {e}")
 
     return entries
 
@@ -461,7 +541,7 @@ def parse_ttml_subtitles(content: str) -> list:
                 })
 
     except Exception as e:
-        print(f"Error parsing TTML: {e}")
+        logger.error(f"Error parsing TTML: {e}")
 
     return entries
 
@@ -505,15 +585,15 @@ def load_vocabulary_data():
                 with open(vocab_file, 'r', encoding='utf-8') as f:
                     data = json.load(f)
                     CEFR_WORDS[level] = set(word.lower() for word in data['words'])
-                    print(f"Loaded {len(data['words'])} {level.upper()} words")
+                    logger.info(f"Loaded {len(data['words'])} {level.upper()} words")
             else:
-                print(f"Warning: {vocab_file} not found")
+                logger.warning(f"Warning: {vocab_file} not found")
                 CEFR_WORDS[level] = set()
         except Exception as e:
-            print(f"Error loading {vocab_file}: {e}")
+            logger.error(f"Error loading {vocab_file}: {e}")
             CEFR_WORDS[level] = set()
 
-    print(f"Total vocabulary loaded: {sum(len(words) for words in CEFR_WORDS.values())} words")
+    logger.info(f"Total vocabulary loaded: {sum(len(words) for words in CEFR_WORDS.values())} words")
 
 # Load vocabulary data on startup
 load_vocabulary_data()
@@ -569,10 +649,10 @@ def load_enhanced_vocabulary(level: str) -> dict:
             enhanced_vocab_cache[level] = enhanced_data
             return enhanced_data
     except FileNotFoundError:
-        print(f"Enhanced vocabulary file not found for level {level}")
+        logger.warning(f"Enhanced vocabulary file not found for level {level}")
         return {}
     except Exception as e:
-        print(f"Error loading enhanced vocabulary for {level}: {e}")
+        logger.error(f"Error loading enhanced vocabulary for {level}: {e}")
         return {}
 
 def get_enhanced_word_info(word: str, level: str) -> dict:
@@ -782,7 +862,7 @@ def split_by_sentence_punctuation(segment):
                 'original_segments': 1
             })
 
-    print(f"Split sentence: '{text[:50]}...' -> {len(segments)} sentences")
+    logger.debug(f"Split sentence: '{text[:50]}...' -> {len(segments)} sentences")
     return segments
 
 def split_long_segment(segment, max_duration=8.0):
@@ -888,6 +968,64 @@ def split_long_segment(segment, max_duration=8.0):
 
     return segments
 
+def deduplicate_overlapping_texts(segments: list) -> list:
+    """
+    Remove overlapping/duplicate content from subtitle segments.
+    YouTube API sometimes provides overlapping segments where later segments
+    repeat parts of earlier segments.
+
+    Args:
+        segments: List of segments with 'text' field
+
+    Returns:
+        List of segments with deduplicated text
+    """
+    if not segments or len(segments) <= 1:
+        return segments
+
+    deduplicated = []
+
+    for i, segment in enumerate(segments):
+        current_text = segment.get('text', '').strip()
+
+        if not current_text:
+            continue
+
+        # Check if this text is already contained in previous segments
+        is_duplicate = False
+
+        # Look at previous segments to see if current text is a subset/duplicate
+        for prev_segment in deduplicated:
+            prev_text = prev_segment.get('text', '').strip()
+
+            # Skip if current text is completely contained in previous text
+            if current_text in prev_text:
+                is_duplicate = True
+                break
+
+            # Check if current text starts with end of previous text (overlap)
+            words_current = current_text.split()
+            words_prev = prev_text.split()
+
+            if len(words_current) >= 3 and len(words_prev) >= 3:
+                # Check for overlap: if first 3+ words of current match last 3+ words of previous
+                for overlap_len in range(min(len(words_current), len(words_prev)), 2, -1):
+                    if (words_current[:overlap_len] == words_prev[-overlap_len:]):
+                        # Remove the overlapping part from current text
+                        remaining_words = words_current[overlap_len:]
+                        if remaining_words:  # Only keep if there's non-overlapping content
+                            segment = segment.copy()
+                            segment['text'] = ' '.join(remaining_words)
+                            current_text = segment['text']
+                        else:
+                            is_duplicate = True
+                        break
+
+        if not is_duplicate and current_text.strip():
+            deduplicated.append(segment)
+
+    return deduplicated
+
 def post_process_subtitles(raw_subtitle_segments: list, pause_gap_threshold: float = 1.0, max_segment_duration: float = 12.0) -> list:
     """
     Enhanced post-process subtitle segments with both combining and splitting logic.
@@ -909,13 +1047,18 @@ def post_process_subtitles(raw_subtitle_segments: list, pause_gap_threshold: flo
     if not raw_subtitle_segments:
         return []
 
-    print(f"Starting post-processing: {len(raw_subtitle_segments)} raw segments")
+    logger.info(f"Starting post-processing: {len(raw_subtitle_segments)} raw segments")
 
     # STEP 1: First combine short fragments into complete sentences
-    print(f"STEP 1: Combining fragments into sentences")
+    logger.debug(f"STEP 1: Combining fragments into sentences")
 
     combined_segments = []
     buffer = []  # Buffer to hold segments while building a sentence
+
+    # STEP 0: Remove overlapping/duplicate content first
+    logger.debug(f"STEP 0: Deduplicating overlapping content")
+    raw_subtitle_segments = deduplicate_overlapping_texts(raw_subtitle_segments)
+    logger.debug(f"After deduplication: {len(raw_subtitle_segments)} segments")
 
     for i, segment in enumerate(raw_subtitle_segments):
         text = segment.get('text', '').strip()
@@ -1005,19 +1148,19 @@ def post_process_subtitles(raw_subtitle_segments: list, pause_gap_threshold: flo
             combined_segments.append(combined_segment)
             buffer = []  # Clear buffer for next sentence
 
-    print(f"STEP 1 complete: {len(raw_subtitle_segments)} raw -> {len(combined_segments)} combined segments")
+    logger.debug(f"STEP 1 complete: {len(raw_subtitle_segments)} raw -> {len(combined_segments)} combined segments")
 
     # STEP 2: Split combined segments by sentence punctuation
-    print(f"STEP 2: Splitting sentences at punctuation boundaries")
+    logger.debug(f"STEP 2: Splitting sentences at punctuation boundaries")
     sentence_split_segments = []
     for segment in combined_segments:
         split_parts = split_by_sentence_punctuation(segment)
         sentence_split_segments.extend(split_parts)
 
-    print(f"STEP 2 complete: {len(combined_segments)} combined -> {len(sentence_split_segments)} sentence-split segments")
+    logger.debug(f"STEP 2 complete: {len(combined_segments)} combined -> {len(sentence_split_segments)} sentence-split segments")
 
     # STEP 3: Recursively merge incomplete segments until complete sentences are formed
-    print(f"STEP 3: Recursively merging incomplete segments for complete sentences")
+    logger.debug(f"STEP 3: Recursively merging incomplete segments for complete sentences")
     context_merged_segments = []
     i = 0
     while i < len(sentence_split_segments):
@@ -1082,29 +1225,29 @@ def post_process_subtitles(raw_subtitle_segments: list, pause_gap_threshold: flo
             }
 
             context_merged_segments.append(merged_segment)
-            print(f"Recursively merged {len(merged_segments)} incomplete segments -> '{merged_text[:50]}...'")
+            logger.debug(f"Recursively merged {len(merged_segments)} incomplete segments -> '{merged_text[:50]}...'")
             i = j + 1  # Skip all merged segments
         else:
             # Keep segment as-is
             context_merged_segments.append(current_segment)
             i += 1
 
-    print(f"STEP 3 complete: {len(sentence_split_segments)} segments -> {len(context_merged_segments)} context-merged segments")
+    logger.debug(f"STEP 3 complete: {len(sentence_split_segments)} segments -> {len(context_merged_segments)} context-merged segments")
 
     # STEP 4: Split overly long segments into manageable chunks
-    print(f"STEP 4: Splitting overly long segments")
+    logger.debug(f"STEP 4: Splitting overly long segments")
     final_segments = []
     for segment in context_merged_segments:
         duration = float(segment.get('duration', 0))
         if duration > max_segment_duration:
-            print(f"🔪 Splitting long segment: {duration:.1f}s -> multiple chunks")
+            logging.info(f"Splitting long segment: {duration:.1f}s -> multiple chunks")
             split_parts = split_long_segment(segment, max_duration=7.0)
             final_segments.extend(split_parts)
         else:
             final_segments.append(segment)
 
     # STEP 5: Final pass - merge any single-word segments created by long segment splitting
-    print(f"STEP 5: Final merge of single-word segments created during splitting")
+    logger.debug(f"STEP 5: Final merge of single-word segments created during splitting")
     final_merged_segments = []
     i = 0
     while i < len(final_segments):
@@ -1141,15 +1284,15 @@ def post_process_subtitles(raw_subtitle_segments: list, pause_gap_threshold: flo
             }
 
             final_merged_segments.append(merged_segment)
-            print(f"Final merge: '{current_text}' + next -> '{merged_text[:50]}...'")
+            logger.debug(f"Final merge: '{current_text}' + next -> '{merged_text[:50]}...'")
             i += 2  # Skip both current and next segment
         else:
             # Keep segment as-is
             final_merged_segments.append(current_segment)
             i += 1
 
-    print(f"STEP 5 complete: {len(final_segments)} segments -> {len(final_merged_segments)} final-merged segments")
-    print(f"Post-processing complete: {len(raw_subtitle_segments)} raw -> {len(final_merged_segments)} final segments")
+    logger.debug(f"STEP 5 complete: {len(final_segments)} segments -> {len(final_merged_segments)} final-merged segments")
+    logger.info(f"Post-processing complete: {len(raw_subtitle_segments)} raw -> {len(final_merged_segments)} final segments")
     return final_merged_segments
 
 def save_learning_content(video_id: str, vocabulary: list = None, grammar: list = None):
@@ -1191,11 +1334,11 @@ def save_learning_content(video_id: str, vocabulary: list = None, grammar: list 
         with open(learn_file, 'w', encoding='utf-8') as f:
             json.dump(learning_data, f, indent=2, ensure_ascii=False)
 
-        print(f"Saved learning content to: {learn_file}")
-        print(f"Learning content: {len(vocabulary or [])} vocabulary + {len(grammar or [])} grammar concepts")
+        logger.info(f"Saved learning content to: {learn_file}")
+        logger.info(f"Learning content: {len(vocabulary or [])} vocabulary + {len(grammar or [])} grammar concepts")
 
     except Exception as e:
-        print(f"Failed to save learning content: {e}")
+        logger.error(f"Failed to save learning content: {e}")
 
 def save_processed_subtitles(video_id: str, processed_segments: list, raw_segments: list):
     """
@@ -1257,11 +1400,11 @@ def save_processed_subtitles(video_id: str, processed_segments: list, raw_segmen
         with open(proc_file, 'w', encoding='utf-8') as f:
             json.dump(subtitle_data, f, indent=2, ensure_ascii=False)
 
-        print(f"Saved UI-ready processed data to: {proc_file}")
-        print(f"Statistics: {len(raw_segments)} raw -> {len(processed_segments)} processed segments")
+        logger.info(f"Saved UI-ready processed data to: {proc_file}")
+        logger.info(f"Statistics: {len(raw_segments)} raw -> {len(processed_segments)} processed segments")
 
     except Exception as e:
-        print(f"Failed to save processed subtitles: {e}")
+        logger.error(f"Failed to save processed subtitles: {e}")
         # Don't raise - this is just for debugging, shouldn't break the main flow
 
 def save_raw_subtitles(video_id: str, raw_segments: list):
@@ -1272,7 +1415,7 @@ def save_raw_subtitles(video_id: str, raw_segments: list):
         video_id: YouTube video ID
         raw_segments: Original raw subtitle segments from YouTube API
     """
-    print(f"🚨 SAVE_RAW_SUBTITLES: Starting save for {video_id} with {len(raw_segments)} segments")
+    logger.debug(f"🚨 SAVE_RAW_SUBTITLES: Starting save for {video_id} with {len(raw_segments)} segments")
     try:
         script_dir = Path(__file__).parent
         cache_dir = script_dir / "cache" / "subtitles"
@@ -1294,11 +1437,11 @@ def save_raw_subtitles(video_id: str, raw_segments: list):
         with open(raw_file, 'w', encoding='utf-8') as f:
             json.dump(raw_data, f, indent=2, ensure_ascii=False)
 
-        print(f"Saved complete raw subtitles to: {raw_file}")
-        print(f"Raw segments saved: {len(raw_segments)} segments")
+        logger.info(f"Saved complete raw subtitles to: {raw_file}")
+        logger.info(f"Raw segments saved: {len(raw_segments)} segments")
 
     except Exception as e:
-        print(f"Failed to save raw subtitles: {e}")
+        logger.error(f"Failed to save raw subtitles: {e}")
         # Don't raise - this is just for backup, shouldn't break the main flow
 
 def find_sentence_boundaries_for_words(transcript: list, words: list) -> dict:
@@ -1540,7 +1683,7 @@ def get_smart_timing(text: str, word: str, entry: dict) -> dict:
                     # Use the original segment's timing instead of merged timing
                     start_time = orig_segment['start']
                     duration = orig_segment['duration']
-                    print(f"Found word '{word}' in original segment at {start_time}s (was {entry['start']}s in merged)")
+                    logger.debug(f"Found word '{word}' in original segment at {start_time}s (was {entry['start']}s in merged)")
                     break
         else:
             duration = entry.get('duration', 3)
@@ -1749,10 +1892,10 @@ async def extract_vocabulary_from_transcript(transcript_text: str, transcript_da
     # Use raw segments for accurate timing, fallback to processed data
     timing_data_source = raw_segments if raw_segments else transcript_data
     sentence_boundaries = find_word_timestamps_smart(timing_data_source, selected_words)
-    print(f"DEBUG: Using {'raw' if raw_segments else 'processed'} segments for word timing")
-    print(f"DEBUG: Found smart timestamps for {len(sentence_boundaries)} words:")
+    logger.debug(f"DEBUG: Using {'raw' if raw_segments else 'processed'} segments for word timing")
+    logger.debug(f"DEBUG: Found smart timestamps for {len(sentence_boundaries)} words:")
     for word, data in sentence_boundaries.items():
-        print(f"  - {word}: timestamp={data['timestamp']}, position={data.get('position_type', 'unknown')}, mode={data['playback_mode']}")
+        logger.debug(f"  - {word}: timestamp={data['timestamp']}, position={data.get('position_type', 'unknown')}, mode={data['playback_mode']}")
 
     # Get simple, kid-friendly definitions
     vocabulary = []
@@ -1761,7 +1904,7 @@ async def extract_vocabulary_from_transcript(transcript_text: str, transcript_da
 
         # Skip proper nouns and common names/places
         if level == "SKIP":
-            print(f"Skipped proper noun: {word}")
+            logger.debug(f"Skipped proper noun: {word}")
             continue
 
         # Get enhanced word information
@@ -1792,6 +1935,9 @@ async def extract_vocabulary_from_transcript(transcript_text: str, transcript_da
                 "sentence": sentence,  # Add subtitle sentence
                 "sentence_start_time": sentence_start_time,  # Sentence start timestamp
                 "sentence_end_time": sentence_end_time,  # Sentence end timestamp
+                # Consistent naming for frontend
+                "startTime": timestamp_data['timestamp'],
+                "endTime": timestamp_data['end_time'],
                 # Enhanced vocabulary information
                 "definition_zh": enhanced_info.get('definition_zh', ''),
                 "usage": enhanced_info.get('usage', ''),
@@ -1800,7 +1946,7 @@ async def extract_vocabulary_from_transcript(transcript_text: str, transcript_da
                 "collocations": enhanced_info.get('collocations', []),
                 "pos": enhanced_info.get('pos', [])
             }
-            print(f"Added {word} with timestamp {vocab_item['timestamp']}")
+            logger.debug(f"Added {word} with timestamp {vocab_item['timestamp']}")
             vocabulary.append(vocab_item)
         else:
             # Fallback if word not found in transcript
@@ -1818,7 +1964,12 @@ async def extract_vocabulary_from_transcript(transcript_text: str, transcript_da
                 "sentence_duration": 5,
                 "context_type": "fallback",
                 "playback_mode": "fallback",
-                "translation": translation
+                "translation": translation,
+                # Consistent naming for frontend
+                "startTime": fallback_start,
+                "endTime": fallback_start + 5,
+                "sentence_start_time": fallback_start,
+                "sentence_end_time": fallback_start + 5
             })
 
     # Apply adaptive vocabulary selection based on user level
@@ -1916,12 +2067,18 @@ def extract_grammar_from_transcript(transcript_text: str) -> list:
             # Create example from first match if possible
             example = matches[0] if isinstance(matches[0], str) else " ".join(matches[0])
 
+            timestamp_start = random.randint(15, 200)
             grammar_concepts.append({
                 "concept": pattern_info["concept"],
                 "explanation": pattern_info["explanation"],
                 "level": pattern_info["level"],
                 "example": example[:50] + "..." if len(example) > 50 else example,
-                "timestamp": random.randint(15, 200)
+                "timestamp": timestamp_start,
+                # Consistent naming for frontend
+                "startTime": timestamp_start,
+                "endTime": timestamp_start + 10,
+                "sentence_start_time": timestamp_start,
+                "sentence_end_time": timestamp_start + 10
             })
 
     # Remove duplicates and limit to 4 concepts
@@ -1961,13 +2118,12 @@ async def extract_content(video_data: dict):
         if cached_raw_segments:
             raw_segments = cached_raw_segments
             transcript_source = "cached_raw_subtitles"
-            print(f"Using cached RAW subtitles for {video_id} ({len(raw_segments)} raw segments)")
+            logger.info(f"Using cached RAW subtitles for {video_id} ({len(raw_segments)} raw segments)")
         else:
             # Method 1: YouTube Transcript API (CORRECTED syntax for system Python3)
             try:
-                print("🔍 Attempting CORRECTED YouTube Transcript API...")
-                api = YouTubeTranscriptApi()
-                raw_transcript = api.fetch(video_id)
+                logger.info("🔍 Attempting CORRECTED YouTube Transcript API...")
+                raw_transcript = YouTubeTranscriptApi.get_transcript(video_id)
 
                 # Convert to expected format
                 raw_segments = []
@@ -1979,38 +2135,38 @@ async def extract_content(video_data: dict):
                     })
 
                 transcript_source = "youtube_transcript_api_CORRECTED_RAW"
-                print(f"🎉 SUCCESS: Extracted {len(raw_segments)} RAW entries using CORRECTED YouTube Transcript API")
+                logger.info(f"🎉 SUCCESS: Extracted {len(raw_segments)} RAW entries using CORRECTED YouTube Transcript API")
 
                 # Save raw subtitles immediately after successful extraction
-                print(f"🚨 DEBUG: About to save raw subtitles for {video_id}, segments count: {len(raw_segments)}")
+                logger.debug(f"🚨 DEBUG: About to save raw subtitles for {video_id}, segments count: {len(raw_segments)}")
                 save_raw_subtitles(video_id, raw_segments)
-                print(f"🚨 DEBUG: Raw subtitles save completed for {video_id}")
+                logger.debug(f"🚨 DEBUG: Raw subtitles save completed for {video_id}")
 
             except Exception as transcript_error:
-                print(f"YouTube Transcript API failed: {transcript_error}")
+                logger.error(f"YouTube Transcript API failed: {transcript_error}")
 
                 # Method 2: yt-dlp fallback (if available)
                 if not raw_segments and YT_DLP_AVAILABLE:
                     try:
-                        print("Attempting yt-dlp subtitle extraction...")
+                        logger.info("Attempting yt-dlp subtitle extraction...")
                         raw_segments = extract_subtitles_with_ytdlp(video_url)
                         transcript_source = "yt_dlp_raw"
-                        print(f"Successfully extracted {len(raw_segments)} RAW entries using yt-dlp")
+                        logger.info(f"Successfully extracted {len(raw_segments)} RAW entries using yt-dlp")
 
                         # Save raw subtitles immediately after successful extraction
                         save_raw_subtitles(video_id, raw_segments)
 
                     except Exception as ytdlp_error:
-                        print(f"yt-dlp subtitle extraction failed: {ytdlp_error}")
+                        logger.error(f"yt-dlp subtitle extraction failed: {ytdlp_error}")
                 else:
-                    print("yt-dlp not available, skipping alternative extraction method")
+                    logger.warning("yt-dlp not available, skipping alternative extraction method")
 
         # Apply post-processing dynamically if we have raw segments
         transcript = None
         if raw_segments and len(raw_segments) > 0:
             # Apply post-processing to create better sentence boundaries
             transcript = post_process_subtitles(raw_segments, pause_gap_threshold=1.0)
-            print(f"Applied dynamic post-processing: {len(raw_segments)} raw segments -> {len(transcript)} processed sentences")
+            logger.info(f"Applied dynamic post-processing: {len(raw_segments)} raw segments -> {len(transcript)} processed sentences")
 
         # Process transcript if we got one
         if transcript and len(transcript) > 0:
@@ -2053,7 +2209,7 @@ async def extract_content(video_data: dict):
             })
 
         else:
-            print("All transcript extraction methods failed, using fallback mock data")
+            logger.warning("All transcript extraction methods failed, using fallback mock data")
             # Fallback to mock data if all transcript extraction methods fail
             return JSONResponse({
                 "vocabulary": [
@@ -2071,14 +2227,499 @@ async def extract_content(video_data: dict):
             })
 
     except Exception as e:
-        print(f"CRITICAL ERROR in extract_content: {str(e)}")
-        print("Full stack trace:")
+        logger.error(f"CRITICAL ERROR in extract_content: {str(e)}")
+        logger.error("Full stack trace:")
         traceback.print_exc()
         raise HTTPException(status_code=500, detail=f"Error processing video: {str(e)}")
 
 # AI Teacher System
+def generate_contextual_response(word: str, definition: str, sentence: str, question: str) -> str:
+    """Generate contextual AI teacher responses based on user questions"""
+
+    question_lower = question.lower()
+
+    # Question pattern matching for intelligent responses
+    if any(phrase in question_lower for phrase in ["how to use", "how do i use", "usage", "use this"]):
+        return f"""Great question! Here are several ways to use '{word}':
+
+**Definition**: {definition}
+
+**In the video context**: "{sentence}"
+
+**More examples:**
+• "I learned about {word} in my English class."
+• "The {word} helps us understand the topic better."
+• "Can you explain {word} in simpler terms?"
+
+**Grammar tip**: '{word}' is typically used as a {get_word_type(word)}. Remember to match it with appropriate articles (a, an, the) when needed.
+
+Try creating your own sentence with '{word}' - what situation would you use it in? 🤔"""
+
+    elif any(phrase in question_lower for phrase in ["similar", "synonym", "like", "related"]):
+        return f"""Excellent question! Here are words similar to '{word}':
+
+**Main word**: {word} - {definition}
+
+**Similar words**:
+{generate_similar_words(word, definition)}
+
+**Context differences**:
+Each similar word has slightly different usage contexts. For example:
+- In formal writing: Use more sophisticated synonyms
+- In casual conversation: Simpler words work better
+- In academic contexts: Precise terminology is important
+
+**Practice**: Try replacing '{word}' in this sentence with one of the similar words: "{sentence}"
+
+Does that help clarify the differences? Feel free to ask about any specific word! 📚"""
+
+    elif any(phrase in question_lower for phrase in ["example", "more examples", "sentences"]):
+        return f"""Perfect! Let me give you more examples with '{word}':
+
+**Original context**: "{sentence}"
+
+**Additional examples**:
+{generate_example_sentences(word, definition)}
+
+**Different contexts**:
+• **Formal**: In academic discussions about {word}...
+• **Casual**: You know, {word} is really interesting because...
+• **Question form**: What do you think about {word}?
+• **Negative form**: I don't fully understand {word} yet.
+
+**Your turn**: Can you create a sentence using '{word}' in a different context? I'd love to hear your attempt! ✨"""
+
+    elif any(phrase in question_lower for phrase in ["remember", "memorize", "memory", "forget"]):
+        return f"""Great question about memory techniques! Here are proven methods to remember '{word}':
+
+**Memory Techniques**:
+{generate_memory_tricks(word, definition)}
+
+**Spaced Repetition**:
+• Review '{word}' tomorrow
+• Review again in 3 days
+• Review again in 1 week
+• Review again in 1 month
+
+**Active Usage**:
+Try using '{word}' in conversations this week. The more you use it, the better you'll remember it!
+
+**Context Connection**:
+Remember this video context: "{sentence[:50]}..."
+This real situation will help trigger your memory of '{word}'.
+
+What memory technique works best for you usually? 🧠"""
+
+    elif any(phrase in question_lower for phrase in ["difficult", "hard", "confusing", "don't understand"]):
+        return f"""I understand! '{word}' can be tricky. Let me break it down simply:
+
+**Simple explanation**: {get_simple_explanation(word, definition)}
+
+**Why it might be confusing**:
+{analyze_difficulty(word, definition)}
+
+**Step-by-step understanding**:
+1. First, think of {word} as: {get_simple_analogy(word)}
+2. In the video: "{sentence}"
+3. The key idea is: {extract_key_concept(definition)}
+4. Practice: Use it in a simple sentence about your daily life
+
+**Don't worry!** Even native speakers sometimes find certain words challenging. The fact that you're asking shows you're learning actively!
+
+What specific part about '{word}' confuses you most? Let's tackle it together! 💪"""
+
+    elif any(phrase in question_lower for phrase in ["grammar", "grammatical", "part of speech"]):
+        return f"""Excellent grammar question! Let me explain '{word}' grammatically:
+
+**Part of Speech**: {get_word_type(word)}
+**Grammar Pattern**: {analyze_grammar_pattern(word, sentence)}
+
+**In your sentence**: "{sentence}"
+Here, '{word}' functions as {explain_grammatical_function(word, sentence)}
+
+**Grammar Rules**:
+{generate_grammar_rules(word)}
+
+**Common Mistakes to Avoid**:
+{generate_common_mistakes(word)}
+
+**Practice Patterns**:
+• Try: [Subject] + [Verb] + {word}
+• Try: {word} + [Verb] + [Object]
+
+Grammar can be complex, but don't worry! Focus on understanding the pattern first, then practice it. 📝"""
+
+    else:
+        # Generic helpful response for other questions
+        return f"""That's a thoughtful question about '{word}'! Let me help:
+
+**About '{word}'**: {definition}
+
+**In context**: "{sentence}"
+
+**Key points**:
+• **Meaning**: {extract_key_concept(definition)}
+• **Usage**: Most commonly used in {get_usage_context(word)}
+• **Level**: This is a {get_difficulty_level(word)}-level word
+• **Frequency**: {get_word_frequency(word)} in everyday English
+
+**Interactive Learning**:
+- Try using '{word}' in your next English conversation
+- Look for '{word}' in other videos, articles, or books
+- Practice explaining '{word}' to someone else
+
+**Follow-up questions you might ask**:
+• "How do I use {word} in a sentence?"
+• "What are words similar to {word}?"
+• "Can you give me more examples?"
+
+Feel free to ask me anything else about '{word}' or English learning! I'm here to help! 🎯"""
+
+# Helper functions for AI teacher responses
+def get_word_type(word: str) -> str:
+    """Determine the likely part of speech for a word"""
+    # Simple heuristics - could be enhanced with NLP libraries
+    if word.endswith(('ing', 'ed', 'ize', 'ise')):
+        return "verb"
+    elif word.endswith(('tion', 'sion', 'ness', 'ity', 'ment')):
+        return "noun"
+    elif word.endswith(('ly')):
+        return "adverb"
+    elif word.endswith(('ful', 'less', 'ous', 'ive', 'able')):
+        return "adjective"
+    else:
+        return "noun/verb"  # Most common types
+
+def generate_similar_words(word: str, definition: str) -> str:
+    """Generate contextually similar words"""
+    # Simple synonym mapping - could be enhanced with actual thesaurus API
+    common_synonyms = {
+        'people': '• folks, individuals, persons, humans\n• community, society, population',
+        'about': '• concerning, regarding, related to\n• approximately, roughly, around',
+        'campus': '• grounds, premises, facility\n• university, college, school',
+        'from': '• out of, away from, starting at\n• originating in, coming from',
+        'said': '• stated, mentioned, declared\n• expressed, articulated, voiced'
+    }
+
+    return common_synonyms.get(word.lower(), f"• related words to '{word}'\n• similar terms in context\n• contextual alternatives")
+
+def generate_example_sentences(word: str, definition: str) -> str:
+    """Generate example sentences for the word"""
+    examples = {
+        'people': '• "Many people enjoy learning languages."\n• "The people in this video are very friendly."\n• "Young people often use social media."',
+        'about': '• "This book is about language learning."\n• "I know about that topic."\n• "It takes about 30 minutes to get there."',
+        'campus': '• "I live on campus during the semester."\n• "The campus library is very modern."\n• "Students walk around campus every day."',
+        'from': '• "I come from China."\n• "This letter is from my teacher."\n• "The store is open from 9 to 5."',
+        'said': '• "She said hello to everyone."\n• "He said it was important."\n• "They said goodbye before leaving."'
+    }
+
+    return examples.get(word.lower(), f'• "The {word} is important in this context."\n• "I learned about {word} today."\n• "Using {word} correctly takes practice."')
+
+def generate_memory_tricks(word: str, definition: str) -> str:
+    """Generate memory techniques for the word"""
+    tricks = {
+        'people': '• Visual: Picture a group of **people** (PEE-ple)\n• Connection: "people" = many persons\n• Rhyme: "People like to be equal"',
+        'about': '• Think: "a-BOUT" = around/concerning something\n• Memory: "about" = "a" + "bout" (fight about something)\n• Visual: Draw a circle **about** the word',
+        'campus': '• Memory: "camp" + "us" = where we camp to study\n• Visual: Picture a school **campus** with buildings\n• Sound: "CAM-pus" sounds like "camp us"',
+        'from': '• Direction: Always shows movement away **from** somewhere\n• Visual: Draw an arrow pointing **from** one place\n• Opposite: Remember "from" vs "to" (from → to)',
+        'said': '• Past tense: "say" becomes "said" (irregular verb)\n• Pronunciation: "said" sounds like "sed"\n• Pattern: I say → I said → I have said'
+    }
+
+    return tricks.get(word.lower(), f'• Break down "{word}" into smaller parts\n• Connect "{word}" to something you know\n• Use "{word}" in a personal sentence')
+
+def get_simple_explanation(word: str, definition: str) -> str:
+    """Provide a simple explanation of the word"""
+    return f"Think of '{word}' as: {definition[:50]}..." if len(definition) > 50 else definition
+
+def analyze_difficulty(word: str, definition: str) -> str:
+    """Analyze why a word might be difficult"""
+    return f"'{word}' can be confusing because it has multiple meanings and is used in different contexts. Don't worry - with practice, it becomes natural!"
+
+def get_simple_analogy(word: str) -> str:
+    """Provide a simple analogy for the word"""
+    analogies = {
+        'people': 'humans like you and me',
+        'about': 'the topic of something',
+        'campus': 'a school\'s outdoor area',
+        'from': 'the starting point',
+        'said': 'spoke in the past'
+    }
+    return analogies.get(word.lower(), f'the main idea of {word}')
+
+def extract_key_concept(definition: str) -> str:
+    """Extract the key concept from definition"""
+    # Take first part of definition before comma or period
+    key_part = definition.split(',')[0].split('.')[0]
+    return key_part if len(key_part) < 100 else definition[:50] + "..."
+
+def analyze_grammar_pattern(word: str, sentence: str) -> str:
+    """Analyze the grammar pattern of the word in sentence"""
+    return f"In this sentence, '{word}' follows standard English grammar patterns"
+
+def explain_grammatical_function(word: str, sentence: str) -> str:
+    """Explain the grammatical function of word in sentence"""
+    return f"a key element that helps convey the main message"
+
+def generate_grammar_rules(word: str) -> str:
+    """Generate grammar rules for the word"""
+    return f"• Use '{word}' in subject-verb-object patterns\n• Remember proper article usage (a/an/the)\n• Pay attention to singular/plural forms"
+
+def generate_common_mistakes(word: str) -> str:
+    """Generate common mistakes to avoid"""
+    return f"• Don't confuse '{word}' with similar-sounding words\n• Remember the correct spelling\n• Use in appropriate contexts"
+
+def get_usage_context(word: str) -> str:
+    """Get the usage context for the word"""
+    contexts = {
+        'people': 'social situations, describing groups',
+        'about': 'explanations, topics, estimates',
+        'campus': 'educational settings, school discussions',
+        'from': 'origins, directions, sources',
+        'said': 'reporting speech, past conversations'
+    }
+    return contexts.get(word.lower(), 'general conversation and writing')
+
+def get_difficulty_level(word: str) -> str:
+    """Get the difficulty level of the word"""
+    return "beginner"  # Default for now
+
+def get_word_frequency(word: str) -> str:
+    """Get word frequency information"""
+    frequent_words = ['people', 'about', 'from', 'said']
+    if word.lower() in frequent_words:
+        return "Very common"
+    else:
+        return "Moderately common"
+
+# Assessment System Functions
+def generate_assessment_questions() -> list:
+    """Generate adaptive vocabulary assessment questions"""
+    questions = [
+        {
+            "id": 1,
+            "word": "ambitious",
+            "definition": "Having a strong desire for success or achievement",
+            "options": ["Lazy and unmotivated", "Having strong desire for success", "Feeling sad or depressed", "Being very quiet"],
+            "correctAnswer": 1,
+            "level": "B2",
+            "difficulty": 6
+        },
+        {
+            "id": 2,
+            "word": "fundamental",
+            "definition": "Basic and essential; of central importance",
+            "options": ["Optional and unnecessary", "Basic and essential", "Complex and confusing", "Temporary and changeable"],
+            "correctAnswer": 1,
+            "level": "B2",
+            "difficulty": 5
+        },
+        {
+            "id": 3,
+            "word": "significant",
+            "definition": "Important; having meaning or consequence",
+            "options": ["Unimportant", "Important and meaningful", "Very small", "Completely useless"],
+            "correctAnswer": 1,
+            "level": "B1",
+            "difficulty": 4
+        },
+        {
+            "id": 4,
+            "word": "evaluate",
+            "definition": "To judge or determine the worth of something",
+            "options": ["To ignore completely", "To judge or assess", "To buy something expensive", "To throw away"],
+            "correctAnswer": 1,
+            "level": "B2",
+            "difficulty": 6
+        },
+        {
+            "id": 5,
+            "word": "efficient",
+            "definition": "Working in a well-organized way; not wasting time or resources",
+            "options": ["Very slow and wasteful", "Well-organized and effective", "Broken and useless", "Extremely expensive"],
+            "correctAnswer": 1,
+            "level": "B1",
+            "difficulty": 4
+        },
+        {
+            "id": 6,
+            "word": "comprehensive",
+            "definition": "Complete and including everything",
+            "options": ["Incomplete and missing parts", "Complete and thorough", "Very simple and basic", "Extremely difficult"],
+            "correctAnswer": 1,
+            "level": "C1",
+            "difficulty": 7
+        },
+        {
+            "id": 7,
+            "word": "demonstrate",
+            "definition": "To show clearly by giving proof or evidence",
+            "options": ["To hide something", "To show or prove", "To break something", "To forget completely"],
+            "correctAnswer": 1,
+            "level": "B1",
+            "difficulty": 4
+        },
+        {
+            "id": 8,
+            "word": "alternative",
+            "definition": "One of two or more available possibilities",
+            "options": ["The only option", "One of several choices", "Something impossible", "A broken item"],
+            "correctAnswer": 1,
+            "level": "B2",
+            "difficulty": 5
+        },
+        {
+            "id": 9,
+            "word": "inevitable",
+            "definition": "Certain to happen; unavoidable",
+            "options": ["Certain to happen", "Never going to happen", "Maybe happening", "Already finished"],
+            "correctAnswer": 0,
+            "level": "C1",
+            "difficulty": 8
+        },
+        {
+            "id": 10,
+            "word": "contemporary",
+            "definition": "Belonging to the present time; modern",
+            "options": ["Very old and ancient", "Modern and current", "Future and unknown", "Broken and useless"],
+            "correctAnswer": 1,
+            "level": "C1",
+            "difficulty": 7
+        },
+        {
+            "id": 11,
+            "word": "obvious",
+            "definition": "Easy to see or understand; clear",
+            "options": ["Very confusing", "Easy to understand", "Impossible to know", "Extremely complicated"],
+            "correctAnswer": 1,
+            "level": "A2",
+            "difficulty": 2
+        },
+        {
+            "id": 12,
+            "word": "successful",
+            "definition": "Achieving what you wanted to achieve",
+            "options": ["Failing completely", "Achieving your goals", "Starting something new", "Being very tired"],
+            "correctAnswer": 1,
+            "level": "A2",
+            "difficulty": 3
+        }
+    ]
+
+    return questions
+
+def evaluate_assessment(answers: list) -> dict:
+    """Evaluate assessment answers and determine user level"""
+    if not answers:
+        return get_default_assessment_result()
+
+    questions = generate_assessment_questions()
+    correct_answers = 0
+    level_scores = {"A1": 0, "A2": 0, "B1": 0, "B2": 0, "C1": 0, "C2": 0}
+
+    for i, answer in enumerate(answers):
+        if i < len(questions):
+            question = questions[i]
+            if answer == question["correctAnswer"]:
+                correct_answers += 1
+                level_scores[question["level"]] += 1
+
+    total_questions = len(answers)
+    accuracy = correct_answers / total_questions if total_questions > 0 else 0
+
+    # Determine estimated level based on performance
+    estimated_level = determine_level_from_scores(level_scores, accuracy)
+    confidence = calculate_confidence(level_scores, accuracy)
+
+    return {
+        "totalQuestions": total_questions,
+        "correctAnswers": correct_answers,
+        "estimatedLevel": estimated_level,
+        "levelConfidence": confidence,
+        "strengths": get_strengths(level_scores),
+        "weaknesses": get_weaknesses(level_scores),
+        "recommendedStartLevel": get_recommended_start_level(estimated_level)
+    }
+
+def get_default_assessment_result() -> dict:
+    """Return default assessment result for new users"""
+    return {
+        "totalQuestions": 0,
+        "correctAnswers": 0,
+        "estimatedLevel": "A2",
+        "levelConfidence": 0.5,
+        "strengths": ["Eager to learn"],
+        "weaknesses": ["Assessment not completed"],
+        "recommendedStartLevel": "A2"
+    }
+
+def determine_level_from_scores(level_scores: dict, accuracy: float) -> str:
+    """Determine CEFR level based on question performance"""
+    if accuracy < 0.3:
+        return "A1"
+    elif accuracy < 0.5:
+        return "A2"
+    elif accuracy < 0.7:
+        return "B1"
+    elif accuracy < 0.85:
+        return "B2"
+    elif accuracy < 0.95:
+        return "C1"
+    else:
+        return "C2"
+
+def calculate_confidence(level_scores: dict, accuracy: float) -> float:
+    """Calculate confidence level for the assessment result"""
+    # Higher accuracy and consistent performance across levels = higher confidence
+    max_score = max(level_scores.values()) if level_scores.values() else 0
+    consistency = 1.0 - (max_score / sum(level_scores.values()) if sum(level_scores.values()) > 0 else 0)
+    return min(0.9, accuracy * 0.7 + consistency * 0.3)
+
+def get_strengths(level_scores: dict) -> list:
+    """Identify user strengths based on performance"""
+    strengths = []
+    max_score = max(level_scores.values()) if level_scores.values() else 0
+
+    if max_score > 2:
+        best_level = max(level_scores.items(), key=lambda x: x[1])[0]
+        strengths.append(f"Strong {best_level} level vocabulary")
+
+    if level_scores.get("A2", 0) > 1:
+        strengths.append("Good foundation in basic vocabulary")
+
+    if level_scores.get("B1", 0) > 1:
+        strengths.append("Solid intermediate vocabulary")
+
+    if level_scores.get("C1", 0) > 0:
+        strengths.append("Advanced vocabulary knowledge")
+
+    return strengths if strengths else ["Motivation to learn"]
+
+def get_weaknesses(level_scores: dict) -> list:
+    """Identify areas for improvement"""
+    weaknesses = []
+
+    if level_scores.get("A2", 0) == 0:
+        weaknesses.append("Basic vocabulary needs work")
+
+    if level_scores.get("B1", 0) == 0:
+        weaknesses.append("Intermediate vocabulary development needed")
+
+    if level_scores.get("B2", 0) == 0:
+        weaknesses.append("Upper-intermediate vocabulary expansion")
+
+    return weaknesses if weaknesses else ["Continue building vocabulary"]
+
+def get_recommended_start_level(estimated_level: str) -> str:
+    """Get recommended starting level for learning"""
+    level_progression = {"A1": "A1", "A2": "A1", "B1": "A2", "B2": "B1", "C1": "B2", "C2": "C1"}
+    return level_progression.get(estimated_level, "A2")
+
 def generate_ai_teacher_response(word: str, definition: str, sentence: str, user_question: str = None) -> str:
     """Generate AI teacher response to help user learn vocabulary"""
+
+    # If user asked a specific question, provide contextual response
+    if user_question:
+        return generate_contextual_response(word, definition, sentence, user_question)
 
     # Predefined AI teacher responses for common words
     ai_responses = {
@@ -2143,6 +2784,126 @@ def generate_ai_teacher_response(word: str, definition: str, sentence: str, user
 
     return ai_response
 
+# User Profile and Assessment System
+@app.post("/api/assessment/start")
+async def start_assessment():
+    """Start vocabulary assessment and return initial questions"""
+    try:
+        questions = generate_assessment_questions()
+        return {
+            "questions": questions,
+            "total_questions": len(questions),
+            "session_id": f"assessment_{int(time.time())}",
+            "timestamp": int(time.time())
+        }
+    except Exception as e:
+        logger.error(f"Error starting assessment: {e}")
+        raise HTTPException(status_code=500, detail=f"Assessment error: {str(e)}")
+
+@app.post("/api/assessment/submit")
+async def submit_assessment(request: dict):
+    """Submit assessment answers and get user level recommendation"""
+    try:
+        answers = request.get('answers', [])
+        session_id = request.get('session_id', '')
+
+        if not answers:
+            raise HTTPException(status_code=400, detail="Answers are required")
+
+        result = evaluate_assessment(answers)
+
+        return {
+            "session_id": session_id,
+            "result": result,
+            "timestamp": int(time.time())
+        }
+    except Exception as e:
+        logger.error(f"Error submitting assessment: {e}")
+        raise HTTPException(status_code=500, detail=f"Assessment submission error: {str(e)}")
+
+@app.post("/api/profile/create")
+async def create_user_profile(request: dict):
+    """Create new user profile"""
+    try:
+        name = request.get('name', 'Anonymous User')
+        estimated_level = request.get('estimatedLevel', 'A2')
+        completed_assessment = request.get('completedAssessment', False)
+
+        profile = {
+            "id": f"user_{int(time.time())}_{hash(name) % 10000}",
+            "name": name,
+            "estimatedLevel": estimated_level,
+            "completedAssessment": completed_assessment,
+            "createdAt": int(time.time()),
+            "lastActiveAt": int(time.time()),
+            "totalStudyTime": 0,
+            "wordsLearned": 0,
+            "currentStreak": 0,
+            "longestStreak": 0
+        }
+
+        # In a real app, save to database
+        # For now, return the profile for frontend storage
+
+        return {
+            "profile": profile,
+            "message": "Profile created successfully",
+            "timestamp": int(time.time())
+        }
+    except Exception as e:
+        logger.error(f"Error creating profile: {e}")
+        raise HTTPException(status_code=500, detail=f"Profile creation error: {str(e)}")
+
+@app.get("/api/profile/{user_id}")
+async def get_user_profile(user_id: str):
+    """Get user profile by ID"""
+    try:
+        # In a real app, fetch from database
+        # For now, return a mock profile
+        profile = {
+            "id": user_id,
+            "name": "Language Learner",
+            "estimatedLevel": "A2",
+            "completedAssessment": True,
+            "createdAt": int(time.time()) - 86400,  # 1 day ago
+            "lastActiveAt": int(time.time()),
+            "totalStudyTime": 120,  # 2 hours
+            "wordsLearned": 45,
+            "currentStreak": 3,
+            "longestStreak": 7
+        }
+
+        return {
+            "profile": profile,
+            "timestamp": int(time.time())
+        }
+    except Exception as e:
+        logger.error(f"Error fetching profile: {e}")
+        raise HTTPException(status_code=500, detail=f"Profile fetch error: {str(e)}")
+
+@app.post("/api/profile/update")
+async def update_user_profile(request: dict):
+    """Update user profile"""
+    try:
+        user_id = request.get('userId', '')
+        updates = request.get('updates', {})
+
+        if not user_id:
+            raise HTTPException(status_code=400, detail="User ID is required")
+
+        # In a real app, update database
+        # For now, return success response
+
+        return {
+            "userId": user_id,
+            "updates": updates,
+            "message": "Profile updated successfully",
+            "timestamp": int(time.time())
+        }
+    except Exception as e:
+        logger.error(f"Error updating profile: {e}")
+        raise HTTPException(status_code=500, detail=f"Profile update error: {str(e)}")
+
 @app.post("/api/ai-teacher")
 async def ai_teacher(request: dict):
     """AI Teacher endpoint to help users learn vocabulary"""
@@ -2164,9 +2925,301 @@ async def ai_teacher(request: dict):
         }
 
     except Exception as e:
-        print(f"Error in AI teacher: {e}")
+        logger.error(f"Error in AI teacher: {e}")
         raise HTTPException(status_code=500, detail=f"AI teacher error: {str(e)}")
+
+def generate_learning_sessions(vocabulary_list: list, session_size: int = 5, user_level: str = "A2") -> list:
+    """
+    Generate smart learning sessions from vocabulary list.
+
+    Smart Navigator Algorithm:
+    1. Group words by difficulty (CEFR level)
+    2. Prioritize user level and one level above
+    3. Distribute words with minimum time gaps to avoid clustering
+    4. Create balanced sessions of 3-7 words each
+    """
+    if not vocabulary_list:
+        return []
+
+    # CEFR level priority mapping (lower number = higher priority)
+    level_priority = {"A1": 1, "A2": 2, "B1": 3, "B2": 4, "C1": 5, "C2": 6}
+
+    # Determine priority levels based on user level
+    user_priority = level_priority.get(user_level.upper(), 2)
+    target_levels = []
+
+    # Include user level and next level up for optimal challenge
+    for level, priority in level_priority.items():
+        if priority == user_priority:
+            target_levels.append(level)
+        elif priority == user_priority + 1:  # One level up for challenge
+            target_levels.append(level)
+
+    # Sort vocabulary by priority, then by timestamp
+    def word_priority(word):
+        word_level = word.get('level', 'A2').upper()
+        level_score = level_priority.get(word_level, 3)
+
+        # Boost priority for target levels
+        if word_level in target_levels:
+            level_score -= 0.5
+
+        # Use timestamp for chronological ordering within same priority
+        timestamp = word.get('timestamp', 0)
+
+        return (level_score, timestamp)
+
+    sorted_vocabulary = sorted(vocabulary_list, key=word_priority)
+
+    # Apply smart time-based distribution to avoid clustering
+    def select_distributed_words(words, max_per_session, min_time_gap=15.0):
+        """
+        Select words ensuring minimum time gap between consecutive words
+        to prevent clustering and rapid consecutive pauses
+        """
+        if not words:
+            return []
+
+        selected = []
+        last_timestamp = -min_time_gap  # Start with negative to allow first word
+
+        for word in words:
+            current_timestamp = word.get('timestamp', 0)
+
+            # Check if enough time has passed since last selected word
+            if current_timestamp - last_timestamp >= min_time_gap:
+                selected.append(word)
+                last_timestamp = current_timestamp
+
+                # Stop if we have enough words for this session
+                if len(selected) >= max_per_session:
+                    break
+
+        return selected
+
+    # Generate sessions with distributed word selection
+    sessions = []
+    session_id = 1
+    remaining_words = sorted_vocabulary[:]
+
+    while remaining_words:
+        # Select distributed words for this session
+        session_words = select_distributed_words(remaining_words, session_size)
+
+        if not session_words:
+            # If no words meet the time gap requirement, take the first available
+            session_words = remaining_words[:min(session_size, len(remaining_words))]
+
+        # Remove selected words from remaining pool
+        selected_word_texts = {word.get('word', '').lower() for word in session_words}
+        remaining_words = [w for w in remaining_words if w.get('word', '').lower() not in selected_word_texts]
+
+        # Sort session words by timestamp for proper playback order
+        session_words_sorted = sorted(session_words, key=lambda x: x.get('timestamp', 0))
+
+        # Calculate session difficulty (average of word levels)
+        levels = [word.get('level', 'A2') for word in session_words_sorted]
+        level_scores = [level_priority.get(level.upper(), 3) for level in levels]
+        avg_difficulty = sum(level_scores) / len(level_scores) if level_scores else 2
+
+        # Determine session level based on average difficulty
+        session_level = "A2"  # Default
+        for level, score in level_priority.items():
+            if abs(score - avg_difficulty) < 0.6:
+                session_level = level
+                break
+
+        # Calculate session timing
+        if session_words_sorted:
+            start_time = session_words_sorted[0].get('timestamp', 0)
+            end_time = session_words_sorted[-1].get('end_time', session_words_sorted[-1].get('timestamp', 0) + 3)
+        else:
+            start_time = end_time = 0
+
+        session = {
+            "session_id": session_id,
+            "session_number": session_id,
+            "total_sessions": 0,  # Will be updated after all sessions are created
+            "focus_words": session_words_sorted,
+            "session_level": session_level,
+            "estimated_duration": len(session_words_sorted) * 2,  # ~2 minutes per word
+            "difficulty_distribution": {
+                level: levels.count(level) for level in set(levels)
+            },
+            "startTime": start_time,
+            "endTime": end_time,
+            "status": "ready"
+        }
+
+        sessions.append(session)
+        session_id += 1
+
+        # Log session info for debugging
+        if session_words_sorted:
+            timestamps = [f"{w.get('word')}@{w.get('timestamp', 0):.1f}s" for w in session_words_sorted]
+            logger.info(f"📚 Session {session_id-1}: {', '.join(timestamps)}")
+
+    # Update total session count for all sessions
+    total_sessions = len(sessions)
+    for session in sessions:
+        session["total_sessions"] = total_sessions
+
+    logger.info(f"✅ Generated {total_sessions} learning sessions with improved word distribution")
+    return sessions
+
+def find_replacement_word(vocabulary_list: list, mastered_word: str, session_context: list, mastered_words: list = None) -> dict:
+    """
+    Find a replacement word when user marks a word as already known.
+
+    Smart Replacement Logic:
+    1. Find words of same or higher difficulty
+    2. Prefer words from same video segment (similar timestamp)
+    3. Avoid words already in the session
+    4. Prioritize words that appear in context
+    """
+    if not vocabulary_list:
+        return None
+
+    # Get the mastered word info
+    mastered_word_info = None
+    for word in vocabulary_list:
+        if word.get('word', '').lower() == mastered_word.lower():
+            mastered_word_info = word
+            break
+
+    if not mastered_word_info:
+        return None
+
+    # Get context info
+    mastered_timestamp = mastered_word_info.get('timestamp', 0)
+    mastered_level = mastered_word_info.get('level', 'A2')
+
+    # Get words already in session
+    session_words = {word.get('word', '').lower() for word in session_context}
+    session_words.add(mastered_word.lower())
+
+    # Add previously mastered words to exclusion list
+    if mastered_words:
+        session_words.update(word.lower() for word in mastered_words)
+        logger.info(f"🚫 Excluding {len(session_words)} total words from replacement pool (session + mastered)")
+
+    # Find candidate replacements
+    level_priority = {"A1": 1, "A2": 2, "B1": 3, "B2": 4, "C1": 5, "C2": 6}
+    mastered_priority = level_priority.get(mastered_level.upper(), 2)
+
+    candidates = []
+    for word in vocabulary_list:
+        word_text = word.get('word', '').lower()
+        word_level = word.get('level', 'A2')
+        word_priority = level_priority.get(word_level.upper(), 2)
+        word_timestamp = word.get('timestamp', 0)
+
+        # Skip if already in session or same as mastered word
+        if word_text in session_words:
+            continue
+
+        # Only consider same level or harder
+        if word_priority < mastered_priority:
+            continue
+
+        # Calculate proximity score (closer timestamp = better)
+        time_distance = abs(word_timestamp - mastered_timestamp)
+        proximity_score = 1.0 / (1.0 + time_distance / 30.0)  # 30 second window
+
+        # Calculate difficulty match score
+        level_match_score = 1.0 if word_priority == mastered_priority else 0.7
+
+        # Overall score
+        total_score = proximity_score * 0.6 + level_match_score * 0.4
+
+        candidates.append({
+            'word_info': word,
+            'score': total_score,
+            'proximity_score': proximity_score,
+            'level_match_score': level_match_score
+        })
+
+    # Sort by score and return best candidate
+    if candidates:
+        logger.info(f"🎯 Found {len(candidates)} replacement candidates")
+        best_candidate = sorted(candidates, key=lambda x: x['score'], reverse=True)[0]
+        logger.info(f"✅ Selected replacement: '{best_candidate['word_info']['word']}' (score: {best_candidate['score']:.3f})")
+        return best_candidate['word_info']
+
+    logger.warning(f"❌ No replacement candidates found for '{mastered_word}' - pool may be exhausted")
+    return None
+
+@app.post("/api/generate-sessions")
+async def generate_sessions_endpoint(request: dict):
+    """Generate smart learning sessions from vocabulary list"""
+    try:
+        vocabulary_list = request.get('vocabulary', [])
+        session_size = request.get('session_size', 5)
+        user_level = request.get('user_level', 'A2')
+
+        if not vocabulary_list:
+            raise HTTPException(status_code=400, detail="Vocabulary list is required")
+
+        sessions = generate_learning_sessions(vocabulary_list, session_size, user_level)
+
+        return {
+            "sessions": sessions,
+            "total_sessions": len(sessions),
+            "total_words": len(vocabulary_list),
+            "user_level": user_level,
+            "session_size": session_size,
+            "generated_at": int(time.time())
+        }
+
+    except Exception as e:
+        logger.error(f"Error generating sessions: {e}")
+        raise HTTPException(status_code=500, detail=f"Session generation error: {str(e)}")
+
+@app.post("/api/replace-word")
+async def replace_word_endpoint(request: dict):
+    """Replace a mastered word with a new challenge word"""
+    try:
+        vocabulary_list = request.get('vocabulary', [])
+        mastered_word = request.get('mastered_word', '')
+        session_context = request.get('session_context', [])
+        mastered_words = request.get('mastered_words', [])  # List of all previously mastered words
+
+        if not vocabulary_list or not mastered_word:
+            raise HTTPException(status_code=400, detail="Vocabulary list and mastered word are required")
+
+        replacement_word = find_replacement_word(vocabulary_list, mastered_word, session_context, mastered_words)
+
+        if replacement_word:
+            return {
+                "replacement_found": True,
+                "replacement_word": replacement_word,
+                "mastered_word": mastered_word,
+                "replaced_at": int(time.time())
+            }
+        else:
+            return {
+                "replacement_found": False,
+                "mastered_word": mastered_word,
+                "message": "No suitable replacement found - excellent vocabulary level!",
+                "replaced_at": int(time.time())
+            }
+
+    except Exception as e:
+        logger.error(f"Error replacing word: {e}")
+        raise HTTPException(status_code=500, detail=f"Word replacement error: {str(e)}")
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+
+    # Configure uvicorn logging
+    log_config = uvicorn.config.LOGGING_CONFIG
+    log_config["formatters"]["default"]["fmt"] = "%(asctime)s [%(levelname)s] %(name)s: %(message)s"
+    log_config["formatters"]["access"]["fmt"] = "%(asctime)s [%(levelname)s] %(name)s: %(message)s"
+
+    uvicorn.run(
+        app,
+        host="0.0.0.0",
+        port=8000,
+        log_config=log_config,
+        access_log=True
+    )

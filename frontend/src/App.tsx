@@ -1,319 +1,547 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import "./App.css";
-
-const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:8000';
-
-// Declare YouTube Player API types
-declare global {
-  interface Window {
-    YT: any;
-    onYouTubeIframeAPIReady: () => void;
-  }
-}
-
-interface Vocabulary {
-  word: string;
-  definition: string;
-  level: string;
-  translation?: string;
-  sentence?: string;
-  timestamp?: number;
-  end_time?: number;
-  word_timestamp?: number;
-  sentence_duration?: number;
-  playback_mode?: string;
-}
-
-interface Grammar {
-  concept: string;
-  explanation: string;
-  level: string;
-  timestamp?: number;
-  end_time?: number;
-  word_timestamp?: number;
-  sentence_duration?: number;
-  playback_mode?: string;
-}
+import { Vocabulary, Grammar, LearningPanelState, LearningSession, UserProfile } from "./types";
+import VideoPlayer from "./features/VideoPlayer/VideoPlayer";
+import LearningPanel from "./features/LearningPanel/LearningPanel";
+import Onboarding from "./features/Onboarding/Onboarding";
+import Homepage from "./features/Homepage/Homepage";
+import AuthModal from "./features/Auth/AuthModal";
+import { useVideoPlayer } from "./hooks/useVideoPlayer";
+import { useSmartMicroPause } from "./hooks/useSmartMicroPause";
+import { useProgressTracking } from "./hooks/useProgressTracking";
+import { useAuth } from "./contexts/AuthContext";
+import { extractContent, generateSessions, replaceWord } from "./services/api";
 
 function App() {
+  // State management
   const [vocabulary, setVocabulary] = useState<Vocabulary[]>([]);
+  const [masteredWords, setMasteredWords] = useState<Set<string>>(new Set());
   const [grammar, setGrammar] = useState<Grammar[]>([]);
   const [videoUrl, setVideoUrl] = useState("");
-  const [player, setPlayer] = useState<any>(null);
-  const [isPlayerReady, setIsPlayerReady] = useState(false);
   const [loading, setLoading] = useState(false);
   const [userLevel, setUserLevel] = useState("A2");
   const [subtitleText, setSubtitleText] = useState("");
-  const [currentPlayingWord, setCurrentPlayingWord] = useState<string | null>(
-    null
-  );
-  const [playbackTimer, setPlaybackTimer] = useState<NodeJS.Timeout | null>(
-    null
-  );
-  const [aiTeacherResponse, setAiTeacherResponse] = useState<string>("");
-  const [showAiTeacher, setShowAiTeacher] = useState<boolean>(false);
-  const [selectedWord, setSelectedWord] = useState<string>("");
-  const playerRef = useRef<HTMLDivElement>(null);
 
-  const getYouTubeVideoId = (url: string): string => {
-    if (!url) return "";
+  // Smart Navigator state
+  const [learningPanelState, setLearningPanelState] = useState<LearningPanelState>('preview');
+  const [currentSession, setCurrentSession] = useState<LearningSession | undefined>();
+  const [allSessions, setAllSessions] = useState<LearningSession[]>([]);
+  const [currentSessionIndex, setCurrentSessionIndex] = useState(0);
+  const [currentWord, setCurrentWord] = useState<Vocabulary | undefined>();
+  const [previousWord, setPreviousWord] = useState<Vocabulary | undefined>();
 
-    const patterns = [
-      /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com|youtu\.be)\/(?:watch\?v=|embed\/|v\/)?([a-zA-Z0-9_-]{11})/,
-      /(?:https?:\/\/)?(?:www\.)?youtube\.com\/watch\?.*v=([a-zA-Z0-9_-]{11})/,
-      /(?:https?:\/\/)?youtu\.be\/([a-zA-Z0-9_-]{11})/,
-    ];
+  // Authentication
+  const { user, isLoading: authLoading, isAuthenticated } = useAuth();
 
-    for (const pattern of patterns) {
-      const match = url.match(pattern);
-      if (match) return match[1];
-    }
+  // User profile state (backwards compatibility with guest users)
+  const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
+  const [showOnboarding, setShowOnboarding] = useState(false);
+  const [showAuthModal, setShowAuthModal] = useState(false);
+  const [profileLoading, setProfileLoading] = useState(true);
 
-    return "";
+  // UI state
+  const [currentView, setCurrentView] = useState<'homepage' | 'learning'>('homepage');
+
+  // Smart Navigator event handlers
+  const handleStateChange = (newState: LearningPanelState) => {
+    console.log(`Learning panel state: ${learningPanelState} → ${newState}`);
+    setLearningPanelState(newState);
   };
 
-  // Load YouTube API
-  useEffect(() => {
-    if (!window.YT) {
-      const script = document.createElement("script");
-      script.src = "https://www.youtube.com/iframe_api";
-      script.async = true;
-      document.body.appendChild(script);
+  // Video player hook
+  const {
+    player,
+    isPlayerReady,
+    currentPlayingWord,
+    seekToTimestamp,
+    handlePlayerReady,
+    resetPlayer,
+  } = useVideoPlayer();
 
-      window.onYouTubeIframeAPIReady = () => {
-        console.log("YouTube API ready");
-        setIsPlayerReady(true);
-      };
-    } else {
-      setIsPlayerReady(true);
-    }
-  }, []);
-
-  // Create YouTube player when API is ready (only once)
-  useEffect(() => {
-    const videoId = getYouTubeVideoId(videoUrl);
-    if (isPlayerReady && videoId && playerRef.current && !player) {
-      console.log("Creating YouTube player for:", videoId);
-
-      try {
-        const newPlayer = new window.YT.Player(playerRef.current, {
-          height: "100%",
-          width: "100%",
-          videoId: videoId,
-          playerVars: {
-            autoplay: 0,
-            controls: 1,
-            disablekb: 0,
-            fs: 1,
-            iv_load_policy: 3,
-            modestbranding: 1,
-            rel: 0,
-            showinfo: 0,
-          },
-          events: {
-            onReady: (event: any) => {
-              console.log("Player is ready");
-              setPlayer(event.target);
-            },
-            onError: (event: any) => {
-              console.error("YouTube player error:", event.data);
-            },
-            onStateChange: (event: any) => {
-              console.log("Player state changed:", event.data);
-            },
-          },
-        });
-      } catch (error) {
-        console.error("Error creating YouTube player:", error);
+  // Smart micro-pause hook
+  const {
+    isWatching,
+    continueToNextWord,
+    nextWordTimestamp,
+    currentWordIndex,
+    startWatching,
+    stopWatching,
+  } = useSmartMicroPause({
+    player,
+    isPlayerReady,
+    currentSession,
+    learningPanelState,
+    onWordEncountered: (word) => {
+      console.log(`🎯 Word encountered: ${word.word}`);
+      setCurrentWord(word);
+      // Track word learning when encountered
+      if (userProfile) {
+        progressTracker.trackWordLearned(word.word);
       }
-    }
-  }, [isPlayerReady, videoUrl, player]);
+    },
+    onStateChange: handleStateChange,
+    onPlayerCorrupted: resetPlayer,
+  });
 
-  // Load new video when URL changes (using existing player)
-  useEffect(() => {
-    const videoId = getYouTubeVideoId(videoUrl);
-    if (player && videoId && player.cueVideoById) {
-      console.log("Cueing new video (without autoplay):", videoId);
-      try {
-        player.cueVideoById(videoId); // Cue video but don't start playing
-      } catch (error) {
-        console.error("Error cueing video:", error);
-      }
-    }
-  }, [player, videoUrl]);
+  // Progress tracking hook
+  const progressTracker = useProgressTracking({
+    userProfile,
+    currentVideoUrl: videoUrl,
+    isLearningActive: learningPanelState === 'cruising'
+  });
 
-  // Cleanup on unmount
+  // Debug logging for learning activity
   useEffect(() => {
-    return () => {
-      if (player && typeof player.destroy === "function") {
+    const isActive = learningPanelState === 'cruising';
+    console.log(`🔍 Learning activity: ${isActive ? 'ACTIVE' : 'INACTIVE'} (panel state: ${learningPanelState})`);
+    if (isActive && userProfile && videoUrl) {
+      console.log(`📊 Progress tracker should be active for user: ${userProfile.name}, video: ${videoUrl.substring(0, 50)}...`);
+    }
+  }, [learningPanelState, userProfile, videoUrl]);
+
+  // Clean up player when switching views
+  useEffect(() => {
+    // When switching away from learning view, ensure player is cleaned
+    if (currentView === 'homepage' && player) {
+      console.log('View changed to homepage - ensuring player cleanup');
+
+      // Small delay to avoid race conditions with the back button handler
+      const cleanup = setTimeout(() => {
+        if (resetPlayer) {
+          resetPlayer();
+        }
+      }, 100);
+
+      return () => clearTimeout(cleanup);
+    }
+  }, [currentView, player, resetPlayer]);
+
+  // Load user profile on app start
+  useEffect(() => {
+    const loadUserProfile = () => {
+      if (isAuthenticated && user) {
+        // Use authenticated user data
+        const profile: UserProfile = {
+          id: user.id.toString(),
+          name: user.name,
+          estimatedLevel: user.estimated_level as any, // Type assertion for CEFR level
+          completedAssessment: user.completed_assessment,
+          createdAt: new Date(user.created_at),
+          lastActiveAt: new Date(user.last_active_at),
+          totalStudyTime: user.total_study_time,
+          wordsLearned: user.words_learned,
+          currentStreak: user.current_streak,
+          longestStreak: user.longest_streak
+        };
+        setUserProfile(profile);
+        console.log('Using authenticated user profile:', profile.name);
+        setProfileLoading(false);
+      } else if (!authLoading && !isAuthenticated) {
+        // Try to load guest profile from localStorage
         try {
-          player.destroy();
+          const storedProfile = localStorage.getItem('userProfile');
+          if (storedProfile) {
+            const profile = JSON.parse(storedProfile);
+            // Convert string dates back to Date objects
+            profile.createdAt = new Date(profile.createdAt);
+            profile.lastActiveAt = new Date(profile.lastActiveAt);
+            setUserProfile(profile);
+            console.log('Loaded guest user profile:', profile.name);
+          } else {
+            setShowOnboarding(true);
+            console.log('No user profile found, showing onboarding');
+          }
         } catch (error) {
-          console.warn("Error destroying YouTube player:", error);
+          console.error('Error loading user profile:', error);
+          setShowOnboarding(true);
+        } finally {
+          setProfileLoading(false);
         }
       }
     };
-  }, [player]);
 
-  // Helper function to check if player is valid and ready
-  const isPlayerReadyCheck = (playerObj: any): boolean => {
-    if (!playerObj) return false;
-    if (typeof playerObj.seekTo !== "function") return false;
-    if (typeof playerObj.getPlayerState !== "function") return false;
-    return true;
-  };
-
-  const seekToTimestamp = (item: Vocabulary | Grammar) => {
-    if (!isPlayerReadyCheck(player)) {
-      console.warn("YouTube player is not ready or has been destroyed");
-      return;
+    if (!authLoading) {
+      loadUserProfile();
     }
+  }, [isAuthenticated, user, authLoading]);
 
-    if (typeof item.timestamp !== "number") {
-      console.warn("Invalid timestamp for item:", item);
-      return;
+  // Update user level when profile changes
+  useEffect(() => {
+    if (userProfile && userProfile.estimatedLevel !== userLevel) {
+      setUserLevel(userProfile.estimatedLevel);
+      console.log(`Updated user level to: ${userProfile.estimatedLevel}`);
     }
+  }, [userProfile, userLevel]);
 
-    // Stop any current playback
-    stopCurrentPlayback();
-
-    const wordKey =
-      "word" in item
-        ? `${item.word}-${item.timestamp}`
-        : `${item.concept}-${item.timestamp}`;
-    setCurrentPlayingWord(wordKey);
-
-    try {
-      player.seekTo(item.timestamp, true);
-      player.playVideo();
-
-      // If we have end time, auto-stop at the end
-      if (typeof item.end_time === "number") {
-        const startTime = item.timestamp;
-        const endTime = item.end_time;
-        const duration = (endTime - startTime) * 1000;
-        const timer = setTimeout(() => {
-          if (isPlayerReadyCheck(player)) {
-            try {
-              player.pauseVideo();
-            } catch (error) {
-              console.warn("Error pausing YouTube player:", error);
-            }
-          }
-          setCurrentPlayingWord(null);
-          setPlaybackTimer(null);
-        }, duration);
-        setPlaybackTimer(timer);
-      }
-    } catch (error) {
-      console.error("Error seeking to timestamp:", error);
-      setCurrentPlayingWord(null);
-    }
-  };
-
-  const stopCurrentPlayback = () => {
-    if (playbackTimer) {
-      clearTimeout(playbackTimer);
-      setPlaybackTimer(null);
-    }
-
-    if (isPlayerReadyCheck(player)) {
-      try {
-        player.pauseVideo();
-      } catch (error) {
-        console.warn("Error pausing YouTube player:", error);
-      }
-    }
-
-    setCurrentPlayingWord(null);
-  };
-
-  const callAiTeacher = async (
-    word: string,
-    definition: string,
-    sentence: string
-  ) => {
-    try {
-      console.log("Calling AI Teacher for word:", word);
-
-      const response = await fetch("http://192.168.0.170:8000/api/ai-teacher", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          word,
-          definition,
-          sentence,
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      const data = await response.json();
-      console.log("AI Teacher response:", data);
-
-      setSelectedWord(word);
-      setAiTeacherResponse(data.ai_response);
-      setShowAiTeacher(true);
-    } catch (error) {
-      console.error("Error calling AI Teacher:", error);
-      alert("AI老师暂时不可用，请稍后再试！");
-    }
-  };
-
-  const filteredVocabulary = vocabulary;
-  const filteredGrammar = grammar;
-
-  const extractContent = async () => {
+  // Extract content from video
+  const handleExtractContent = async () => {
     setLoading(true);
     try {
-      console.log("Requesting content extraction for:", videoUrl);
-      const response = await fetch(
-        "http://192.168.0.170:8000/api/extract-content",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ videoUrl, userLevel }),
+      const data = await extractContent(videoUrl, userLevel);
+
+      setVocabulary(data.vocabulary || []);
+      setGrammar(data.grammar || []);
+      setSubtitleText(data.subtitleText || "");
+
+      // Reset mastered words for new video
+      setMasteredWords(new Set());
+      console.log("🔄 Reset mastered words for new video");
+
+      // Generate smart learning sessions (Smart Navigator)
+      if (data.vocabulary && data.vocabulary.length > 0) {
+        console.log("🧠 Generating smart learning sessions...");
+
+        try {
+          const sessionData = await generateSessions(data.vocabulary, userLevel, 5);
+
+          // Convert backend sessions to frontend format
+          const frontendSessions: LearningSession[] = sessionData.sessions.map((session, index) => {
+            // Sort focus words by timestamp to ensure proper order
+            const sortedWords = [...session.focus_words].sort((a, b) => {
+              const aTime = a.startTime ?? a.timestamp ?? 0;
+              const bTime = b.startTime ?? b.timestamp ?? 0;
+              return aTime - bTime;
+            });
+
+            // Calculate session start and end times
+            let sessionStartTime = 0;
+            let sessionEndTime = 0;
+
+            if (index === 0) {
+              // First session starts from beginning
+              sessionStartTime = 0;
+            } else {
+              // Later sessions start from the end of previous session
+              const prevSession = sessionData.sessions[index - 1];
+              const prevLastWord = [...prevSession.focus_words].sort((a, b) => {
+                const aTime = a.startTime ?? a.timestamp ?? 0;
+                const bTime = b.startTime ?? b.timestamp ?? 0;
+                return aTime - bTime;
+              }).pop();
+              sessionStartTime = prevLastWord ? (prevLastWord.endTime ?? prevLastWord.end_time ?? 0) : 0;
+            }
+
+            // Session ends at the last word's end time
+            const lastWord = sortedWords[sortedWords.length - 1];
+            sessionEndTime = lastWord ? (lastWord.endTime ?? lastWord.end_time ?? 0) : sessionStartTime;
+
+            return {
+              id: `session-${session.session_id}`,
+              videoId: videoUrl,
+              sessionNumber: session.session_number,
+              totalSessions: session.total_sessions,
+              focusWords: sortedWords, // Use sorted words
+              status: 'preview' as const,
+              startTime: sessionStartTime,
+              endTime: sessionEndTime
+            };
+          });
+
+          setAllSessions(frontendSessions);
+          setCurrentSessionIndex(0);
+          setCurrentSession(frontendSessions[0]);
+          setLearningPanelState('preview');
+
+          console.log(`🎯 Generated ${frontendSessions.length} smart learning sessions`);
+          console.log(`📊 Session 1 words:`, frontendSessions[0]?.focusWords.map(w => w.word));
+
+        } catch (sessionError) {
+          console.error("Session generation failed, falling back to simple session:", sessionError);
+
+          // Fallback: Create simple session if smart generation fails
+          const sessionWords = data.vocabulary.slice(0, Math.min(5, data.vocabulary.length))
+            .sort((a, b) => {
+              const aTime = a.startTime ?? a.timestamp ?? 0;
+              const bTime = b.startTime ?? b.timestamp ?? 0;
+              return aTime - bTime;
+            });
+
+          const lastWord = sessionWords[sessionWords.length - 1];
+
+          const fallbackSession: LearningSession = {
+            id: `session-${Date.now()}`,
+            videoId: videoUrl,
+            sessionNumber: 1,
+            totalSessions: Math.ceil(data.vocabulary.length / 5),
+            focusWords: sessionWords,
+            status: 'preview',
+            startTime: 0,
+            endTime: lastWord ? (lastWord.endTime ?? lastWord.end_time ?? 0) : 0
+          };
+
+          setCurrentSession(fallbackSession);
+          setAllSessions([fallbackSession]);
+          setLearningPanelState('preview');
         }
-      );
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
       }
 
-      const data = await response.json();
-      console.log("Received data:", data);
-
-      if (data.vocabulary) {
-        console.log("Setting vocabulary:", data.vocabulary);
-        setVocabulary(data.vocabulary);
-      }
-
-      if (data.grammar) {
-        console.log("Setting grammar:", data.grammar);
-        setGrammar(data.grammar);
-      }
-
-      // Extract first 200 words from subtitle data for testing
-      if (data.subtitles && Array.isArray(data.subtitles)) {
-        const subtitleWords = data.subtitles
-          .map((sub: any) => sub.text)
-          .join(" ")
-          .split(" ")
-          .slice(0, 200)
-          .join(" ");
-        setSubtitleText(subtitleWords);
-      }
+      console.log(`✅ Extracted ${data.vocabulary?.length || 0} vocabulary items and ${data.grammar?.length || 0} grammar items`);
     } catch (error) {
-      console.error("Error extracting content:", error);
-      alert("Failed to extract content. Check console for details.");
+      console.error("Content extraction failed:", error);
+      alert(`Content extraction failed: ${error}`);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleWordMastered = async (word: string) => {
+    console.log(`Word marked as mastered: ${word}`);
+
+    if (!currentSession || !vocabulary.length) return;
+
+    // Add word to mastered set to prevent it from being used again
+    const newMasteredWords = new Set(masteredWords);
+    newMasteredWords.add(word);
+    setMasteredWords(newMasteredWords);
+
+    // Track the mastered word
+    if (userProfile) {
+      progressTracker.trackWordLearned(word);
+      console.log(`📊 Tracked mastered word: ${word}`);
+    }
+
+    try {
+      // Filter out mastered words from vocabulary pool
+      const availableVocabulary = vocabulary.filter(v => !newMasteredWords.has(v.word));
+      console.log(`📝 Available vocabulary pool: ${availableVocabulary.length}/${vocabulary.length} words (excluded ${newMasteredWords.size} mastered)`);
+
+      // If available pool is too small, try with a broader pool but mark the preference
+      let vocabularyForReplacement = availableVocabulary;
+      let isUsingBroaderPool = false;
+
+      if (availableVocabulary.length < 5) {
+        console.log(`⚠️ Available pool too small (${availableVocabulary.length}), using broader vocabulary pool`);
+        vocabularyForReplacement = vocabulary; // Use full vocabulary, backend will handle filtering
+        isUsingBroaderPool = true;
+      }
+
+      // Call smart replacement API with mastered words list
+      const masteredWordsArray = Array.from(newMasteredWords);
+      const replacementResult = await replaceWord(vocabularyForReplacement, word, currentSession.focusWords, masteredWordsArray);
+
+      console.log(`🔍 Replacement API response:`, {
+        replacement_found: replacementResult.replacement_found,
+        replacement_word: replacementResult.replacement_word?.word,
+        message: replacementResult.message,
+        pool_size: vocabularyForReplacement.length,
+        used_broader_pool: isUsingBroaderPool
+      });
+
+      if (replacementResult.replacement_found && replacementResult.replacement_word) {
+        // Replace the mastered word with the new challenge word
+        const replacedWords = currentSession.focusWords.map(w =>
+          w.word === word ? replacementResult.replacement_word : w
+        );
+
+        // Sort by timestamp to maintain proper order
+        const sortedWords = replacedWords.sort((a, b) => {
+          const aTime = a.startTime ?? a.timestamp ?? 0;
+          const bTime = b.startTime ?? b.timestamp ?? 0;
+          return aTime - bTime;
+        });
+
+        // Recalculate session end time
+        const lastWord = sortedWords[sortedWords.length - 1];
+        const newEndTime = lastWord ? (lastWord.endTime ?? lastWord.end_time ?? currentSession.endTime) : currentSession.endTime;
+
+        setCurrentSession({
+          ...currentSession,
+          focusWords: sortedWords,
+          endTime: newEndTime
+        });
+
+        console.log(`✅ Replaced "${word}" with "${replacementResult.replacement_word.word}" and re-sorted by timestamp`);
+      } else {
+        // No replacement found - just remove the word
+        const filteredWords = currentSession.focusWords.filter(w => w.word !== word);
+
+        // Recalculate session end time
+        const lastWord = filteredWords[filteredWords.length - 1];
+        const newEndTime = lastWord ? (lastWord.endTime ?? lastWord.end_time ?? currentSession.startTime) : currentSession.startTime;
+
+        setCurrentSession({
+          ...currentSession,
+          focusWords: filteredWords,
+          endTime: newEndTime
+        });
+
+        console.log(`🎉 No replacement needed for "${word}" - ${replacementResult.message || 'excellent vocabulary level!'} - recalculated session end time`);
+      }
+
+      // Update session progress after word mastery
+      if (userProfile && currentSession) {
+        const currentWordsInSession = progressTracker.sessionWordsLearned;
+        progressTracker.updateSessionProgress(
+          currentSession.sessionNumber,
+          currentSession.totalSessions,
+          currentWordsInSession
+        );
+      }
+
+    } catch (error) {
+      console.error("Smart word replacement failed:", error);
+
+      // Fallback: just remove the word
+      const updatedWords = currentSession.focusWords.filter(w => w.word !== word);
+      setCurrentSession({
+        ...currentSession,
+        focusWords: updatedWords
+      });
+
+      console.log(`⚠️ Fallback: Removed "${word}" (replacement service unavailable)`);
+    }
+  };
+
+  const handleStartWatching = () => {
+    console.log(`Starting Session ${currentSession?.sessionNumber} watching experience`);
+    setLearningPanelState('cruising');
+
+    // Start the smart micro-pause experience
+    if (player && isPlayerReady) {
+      startWatching();
+      console.log("🎬 Smart micro-pause experience started");
+    } else {
+      console.warn("Player not ready for start watching");
+    }
+  };
+
+  const handlePracticeComplete = () => {
+    console.log("Practice completed for current word");
+
+    // Track word as learned
+    if (currentWord) {
+      progressTracker.trackWordLearned(currentWord.word);
+      setPreviousWord(currentWord);
+      setCurrentWord(undefined);
+      console.log(`✅ Word "${currentWord.word}" tracked as learned`);
+    }
+
+    // Use smart micro-pause to continue to next word
+    continueToNextWord();
+  };
+
+  const handleNextSession = () => {
+    console.log("Moving to next session");
+
+    if (currentSessionIndex + 1 < allSessions.length) {
+      const nextIndex = currentSessionIndex + 1;
+      setCurrentSessionIndex(nextIndex);
+      setCurrentSession(allSessions[nextIndex]);
+      setLearningPanelState('preview');
+
+      console.log(`📚 Started Session ${nextIndex + 1}/${allSessions.length}`);
+    } else {
+      console.log("🎊 All sessions completed!");
+
+      // Track video completion
+      if (userProfile && videoUrl) {
+        const videoProgress = progressTracker.trackVideoComplete(`Video: ${videoUrl}`);
+        console.log("Video completion tracked:", videoProgress);
+      }
+    }
+  };
+
+  const handleSessionComplete = () => {
+    console.log("Session completed!");
+
+    // Track session completion
+    if (userProfile && currentSession) {
+      const sessionProgress = progressTracker.trackSessionComplete(
+        currentSession.sessionNumber,
+        currentSession.totalSessions,
+        `Video: ${videoUrl}`
+      );
+      console.log("Session progress saved:", sessionProgress);
+    }
+
+    setLearningPanelState('summary');
+  };
+
+  const handleReplaySegment = (word: Vocabulary) => {
+    console.log(`🎬 Replaying segment for word: ${word.word}`);
+    if (word.timestamp && word.end_time && player) {
+      seekToTimestamp(word);
+      // The seekToTimestamp function will handle the replay automatically
+    }
+  };
+
+  // Onboarding handlers
+  const handleOnboardingComplete = (profile: UserProfile) => {
+    setUserProfile(profile);
+    setShowOnboarding(false);
+    console.log('Onboarding completed for:', profile.name);
+  };
+
+  const handleOnboardingSkip = () => {
+    // Create minimal profile for users who skip onboarding
+    const defaultProfile: UserProfile = {
+      id: `guest_${Date.now()}`,
+      name: 'Guest User',
+      estimatedLevel: 'A2',
+      completedAssessment: false,
+      createdAt: new Date(),
+      lastActiveAt: new Date(),
+      totalStudyTime: 0,
+      wordsLearned: 0,
+      currentStreak: 0,
+      longestStreak: 0
+    };
+
+    localStorage.setItem('userProfile', JSON.stringify(defaultProfile));
+    setUserProfile(defaultProfile);
+    setShowOnboarding(false);
+    console.log('Onboarding skipped, using default profile');
+  };
+
+  // Homepage handlers
+  const handleVideoSelect = (videoUrl: string) => {
+    setVideoUrl(videoUrl);
+    setCurrentView('learning');
+    console.log('Selected video from homepage:', videoUrl);
+  };
+
+  const handleNewVideo = () => {
+    setCurrentView('learning');
+    console.log('Starting new video learning session');
+  };
+
+  const handleBackToHomepage = () => {
+    // Clean up video player state when navigating away
+    if (player) {
+      try {
+        if (typeof player.destroy === 'function') {
+          player.destroy();
+        }
+      } catch (error) {
+        console.warn('Error destroying player during navigation:', error);
+      }
+    }
+
+    // Reset player state using the resetPlayer function
+    if (resetPlayer) {
+      resetPlayer();
+    }
+
+    // Clear learning state
+    setCurrentSession(undefined);
+    setAllSessions([]);
+    setLearningPanelState('preview');
+
+    setCurrentView('homepage');
+    console.log('Returning to homepage - player state cleaned');
+  };
+
+  // Legacy word click handler (will be replaced by smart micro-pause)
+  const handleWordClick = (item: Vocabulary | Grammar) => {
+    if (learningPanelState === 'cruising' || learningPanelState === 'preview') {
+      // Set as current word and switch to focus state
+      if ('word' in item) {
+        setCurrentWord(item);
+        setLearningPanelState('focus');
+      }
+
+      // Also seek to timestamp for immediate feedback
+      seekToTimestamp(item);
     }
   };
 
@@ -330,7 +558,7 @@ function App() {
     return levelColors[level.toUpperCase()] || "#6c757d";
   };
 
-  // Render vocabulary item with timestamp, translation on same row, and subtitle below
+  // Legacy vocabulary item rendering (for fallback)
   const renderVocabularyItem = (item: Vocabulary, index: number) => {
     const wordKey = `${item.word}-${item.timestamp}`;
     const isPlaying = currentPlayingWord === wordKey;
@@ -338,10 +566,8 @@ function App() {
     return (
       <div
         key={index}
-        className={`content-item ${
-          item.timestamp !== undefined ? "clickable" : ""
-        } ${isPlaying ? "flashing" : ""}`}
-        onClick={() => item.timestamp !== undefined && seekToTimestamp(item)}
+        className={`content-item ${item.timestamp !== undefined ? "clickable" : ""} ${isPlaying ? "flashing" : ""}`}
+        onClick={() => item.timestamp !== undefined && handleWordClick(item)}
         style={{
           cursor: item.timestamp !== undefined ? "pointer" : "default",
           padding: "12px",
@@ -351,15 +577,12 @@ function App() {
           transition: "all 0.2s ease",
         }}
       >
-        {/* First row: Word + Translation + Timestamp + Level */}
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            marginBottom: "4px",
-          }}
-        >
+        <div style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          marginBottom: "4px",
+        }}>
           <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
             <strong style={{ fontSize: "16px", color: "#2c3e50" }}>
               {item.word}
@@ -369,49 +592,6 @@ function App() {
                 ({item.translation})
               </span>
             )}
-            {item.timestamp !== undefined && (
-              <span
-                style={{
-                  backgroundColor: "#e74c3c",
-                  color: "white",
-                  padding: "2px 6px",
-                  borderRadius: "4px",
-                  fontSize: "11px",
-                  fontWeight: "bold",
-                  marginLeft: "4px",
-                }}
-              >
-                {Math.floor(item.timestamp / 60)}:
-                {(item.timestamp % 60).toString().padStart(2, "0")}
-                {item.end_time !== undefined && (
-                  <>
-                    {" - "}
-                    {Math.floor(item.end_time / 60)}:
-                    {(item.end_time % 60).toString().padStart(2, "0")}
-                  </>
-                )}
-              </span>
-            )}
-            {/* AI Teacher Button */}
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                callAiTeacher(item.word, item.definition, item.sentence || "");
-              }}
-              style={{
-                backgroundColor: "#28a745",
-                color: "white",
-                border: "none",
-                padding: "2px 6px",
-                borderRadius: "4px",
-                fontSize: "11px",
-                cursor: "pointer",
-                marginLeft: "4px",
-              }}
-              title="AI老师帮助"
-            >
-              🎓 AI
-            </button>
           </div>
           <span
             className="level-badge"
@@ -428,24 +608,16 @@ function App() {
           </span>
         </div>
 
-        {/* Second row: Definition */}
-        {/* <div className="definition" style={{ color: "#555", fontSize: "14px", marginBottom: "6px" }}>
-          {item.definition}
-        </div> */}
-
-        {/* Third row: Subtitle sentence with highlighted word */}
         {item.sentence && (
-          <div
-            style={{
-              padding: "8px",
-              backgroundColor: "#f8f9fa",
-              borderRadius: "4px",
-              fontSize: "13px",
-              fontStyle: "italic",
-              color: "#666",
-              border: "1px solid #e9ecef",
-            }}
-          >
+          <div style={{
+            padding: "8px",
+            backgroundColor: "#f8f9fa",
+            borderRadius: "4px",
+            fontSize: "13px",
+            fontStyle: "italic",
+            color: "#666",
+            border: "1px solid #e9ecef",
+          }}>
             <span
               dangerouslySetInnerHTML={{
                 __html: item.sentence.replace(
@@ -460,260 +632,357 @@ function App() {
     );
   };
 
-  // Render grammar item
-  const renderGrammarItem = (item: Grammar, index: number) => {
-    const grammarKey = `${item.concept}-${item.timestamp}`;
-    const isPlaying = currentPlayingWord === grammarKey;
-
+  // Show loading screen while checking authentication and profile
+  if (authLoading || profileLoading) {
     return (
-      <div
-        key={index}
-        className={`content-item ${
-          item.timestamp !== undefined ? "clickable" : ""
-        }`}
-        onClick={() => item.timestamp !== undefined && seekToTimestamp(item)}
-        style={{
-          cursor: item.timestamp !== undefined ? "pointer" : "default",
-          backgroundColor: isPlaying ? "#e8f5e8" : "transparent",
-          animation: isPlaying ? "pulse 2s infinite" : "none",
-          padding: "12px",
-          borderRadius: "8px",
-          border: "1px solid #e0e0e0",
-          marginBottom: "8px",
-        }}
-      >
-        <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-          <strong>{item.concept}</strong>
-          <span className="level-badge">{item.level}</span>
-          {isPlaying && (
-            <span
-              style={{
-                color: "#28a745",
-                fontSize: "12px",
-                fontWeight: "bold",
-              }}
-            >
-              🔊 Playing
-            </span>
-          )}
+      <div style={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        height: "100vh",
+        backgroundColor: "#f8f9fa",
+        textAlign: "center"
+      }}>
+        <div style={{
+          width: "48px",
+          height: "48px",
+          border: "4px solid #f3f3f3",
+          borderTop: "4px solid #007bff",
+          borderRadius: "50%",
+          animation: "spin 1s linear infinite",
+          marginBottom: "24px"
+        }} />
+        <div style={{
+          fontSize: "18px",
+          color: "#6c757d",
+          marginBottom: "8px"
+        }}>
+          Loading Smart Navigator
         </div>
-        <div className="explanation" style={{ marginTop: "4px" }}>
-          {item.explanation}
+        <div style={{
+          fontSize: "14px",
+          color: "#adb5bd"
+        }}>
+          Setting up your learning experience...
         </div>
+        <style>
+          {`
+            @keyframes spin {
+              0% { transform: rotate(0deg); }
+              100% { transform: rotate(360deg); }
+            }
+          `}
+        </style>
       </div>
     );
-  };
+  }
+
+  // Show onboarding for new users
+  if (showOnboarding) {
+    return (
+      <Onboarding
+        onComplete={handleOnboardingComplete}
+        onSkip={handleOnboardingSkip}
+      />
+    );
+  }
 
   return (
     <div className="App">
       {/* Header */}
-      <header
-        style={{
-          padding: "10px 20px",
-          background: "#f8f9fa",
-          borderBottom: "1px solid #ddd",
-        }}
-      >
-        <h1 style={{ margin: "0", fontSize: "24px", color: "#333" }}>
-          🎓 Immersive Language Learning
-        </h1>
-        <p style={{ margin: "5px 0 0 0", color: "#666", fontSize: "14px" }}>
-          Learn languages through YouTube videos with vocabulary and grammar
-          extraction!
-        </p>
-      </header>
-
-      {/* Main Left-Right Layout */}
-      <div className="main-layout">
-        {/* Left Side - Video Section */}
-        <div className="video-section">
-          <h2>📺 Video Player</h2>
-
-          {/* Video Controls */}
-          <input
-            type="text"
-            placeholder="Enter YouTube URL (e.g., https://www.youtube.com/watch?v=VIDEO_ID)"
-            value={videoUrl}
-            onChange={(e) => setVideoUrl(e.target.value)}
-            className="url-input"
-          />
-
-          <div style={{ display: "flex", gap: "10px", marginBottom: "15px" }}>
-            <button
-              onClick={extractContent}
-              disabled={loading || !videoUrl.trim()}
-              className="extract-btn"
-            >
-              {loading ? "Processing..." : "Extract Content"}
-            </button>
-            <button
-              onClick={() =>
-                setVideoUrl("https://www.youtube.com/watch?v=_lLkyJJm_o4")
-              }
-              className="extract-btn"
-              style={{ backgroundColor: "#007bff" }}
-            >
-              Test Video 1
-            </button>
-            <button
-              onClick={() =>
-                setVideoUrl("https://www.youtube.com/watch?v=RBgjzSk_38M")
-              }
-              className="extract-btn"
-              style={{ backgroundColor: "#28a745" }}
-            >
-              Test Video 2
-            </button>
-          </div>
-
-          {/* Video Player */}
-          <div className="video-placeholder">
-            {videoUrl && getYouTubeVideoId(videoUrl) ? (
-              <div
-                ref={playerRef}
-                style={{ width: "100%", height: "100%" }}
-              ></div>
-            ) : (
-              <div className="placeholder-text">
-                Enter a YouTube URL above to load the video
-              </div>
-            )}
-            {!player && isPlayerReady && (
-              <div
+      <header style={{
+        padding: "10px 20px",
+        background: "#f8f9fa",
+        borderBottom: "1px solid #ddd",
+      }}>
+        <div style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between"
+        }}>
+          <div style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "16px"
+          }}>
+            {currentView === 'learning' && (
+              <button
+                onClick={handleBackToHomepage}
                 style={{
-                  position: "absolute",
-                  top: "10px",
-                  right: "10px",
-                  background: "rgba(0,0,0,0.7)",
-                  color: "white",
-                  padding: "5px 10px",
-                  borderRadius: "5px",
-                  fontSize: "12px",
+                  padding: "8px 16px",
+                  backgroundColor: "transparent",
+                  color: "#007bff",
+                  border: "1px solid #007bff",
+                  borderRadius: "8px",
+                  fontSize: "14px",
+                  fontWeight: "600",
+                  cursor: "pointer",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "8px",
+                  transition: "all 0.2s ease"
+                }}
+                onMouseOver={(e) => {
+                  e.currentTarget.style.backgroundColor = "#007bff";
+                  e.currentTarget.style.color = "white";
+                }}
+                onMouseOut={(e) => {
+                  e.currentTarget.style.backgroundColor = "transparent";
+                  e.currentTarget.style.color = "#007bff";
                 }}
               >
-                YouTube API Ready
-              </div>
+                ← Back to Home
+              </button>
             )}
+            <div>
+              <h1 style={{ margin: "0", fontSize: "24px", color: "#333" }}>
+                🎓 Smart Navigator - Immersive Language Learning
+              </h1>
+              <p style={{ margin: "5px 0 0 0", color: "#666", fontSize: "14px" }}>
+                Transform any YouTube video into your personal language course
+              </p>
+            </div>
           </div>
+
+          {/* User Profile Info */}
+          {userProfile ? (
+            <div style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "12px"
+            }}>
+              <div style={{
+                textAlign: "right",
+                fontSize: "14px"
+              }}>
+                <div style={{
+                  color: "#2c3e50",
+                  fontWeight: "600",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "4px"
+                }}>
+                  Welcome, {userProfile.name}!
+                  {isAuthenticated ? (
+                    <span style={{
+                      backgroundColor: "#28a745",
+                      color: "white",
+                      fontSize: "10px",
+                      padding: "2px 6px",
+                      borderRadius: "10px",
+                      fontWeight: "bold"
+                    }}>
+                      SYNCED
+                    </span>
+                  ) : (
+                    <span style={{
+                      backgroundColor: "#ffc107",
+                      color: "#212529",
+                      fontSize: "10px",
+                      padding: "2px 6px",
+                      borderRadius: "10px",
+                      fontWeight: "bold"
+                    }}>
+                      GUEST
+                    </span>
+                  )}
+                </div>
+                <div style={{
+                  color: "#6c757d",
+                  fontSize: "12px"
+                }}>
+                  Level: {userProfile.estimatedLevel} • Words: {userProfile.wordsLearned}
+                </div>
+              </div>
+              <div style={{
+                position: "relative"
+              }}>
+                <div style={{
+                  width: "40px",
+                  height: "40px",
+                  borderRadius: "50%",
+                  backgroundColor: "#007bff",
+                  color: "white",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  fontSize: "16px",
+                  fontWeight: "600",
+                  cursor: "pointer"
+                }}
+                onClick={() => setShowAuthModal(true)}
+                >
+                  {userProfile.name.charAt(0).toUpperCase()}
+                </div>
+                {!isAuthenticated && (
+                  <div style={{
+                    position: "absolute",
+                    top: "-2px",
+                    right: "-2px",
+                    width: "12px",
+                    height: "12px",
+                    backgroundColor: "#ffc107",
+                    borderRadius: "50%",
+                    border: "2px solid white"
+                  }}></div>
+                )}
+              </div>
+            </div>
+          ) : (
+            <button
+              onClick={() => setShowAuthModal(true)}
+              style={{
+                padding: "8px 16px",
+                backgroundColor: "#007bff",
+                color: "white",
+                border: "none",
+                borderRadius: "8px",
+                fontSize: "14px",
+                fontWeight: "600",
+                cursor: "pointer",
+                transition: "background-color 0.2s ease"
+              }}
+              onMouseOver={(e) => e.currentTarget.style.backgroundColor = "#0056b3"}
+              onMouseOut={(e) => e.currentTarget.style.backgroundColor = "#007bff"}
+            >
+              Sign In
+            </button>
+          )}
+        </div>
+      </header>
+
+      {/* Main Content */}
+      {currentView === 'homepage' ? (
+        <Homepage
+          userProfile={userProfile!}
+          onVideoSelect={handleVideoSelect}
+          onNewVideo={handleNewVideo}
+        />
+      ) : (
+        <>
+          {/* Main Left-Right Layout */}
+          <div className="main-layout">
+            {/* Left Side - Video Section */}
+            <div className="video-section">
+          {/* Video Controls */}
+          <div className="video-controls">
+            <div className="video-controls-row">
+              <input
+                type="text"
+                value={videoUrl}
+                onChange={(e) => setVideoUrl(e.target.value)}
+                placeholder="🔗 Paste YouTube URL here..."
+                className="video-url-input"
+              />
+              <select
+                value={userLevel}
+                onChange={(e) => setUserLevel(e.target.value)}
+                className="level-select"
+              >
+                <option value="A1">🌱 A1 Beginner</option>
+                <option value="A2">🌿 A2 Elementary</option>
+                <option value="B1">🌳 B1 Intermediate</option>
+                <option value="B2">🎯 B2 Upper Intermediate</option>
+                <option value="C1">🚀 C1 Advanced</option>
+                <option value="C2">⭐ C2 Proficient</option>
+              </select>
+            </div>
+
+            <div className="video-controls-row">
+              <button
+                onClick={handleExtractContent}
+                disabled={loading || !videoUrl.trim()}
+                className="control-button primary"
+              >
+                {loading ? (
+                  <>⏳ Processing...</>
+                ) : (
+                  <>🎯 Extract Content</>
+                )}
+              </button>
+              <button
+                onClick={() => setVideoUrl("https://www.youtube.com/watch?v=_lLkyJJm_o4")}
+                className="control-button test1"
+              >
+                📺 Test Video 1
+              </button>
+              <button
+                onClick={() => setVideoUrl("https://www.youtube.com/watch?v=RBgjzSk_38M")}
+                className="control-button test2"
+              >
+                🎬 Test Video 2
+              </button>
+            </div>
+          </div>
+
+          {/* Video Player Component */}
+          <VideoPlayer
+            videoUrl={videoUrl}
+            player={player}
+            isPlayerReady={isPlayerReady}
+            onPlayerReady={handlePlayerReady}
+            onSeekToTimestamp={seekToTimestamp}
+            currentPlayingWord={currentPlayingWord}
+          />
         </div>
 
-        {/* Right Side - Learning Content Panel */}
+        {/* Right Side - Learning Panel */}
         <div className="content-panel">
-          {/* Vocabulary Section */}
-          <div className="vocabulary-section">
-            <h3>📚 Vocabulary ({filteredVocabulary.length})</h3>
-            <div className="content-list">
-              {filteredVocabulary.length === 0 ? (
-                <div
-                  style={{
-                    color: "#888",
-                    textAlign: "center",
-                    padding: "20px",
-                  }}
-                >
-                  No vocabulary extracted yet. Click "Extract Content" to
-                  analyze a video!
-                </div>
-              ) : (
-                filteredVocabulary.map(renderVocabularyItem)
-              )}
-            </div>
-          </div>
-
-          {/* Grammar Section */}
-          <div className="grammar-section">
-            <h3>📝 Grammar ({filteredGrammar.length})</h3>
-            <div className="content-list">
-              {filteredGrammar.length === 0 ? (
-                <div
-                  style={{
-                    color: "#888",
-                    textAlign: "center",
-                    padding: "20px",
-                  }}
-                >
-                  No grammar concepts extracted yet. Click "Extract Content" to
-                  analyze a video!
-                </div>
-              ) : (
-                filteredGrammar.map(renderGrammarItem)
-              )}
-            </div>
-          </div>
+          <LearningPanel
+            currentState={learningPanelState}
+            session={currentSession}
+            currentWord={currentWord}
+            previousWord={previousWord}
+            onStateChange={handleStateChange}
+            onWordMastered={handleWordMastered}
+            onStartWatching={handleStartWatching}
+            onPracticeComplete={handlePracticeComplete}
+            onNextSession={handleNextSession}
+            onSessionComplete={handleSessionComplete}
+            onReplaySegment={handleReplaySegment}
+            nextWordTimestamp={nextWordTimestamp}
+            currentWordIndex={currentWordIndex}
+            progressData={{
+              currentProgress: progressTracker.currentProgress,
+              sessionWordsLearned: progressTracker.sessionWordsLearned,
+              sessionDuration: progressTracker.sessionDuration
+            }}
+          />
         </div>
       </div>
 
-      {/* AI Teacher Modal */}
-      {showAiTeacher && (
-        <div
-          style={{
-            position: "fixed",
-            top: "0",
-            left: "0",
-            right: "0",
-            bottom: "0",
-            backgroundColor: "rgba(0,0,0,0.5)",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            zIndex: 1000,
-          }}
-        >
-          <div
-            style={{
-              backgroundColor: "white",
-              padding: "20px",
-              borderRadius: "12px",
-              maxWidth: "600px",
-              maxHeight: "80vh",
-              overflow: "auto",
-              margin: "20px",
-              boxShadow: "0 4px 20px rgba(0,0,0,0.15)",
-            }}
-          >
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-                marginBottom: "15px",
-                borderBottom: "2px solid #f0f0f0",
-                paddingBottom: "10px",
-              }}
-            >
-              <h3 style={{ margin: "0", color: "#2c3e50" }}>
-                🎓 AI老师：{selectedWord}
-              </h3>
-              <button
-                onClick={() => setShowAiTeacher(false)}
-                style={{
-                  backgroundColor: "#dc3545",
-                  color: "white",
-                  border: "none",
-                  padding: "8px 12px",
-                  borderRadius: "6px",
-                  cursor: "pointer",
-                  fontSize: "14px",
-                }}
-              >
-                关闭
-              </button>
-            </div>
-            <div
-              style={{
-                whiteSpace: "pre-line",
-                lineHeight: "1.6",
-                color: "#333",
-                fontSize: "14px",
-              }}
-            >
-              {aiTeacherResponse}
-            </div>
+      {/* Fallback Legacy Vocabulary Display (for development/debugging) */}
+      {process.env.NODE_ENV === 'development' && vocabulary.length > 0 && (
+        <div style={{
+          padding: "20px",
+          borderTop: "2px solid #dee2e6",
+          backgroundColor: "#f8f9fa"
+        }}>
+          <h3>🐛 Debug: Legacy Vocabulary ({vocabulary.length} items)</h3>
+          <div style={{ maxHeight: "200px", overflow: "auto" }}>
+            {vocabulary.slice(0, 5).map(renderVocabularyItem)}
           </div>
-        </div>
-      )}
-    </div>
-  );
+            </div>
+          )}
+          </>
+        )}
+
+        {/* Authentication Modal */}
+        <AuthModal
+          isOpen={showAuthModal}
+          onClose={() => setShowAuthModal(false)}
+          onSuccess={() => {
+            setShowAuthModal(false);
+            // Profile will be updated automatically via useEffect
+          }}
+          initialData={userProfile ? {
+            name: userProfile.name,
+            estimatedLevel: userProfile.estimatedLevel
+          } : undefined}
+        />
+      </div>
+    );
 }
 
 export default App;

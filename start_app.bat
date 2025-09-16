@@ -52,13 +52,18 @@ if not exist "requirements_installed.txt" (
     echo Python requirements already installed
 )
 
-REM Start the backend with console logging
-echo Starting backend server (logs will appear in this console)
+REM Start the backend with built-in logging
+echo Starting backend server (logs will appear in console and backend.log)
+echo Log file location: %CD%\..\..\backend.log
+echo Backend uses Python logging module for proper UTF-8 log file output
+echo.
+
+REM Start Python with built-in logging (no additional redirection needed)
 python main.py
 
 REM Backend will run in foreground with logs visible
 echo.
-echo Backend is starting - you will see logs below.
+echo Backend is starting - you will see logs below and in backend.log
 echo Press Ctrl+C to stop the server.
 echo.
 echo ========================================
