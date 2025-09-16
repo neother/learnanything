@@ -1,6 +1,8 @@
 import React, { useState, useRef, useEffect } from "react";
 import "./App.css";
 
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:8000';
+
 // Declare YouTube Player API types
 declare global {
   interface Window {
@@ -210,7 +212,7 @@ function App() {
     try {
       console.log("Calling AI Teacher for word:", word);
 
-      const response = await fetch("http://192.168.0.170:8000/api/ai-teacher", {
+      const response = await fetch(`${API_BASE_URL}/api/ai-teacher`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -246,7 +248,7 @@ function App() {
     try {
       console.log("Requesting content extraction for:", videoUrl);
       const response = await fetch(
-        "http://192.168.0.170:8000/api/extract-content",
+        `${API_BASE_URL}/api/extract-content`,
         {
           method: "POST",
           headers: {
