@@ -976,6 +976,7 @@ def post_process_subtitles(raw_subtitle_segments: list, pause_gap_threshold: flo
             combined_text = " ".join([seg.get('text', '').strip() for seg in buffer]).strip()
 
             # Calculate timing: start of first segment to end of last segment
+            # CRITICAL: Preserve original YouTube timing boundaries for video accuracy
             first_segment = buffer[0]
             last_segment = buffer[-1]
 
@@ -1048,16 +1049,18 @@ def post_process_subtitles(raw_subtitle_segments: list, pause_gap_threshold: flo
                 j += 1
 
             # Create merged segment from all collected segments
+            # CRITICAL FIX: Preserve original timing boundaries to maintain video accuracy
             first_segment = merged_segments[0]
             last_segment = merged_segments[-1]
 
-            combined_start = first_segment.get('start', 0)
-            last_start = last_segment.get('start', 0)
-            last_duration = last_segment.get('duration', 0)
+            # Use the actual start time from the original segments, not calculated times
+            combined_start = float(first_segment.get('start', 0))
+            last_start = float(last_segment.get('start', 0))
+            last_duration = float(last_segment.get('duration', 0))
             combined_end = last_start + last_duration
             combined_duration = combined_end - combined_start
 
-            # Create the final merged segment
+            # Create the final merged segment with original segment mapping for word timing
             merged_segment = {
                 'text': merged_text,
                 'start': combined_start,
@@ -1066,7 +1069,16 @@ def post_process_subtitles(raw_subtitle_segments: list, pause_gap_threshold: flo
                 'original_segments': sum(seg.get('original_segments', 1) for seg in merged_segments),
                 'sentence_complete': bool(re.search(r'[.!?,]\s*$', merged_text)),
                 'break_reason': f"recursive_merge_{len(merged_segments)}_segments",
-                'merge_info': f'incomplete_merged_with_{len(merged_segments)}_segments'
+                'merge_info': f'incomplete_merged_with_{len(merged_segments)}_segments',
+                # CRITICAL: Store original segment mappings for accurate word timing
+                'original_segment_mapping': [
+                    {
+                        'text': seg.get('text', ''),
+                        'start': seg.get('start', 0),
+                        'end': seg.get('end', seg.get('start', 0) + seg.get('duration', 0)),
+                        'duration': seg.get('duration', 0)
+                    } for seg in merged_segments
+                ]
             }
 
             context_merged_segments.append(merged_segment)
@@ -1107,11 +1119,11 @@ def post_process_subtitles(raw_subtitle_segments: list, pause_gap_threshold: flo
             # Merge current single word with next segment
             merged_text = f"{current_text} {next_segment.get('text', '').strip()}".strip()
 
-            # Calculate combined timing
-            current_start = current_segment.get('start', 0)
-            current_duration = current_segment.get('duration', 0)
-            next_start = next_segment.get('start', 0)
-            next_duration = next_segment.get('duration', 0)
+            # Calculate combined timing - preserve original boundaries
+            current_start = float(current_segment.get('start', 0))
+            current_duration = float(current_segment.get('duration', 0))
+            next_start = float(next_segment.get('start', 0))
+            next_duration = float(next_segment.get('duration', 0))
 
             # Combined segment spans from start of current to end of next
             combined_end = next_start + next_duration
@@ -1516,8 +1528,22 @@ def get_smart_timing(text: str, word: str, entry: dict) -> dict:
         total_words = len(words_in_chunk)
         position_ratio = word_position / max(1, total_words - 1) if total_words > 1 else 0.5
 
+        # CRITICAL FIX: Check for original segment mapping to get accurate word timing
         start_time = entry['start']
         duration = entry.get('duration', 3)
+
+        # If this is a merged segment, find the original segment containing the word
+        if 'original_segment_mapping' in entry:
+            for orig_segment in entry['original_segment_mapping']:
+                orig_text = orig_segment['text'].lower()
+                if word.lower() in orig_text:
+                    # Use the original segment's timing instead of merged timing
+                    start_time = orig_segment['start']
+                    duration = orig_segment['duration']
+                    print(f"Found word '{word}' in original segment at {start_time}s (was {entry['start']}s in merged)")
+                    break
+        else:
+            duration = entry.get('duration', 3)
         original_end = start_time + duration
 
         # Check if this is a no-punctuation scenario (no sentence endings)
@@ -1684,7 +1710,7 @@ def adaptive_vocabulary_selection(vocabulary: list, user_level: str = "A2", max_
             selected.extend(remaining_words[:words_to_take])
     return selected[:max_words]
 
-async def extract_vocabulary_from_transcript(transcript_text: str, transcript_data: list, user_level: str = "A2", max_words: int = 8):
+async def extract_vocabulary_from_transcript(transcript_text: str, transcript_data: list, user_level: str = "A2", max_words: int = 8, raw_segments: list = None):
     """Extract key vocabulary words from transcript text with real definitions"""
     # Extract all words and count frequency
     words = re.findall(r'\b[a-zA-Z]+\b', transcript_text.lower())
@@ -1720,7 +1746,10 @@ async def extract_vocabulary_from_transcript(transcript_text: str, transcript_da
     selected_words = interesting_words[:max_words]
 
     # Find word timestamps with smart position detection for optimal UX
-    sentence_boundaries = find_word_timestamps_smart(transcript_data, selected_words)
+    # Use raw segments for accurate timing, fallback to processed data
+    timing_data_source = raw_segments if raw_segments else transcript_data
+    sentence_boundaries = find_word_timestamps_smart(timing_data_source, selected_words)
+    print(f"DEBUG: Using {'raw' if raw_segments else 'processed'} segments for word timing")
     print(f"DEBUG: Found smart timestamps for {len(sentence_boundaries)} words:")
     for word, data in sentence_boundaries.items():
         print(f"  - {word}: timestamp={data['timestamp']}, position={data.get('position_type', 'unknown')}, mode={data['playback_mode']}")
@@ -1988,7 +2017,8 @@ async def extract_content(video_data: dict):
             transcript_text = " ".join([entry['text'] for entry in transcript])
 
             # Extract vocabulary and grammar from real transcript with adaptive selection
-            vocabulary = await extract_vocabulary_from_transcript(transcript_text, transcript, user_level)
+            # Pass both processed and raw data for accurate timing
+            vocabulary = await extract_vocabulary_from_transcript(transcript_text, transcript, user_level, 8, raw_segments)
             grammar = extract_grammar_from_transcript(transcript_text)
 
             # Save processed subtitles (subtitle processing only)

@@ -1,6 +1,6 @@
 {
   "video_id": "_lLkyJJm_o4",
-  "learning_timestamp": 1757947724.804328,
+  "learning_timestamp": 1757952245.7789671,
   "type": "learning_content",
   "source": "ai_extracted_content",
   "statistics": {
@@ -13,10 +13,10 @@
       "word": "campus",
       "definition": "a word that means campus",
       "level": "A2",
-      "timestamp": 11,
-      "end_time": 19,
-      "word_timestamp": 12,
-      "sentence_duration": 8,
+      "timestamp": 12,
+      "end_time": 18,
+      "word_timestamp": 14,
+      "sentence_duration": 6,
       "context_type": "real_transcript",
       "playback_mode": "smart_buffered_with_punct_detection",
       "translation": "校园",
@@ -35,13 +35,13 @@
       "definition": "persons; human beings in general",
       "level": "A1",
       "timestamp": 21,
-      "end_time": 26,
+      "end_time": 27,
       "word_timestamp": 22,
-      "sentence_duration": 4,
+      "sentence_duration": 5,
       "context_type": "real_transcript",
       "playback_mode": "smart_buffered_with_punct_detection",
       "translation": "人们",
-      "sentence": ">> all I hear is screaming and I see people running and all I'm saying is, \"Please God,",
+      "sentence": "all I hear is screaming and I see people running and all I'm saying is, \"Please God,",
       "sentence_start_time": 22.32,
       "sentence_end_time": 25.85025641025641,
       "definition_zh": "人们，人民",
@@ -77,9 +77,9 @@
       "definition": "concerning; approximately",
       "level": "A1",
       "timestamp": 106,
-      "end_time": 112,
+      "end_time": 113,
       "word_timestamp": 107,
-      "sentence_duration": 5,
+      "sentence_duration": 6,
       "context_type": "real_transcript",
       "playback_mode": "smart_buffered_with_punct_detection",
       "translation": "关于",
@@ -120,10 +120,10 @@
       "word": "from",
       "definition": "indicating the point in space at which a journey, motion, or action starts",
       "level": "A1",
-      "timestamp": 175,
-      "end_time": 185,
-      "word_timestamp": 176,
-      "sentence_duration": 10,
+      "timestamp": 174,
+      "end_time": 182,
+      "word_timestamp": 174,
+      "sentence_duration": 8,
       "context_type": "real_transcript",
       "playback_mode": "smart_buffered_with_punct_detection",
       "translation": "从",
@@ -161,7 +161,7 @@
       "word": "said",
       "definition": "past tense of say; uttered",
       "level": "A1",
-      "timestamp": 298,
+      "timestamp": 299,
       "end_time": 305,
       "word_timestamp": 300,
       "sentence_duration": 6,
@@ -202,32 +202,32 @@
   ],
   "grammar": [
     {
-      "concept": "Modal Verbs",
-      "explanation": "Used to express ability, possibility, permission, and obligation",
-      "level": "A2",
-      "example": "can",
-      "timestamp": 17
-    },
-    {
       "concept": "Negative Forms",
       "explanation": "Used to make sentences negative using contractions",
       "level": "A1",
       "example": "don't",
-      "timestamp": 113
-    },
-    {
-      "concept": "Articles (a, an, the)",
-      "explanation": "Words used before nouns to specify or generalize",
-      "level": "A1",
-      "example": "a",
-      "timestamp": 122
+      "timestamp": 25
     },
     {
       "concept": "Comparatives and Superlatives",
       "explanation": "Used to compare things and show the highest degree",
       "level": "A2",
       "example": " ",
-      "timestamp": 138
+      "timestamp": 52
+    },
+    {
+      "concept": "Future Tense",
+      "explanation": "Used to express future actions, plans, and predictions",
+      "level": "A2",
+      "example": "",
+      "timestamp": 58
+    },
+    {
+      "concept": "Modal Verbs",
+      "explanation": "Used to express ability, possibility, permission, and obligation",
+      "level": "A2",
+      "example": "can",
+      "timestamp": 80
     }
   ]
 }

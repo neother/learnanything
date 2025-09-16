@@ -1,14 +1,14 @@
 {
   "video_id": "_lLkyJJm_o4",
-  "processing_timestamp": 1757947724.801128,
+  "processing_timestamp": 1757952245.774839,
   "type": "ui_ready_processed_data",
   "source": "youtube_transcript_api_processed",
   "statistics": {
     "raw_segments_count": 360,
-    "processed_segments_count": 241,
-    "compression_ratio": "360/241 = 1.49x",
+    "processed_segments_count": 236,
+    "compression_ratio": "360/236 = 1.53x",
     "total_duration": 856.58,
-    "average_segment_duration": 4.2803856669044045
+    "average_segment_duration": 4.350115988944141
   },
   "ui_segments": [
     {
@@ -37,14 +37,14 @@
     },
     {
       "index": 2,
-      "text": ">> In America over the last 10 years,",
+      "text": "In America over the last 10 years,",
       "start": 15.92,
       "duration": 6.4,
       "end": 22.32,
       "original_segments": 1,
       "sentence_complete": true,
       "break_reason": "punctuation",
-      "word_count": 8,
+      "word_count": 7,
       "readability_score": "A2"
     },
     {
@@ -61,14 +61,14 @@
     },
     {
       "index": 4,
-      "text": ">> all I hear is screaming and I see people running and all I'm saying is, \"Please God,",
+      "text": "all I hear is screaming and I see people running and all I'm saying is, \"Please God,",
       "start": 22.32,
       "duration": 3.53025641025641,
       "end": 25.85025641025641,
       "original_segments": 3,
       "sentence_complete": true,
       "break_reason": "recursive_merge_2_segments",
-      "word_count": 18,
+      "word_count": 17,
       "readability_score": "A2"
     },
     {
@@ -133,22 +133,22 @@
     },
     {
       "index": 10,
-      "text": ">> A major manhunt's launched and in less than 36 hours,",
+      "text": "A major manhunt's launched and in less than 36 hours,",
       "start": 32.399,
-      "duration": 6.3566999999999965,
-      "end": 38.7557,
+      "duration": 6.2505584415584385,
+      "end": 38.64955844155844,
       "original_segments": 1,
       "sentence_complete": false,
       "break_reason": "unknown",
-      "word_count": 11,
+      "word_count": 10,
       "readability_score": "A2"
     },
     {
       "index": 11,
       "text": "a suspect is caught.",
-      "start": 38.869212499999996,
-      "duration": 2.270249999999999,
-      "end": 41.13946249999999,
+      "start": 38.76749350649351,
+      "duration": 2.3587012987012974,
+      "end": 41.12619480519481,
       "original_segments": 1,
       "sentence_complete": false,
       "break_reason": "unknown",
@@ -158,8 +158,8 @@
     {
       "index": 12,
       "text": "We got him.",
-      "start": 41.025949999999995,
-      "duration": 0.4540500000000094,
+      "start": 41.00825974025974,
+      "duration": 0.47174025974026534,
       "end": 41.480000000000004,
       "original_segments": 2,
       "sentence_complete": true,
@@ -361,45 +361,33 @@
     },
     {
       "index": 29,
-      "text": ">> Counting or not counting gang violence.",
+      "text": "Counting or not counting gang violence.",
       "start": 115.92,
       "duration": 4.5589999999999975,
       "end": 120.479,
       "original_segments": 1,
       "sentence_complete": true,
       "break_reason": "punctuation",
-      "word_count": 7,
+      "word_count": 6,
       "readability_score": "A2"
     },
     {
       "index": 30,
-      "text": ">> Great.",
+      "text": "Great. He's hit by a single gunshot to the neck and he collapses to his left.",
       "start": 117.759,
-      "duration": 5.040000000000006,
-      "end": 122.799,
-      "original_segments": 1,
+      "duration": 9.130526315789481,
+      "end": 126.88952631578948,
+      "original_segments": 2,
       "sentence_complete": true,
-      "break_reason": "punctuation",
-      "word_count": 2,
-      "readability_score": "A2"
-    },
-    {
-      "index": 31,
-      "text": ">> He's hit by a single gunshot to the neck and he collapses to his left.",
-      "start": 120.479,
-      "duration": 6.431392405063299,
-      "end": 126.9103924050633,
-      "original_segments": 1,
-      "sentence_complete": false,
-      "break_reason": "unknown",
+      "break_reason": "recursive_merge_2_segments",
       "word_count": 16,
       "readability_score": "A2"
     },
     {
-      "index": 32,
+      "index": 31,
       "text": "We've paused the video at this moment as it's too graphic to show.",
-      "start": 126.9103924050633,
-      "duration": 4.691580567909654,
+      "start": 126.88952631578948,
+      "duration": 4.712446657183477,
       "end": 131.60197297297296,
       "original_segments": 2,
       "sentence_complete": true,
@@ -408,7 +396,7 @@
       "readability_score": "A2"
     },
     {
-      "index": 33,
+      "index": 32,
       "text": "Panic quickly ensues and the crowd immediately scatters.",
       "start": 131.60197297297296,
       "duration": 3.468711958533902,
@@ -420,7 +408,7 @@
       "readability_score": "A2"
     },
     {
-      "index": 34,
+      "index": 33,
       "text": "Charlie Kirk is bundled into a car and driven away.",
       "start": 135.07068493150686,
       "duration": 3.514578226387897,
@@ -432,7 +420,7 @@
       "readability_score": "A2"
     },
     {
-      "index": 35,
+      "index": 34,
       "text": "Investigators say the shooter arrived on campus at 11:52 a.m.",
       "start": 138.58526315789476,
       "duration": 3.978947368421018,
@@ -444,7 +432,7 @@
       "readability_score": "A2"
     },
     {
-      "index": 36,
+      "index": 35,
       "text": "This video was filmed before the shooting.",
       "start": 142.56421052631578,
       "duration": 2.275789473684199,
@@ -456,7 +444,7 @@
       "readability_score": "A2"
     },
     {
-      "index": 37,
+      "index": 36,
       "text": "We can see a figure on the rooftop.",
       "start": 144.83999999999997,
       "duration": 2.064242424242451,
@@ -468,7 +456,7 @@
       "readability_score": "A2"
     },
     {
-      "index": 38,
+      "index": 37,
       "text": "And this was video after Charlie Kirk was shot.",
       "start": 146.90424242424243,
       "duration": 3.67681020733653,
@@ -480,7 +468,7 @@
       "readability_score": "A2"
     },
     {
-      "index": 39,
+      "index": 38,
       "text": "You can see the person on top of the same building moving across the roof.",
       "start": 150.58105263157896,
       "duration": 6.297947368421063,
@@ -492,7 +480,7 @@
       "readability_score": "A2"
     },
     {
-      "index": 40,
+      "index": 39,
       "text": "Some of those who'd been in the crowd as the shot was fired spoke about what they had seen.",
       "start": 155.28,
       "duration": 5.903430379746823,
@@ -504,7 +492,7 @@
       "readability_score": "A2"
     },
     {
-      "index": 41,
+      "index": 40,
       "text": "The first student got up and they were talking about religion,",
       "start": 161.18343037974682,
       "duration": 4.496569620253155,
@@ -516,7 +504,7 @@
       "readability_score": "A2"
     },
     {
-      "index": 42,
+      "index": 41,
       "text": "Mormonism, and Christianity.",
       "start": 163.68,
       "duration": 2.799999999999983,
@@ -528,7 +516,7 @@
       "readability_score": "A2"
     },
     {
-      "index": 43,
+      "index": 42,
       "text": "And the second student to get up was talking about transgenderism and how um gun violence has been very frequent with that community.",
       "start": 166.38,
       "duration": 8.762857142857143,
@@ -540,7 +528,7 @@
       "readability_score": "A2"
     },
     {
-      "index": 44,
+      "index": 43,
       "text": "And that is when it happened.",
       "start": 175.14285714285714,
       "duration": 1.4163928571428812,
@@ -552,7 +540,7 @@
       "readability_score": "A2"
     },
     {
-      "index": 45,
+      "index": 44,
       "text": "I was watching from pretty close up and I heard a pop and I thought no that that nobody's shooting firecrackers,",
       "start": 176.55925000000002,
       "duration": 8.293083333333328,
@@ -564,7 +552,7 @@
       "readability_score": "A2"
     },
     {
-      "index": 46,
+      "index": 45,
       "text": "right? This is the middle of the day.",
       "start": 184.95489743589744,
       "duration": 1.4831025641025803,
@@ -576,7 +564,7 @@
       "readability_score": "A2"
     },
     {
-      "index": 47,
+      "index": 46,
       "text": "As soon as the shot we heard the shot and we saw what had happened,",
       "start": 186.43800000000002,
       "duration": 4.921999999999997,
@@ -588,7 +576,7 @@
       "readability_score": "A2"
     },
     {
-      "index": 48,
+      "index": 47,
       "text": "we all dropped to the ground and I want to say we sat like that for about 30 to 45 seconds and then everyone around us got up and started running.",
       "start": 189.28,
       "duration": 9.078400000000016,
@@ -600,7 +588,7 @@
       "readability_score": "A2"
     },
     {
-      "index": 49,
+      "index": 48,
       "text": "They had moved the barricades and we all fled from behind like behind Kirk's tent.",
       "start": 198.35840000000002,
       "duration": 6.281599999999969,
@@ -612,23 +600,23 @@
       "readability_score": "A2"
     },
     {
-      "index": 50,
-      "text": ">> Yeah.",
+      "index": 49,
+      "text": "Yeah. We ran about 15 30 seconds into a building and just went under um a desk in there.",
       "start": 201.04,
-      "duration": 1.0209523809523835,
-      "end": 202.0609523809524,
-      "original_segments": 1,
-      "sentence_complete": false,
-      "break_reason": "unknown",
-      "word_count": 2,
+      "duration": 7.839000000000027,
+      "end": 208.87900000000002,
+      "original_segments": 4,
+      "sentence_complete": true,
+      "break_reason": "recursive_merge_3_segments",
+      "word_count": 19,
       "readability_score": "A2"
     },
     {
-      "index": 51,
-      "text": "We ran about 15 30 seconds into a building and just went under um a desk in there.",
-      "start": 202.0609523809524,
-      "duration": 6.818047619047633,
-      "end": 208.87900000000002,
+      "index": 50,
+      "text": "All I hear is screaming and I see people running and I'm like it's not safe to run.",
+      "start": 206.959,
+      "duration": 3.7293333333333294,
+      "end": 210.68833333333333,
       "original_segments": 3,
       "sentence_complete": true,
       "break_reason": "recursive_merge_2_segments",
@@ -636,19 +624,7 @@
       "readability_score": "A2"
     },
     {
-      "index": 52,
-      "text": ">> All I hear is screaming and I see people running and I'm like it's not safe to run.",
-      "start": 206.959,
-      "duration": 3.7293333333333294,
-      "end": 210.68833333333333,
-      "original_segments": 3,
-      "sentence_complete": true,
-      "break_reason": "recursive_merge_2_segments",
-      "word_count": 19,
-      "readability_score": "A2"
-    },
-    {
-      "index": 53,
+      "index": 51,
       "text": "It's not safe to get up.",
       "start": 210.78066666666666,
       "duration": 2.2159999999999997,
@@ -660,7 +636,7 @@
       "readability_score": "A2"
     },
     {
-      "index": 54,
+      "index": 52,
       "text": "It's not.",
       "start": 212.9043333333333,
       "duration": 1.0156666666666663,
@@ -672,7 +648,7 @@
       "readability_score": "A2"
     },
     {
-      "index": 55,
+      "index": 53,
       "text": "And all I'm saying is please God.",
       "start": 212.239,
       "duration": 2.508824999999997,
@@ -684,7 +660,7 @@
       "readability_score": "A2"
     },
     {
-      "index": 56,
+      "index": 54,
       "text": "Please God.",
       "start": 214.747825,
       "duration": -0.5652608974359055,
@@ -696,7 +672,7 @@
       "readability_score": "A2"
     },
     {
-      "index": 57,
+      "index": 55,
       "text": "Please God because I don't want to die.",
       "start": 214.1825641025641,
       "duration": 1.495165627165619,
@@ -708,7 +684,7 @@
       "readability_score": "A2"
     },
     {
-      "index": 58,
+      "index": 56,
       "text": "I don't want anybody else to die and I I think I just saw a guy die,",
       "start": 215.67772972972972,
       "duration": 5.095603603603621,
@@ -720,7 +696,7 @@
       "readability_score": "A2"
     },
     {
-      "index": 59,
+      "index": 57,
       "text": "you know.",
       "start": 220.77333333333334,
       "duration": 1.2266666666666692,
@@ -732,19 +708,19 @@
       "readability_score": "A2"
     },
     {
-      "index": 60,
-      "text": ">> As news of the shooting began to reverberate around the world and the severity of his injuries remained unclear,",
+      "index": 58,
+      "text": "As news of the shooting began to reverberate around the world and the severity of his injuries remained unclear,",
       "start": 220.159,
       "duration": 7.574333333333357,
       "end": 227.73333333333335,
       "original_segments": 4,
       "sentence_complete": true,
       "break_reason": "recursive_merge_2_segments",
-      "word_count": 20,
+      "word_count": 19,
       "readability_score": "A2"
     },
     {
-      "index": 61,
+      "index": 59,
       "text": "Donald Trump took to social media urging people to pray and calling him a great guy from top to bottom.",
       "start": 227.73333333333335,
       "duration": 10.505666666666656,
@@ -756,7 +732,7 @@
       "readability_score": "A2"
     },
     {
-      "index": 62,
+      "index": 60,
       "text": "Then around 2 hours later,",
       "start": 235.599,
       "duration": 2.0254912280701753,
@@ -768,7 +744,7 @@
       "readability_score": "A2"
     },
     {
-      "index": 63,
+      "index": 61,
       "text": "another post from the president confirmed Charlie Kirk's death to the world.",
       "start": 237.7023947368421,
       "duration": 5.9206666666666665,
@@ -780,7 +756,7 @@
       "readability_score": "A2"
     },
     {
-      "index": 64,
+      "index": 62,
       "text": "Writing on Truth Social, \"The great and even legendary Charlie Kirk is dead,\" adding,",
       "start": 243.54515789473683,
       "duration": 5.893842105263161,
@@ -792,7 +768,7 @@
       "readability_score": "A2"
     },
     {
-      "index": 65,
+      "index": 63,
       "text": "\"No one understood or had the heart of the youth in the US more than him.\" Our",
       "start": 247.28,
       "duration": 6.923636363636377,
@@ -804,7 +780,7 @@
       "readability_score": "A2"
     },
     {
-      "index": 66,
+      "index": 64,
       "text": "North America editor Sarah Smith has been taking a look at the reaction to his death.",
       "start": 254.20363636363638,
       "duration": 6.51636363636365,
@@ -816,7 +792,7 @@
       "readability_score": "A2"
     },
     {
-      "index": 67,
+      "index": 65,
       "text": "Charlie Kirk reached places and people other politicians simply could not,",
       "start": 258.4,
       "duration": 7.600000000000023,
@@ -828,7 +804,7 @@
       "readability_score": "A2"
     },
     {
-      "index": 68,
+      "index": 66,
       "text": "especially with younger voters,",
       "start": 263.199,
       "duration": 5.36099999999999,
@@ -840,7 +816,7 @@
       "readability_score": "A2"
     },
     {
-      "index": 69,
+      "index": 67,
       "text": "frequently debating anyone who disagreed with him.",
       "start": 266.0,
       "duration": 3.7942307692307584,
@@ -852,7 +828,7 @@
       "readability_score": "A2"
     },
     {
-      "index": 70,
+      "index": 68,
       "text": "Okay. So,",
       "start": 269.87011538461536,
       "duration": 0.6829615384615408,
@@ -864,7 +840,7 @@
       "readability_score": "A2"
     },
     {
-      "index": 71,
+      "index": 69,
       "text": "it's a fertilized embryo,",
       "start": 270.4013076923077,
       "duration": 2.79769230769233,
@@ -876,130 +852,82 @@
       "readability_score": "A2"
     },
     {
-      "index": 72,
-      "text": ">> correct?",
+      "index": 70,
+      "text": "correct? Which is not a baby.",
       "start": 271.919,
-      "duration": 1.182843749999991,
-      "end": 273.10184375,
-      "original_segments": 1,
-      "sentence_complete": false,
-      "break_reason": "unknown",
-      "word_count": 2,
-      "readability_score": "A2"
-    },
-    {
-      "index": 73,
-      "text": "Which is not a baby.",
-      "start": 273.10184375,
-      "duration": 2.258156249999983,
+      "duration": 3.440999999999974,
       "end": 275.35999999999996,
-      "original_segments": 1,
-      "sentence_complete": false,
-      "break_reason": "unknown",
-      "word_count": 5,
+      "original_segments": 2,
+      "sentence_complete": true,
+      "break_reason": "recursive_merge_2_segments",
+      "word_count": 6,
       "readability_score": "A2"
     },
     {
-      "index": 74,
-      "text": ">> So,",
+      "index": 71,
+      "text": "So, at what point does it become a baby?",
       "start": 273.199,
-      "duration": 0.45767441860464736,
-      "end": 273.65667441860467,
-      "original_segments": 1,
-      "sentence_complete": false,
-      "break_reason": "unknown",
-      "word_count": 2,
-      "readability_score": "A2"
-    },
-    {
-      "index": 75,
-      "text": "at what point does it become a baby?",
-      "start": 273.65667441860467,
-      "duration": 2.8223255813953254,
+      "duration": 3.2799999999999727,
       "end": 276.479,
-      "original_segments": 1,
-      "sentence_complete": false,
-      "break_reason": "unknown",
-      "word_count": 8,
+      "original_segments": 2,
+      "sentence_complete": true,
+      "break_reason": "recursive_merge_2_segments",
+      "word_count": 9,
       "readability_score": "A2"
     },
     {
-      "index": 76,
-      "text": ">> When it is born.",
+      "index": 72,
+      "text": "When it is born.",
       "start": 275.36,
       "duration": 1.4399999999999977,
       "end": 276.8,
       "original_segments": 1,
       "sentence_complete": true,
       "break_reason": "punctuation",
-      "word_count": 5,
+      "word_count": 4,
       "readability_score": "A2"
     },
     {
-      "index": 77,
-      "text": ">> Oh.",
+      "index": 73,
+      "text": "Oh. He built a huge devoted worldwide following.",
       "start": 276.479,
-      "duration": 3.040999999999997,
-      "end": 279.52,
-      "original_segments": 1,
-      "sentence_complete": true,
-      "break_reason": "punctuation",
-      "word_count": 2,
-      "readability_score": "A2"
-    },
-    {
-      "index": 78,
-      "text": ">> He built a huge devoted worldwide following.",
-      "start": 276.8,
-      "duration": 4.8799999999999955,
+      "duration": 5.201000000000022,
       "end": 281.68,
-      "original_segments": 2,
+      "original_segments": 3,
       "sentence_complete": true,
-      "break_reason": "punctuation",
+      "break_reason": "recursive_merge_2_segments",
       "word_count": 8,
       "readability_score": "A2"
     },
     {
-      "index": 79,
-      "text": ">> Are you trying to say that blacks thrive under subjugation?",
+      "index": 74,
+      "text": "Are you trying to say that blacks thrive under subjugation?",
       "start": 279.84,
       "duration": 4.160000000000025,
       "end": 284.0,
       "original_segments": 2,
       "sentence_complete": true,
       "break_reason": "punctuation",
-      "word_count": 11,
+      "word_count": 10,
       "readability_score": "A2"
     },
     {
-      "index": 80,
-      "text": ">> No,",
+      "index": 75,
+      "text": "No, I'm not.",
       "start": 282.56,
-      "duration": 0.41142857142857076,
-      "end": 282.9714285714286,
-      "original_segments": 1,
-      "sentence_complete": false,
-      "break_reason": "unknown",
-      "word_count": 2,
+      "duration": 0.8861538461538316,
+      "end": 283.44615384615383,
+      "original_segments": 2,
+      "sentence_complete": true,
+      "break_reason": "recursive_merge_2_segments",
+      "word_count": 3,
       "readability_score": "A2"
     },
     {
-      "index": 81,
-      "text": "I'm not.",
-      "start": 283.04,
-      "duration": 0.5485714285714277,
-      "end": 283.58857142857147,
-      "original_segments": 1,
-      "sentence_complete": false,
-      "break_reason": "unknown",
-      "word_count": 2,
-      "readability_score": "A2"
-    },
-    {
-      "index": 82,
+      "index": 76,
       "text": "I'm saying they I'm asking you the question.",
-      "start": 283.52,
-      "duration": 2.023783783783813,
+      "start": 283.3723076923077,
+      "duration": 2.1714760914761086,
       "end": 285.5437837837838,
       "original_segments": 2,
       "sentence_complete": true,
@@ -1008,7 +936,7 @@
       "readability_score": "A2"
     },
     {
-      "index": 83,
+      "index": 77,
       "text": "The data shows they were actually better in the 1940s.",
       "start": 285.5437837837838,
       "duration": 3.3504324324324557,
@@ -1020,7 +948,7 @@
       "readability_score": "A2"
     },
     {
-      "index": 84,
+      "index": 78,
       "text": "It was bad.",
       "start": 288.89421621621625,
       "duration": -0.8142162162162094,
@@ -1032,7 +960,7 @@
       "readability_score": "A2"
     },
     {
-      "index": 85,
+      "index": 79,
       "text": "It was evil.",
       "start": 288.17,
       "duration": 1.0800000000000067,
@@ -1044,7 +972,7 @@
       "readability_score": "A2"
     },
     {
-      "index": 86,
+      "index": 80,
       "text": "But what happened?",
       "start": 289.16,
       "duration": 1.8000000000000114,
@@ -1056,7 +984,7 @@
       "readability_score": "A2"
     },
     {
-      "index": 87,
+      "index": 81,
       "text": "Something changed.",
       "start": 289.199,
       "duration": 1.0615263157894668,
@@ -1068,7 +996,7 @@
       "readability_score": "A2"
     },
     {
-      "index": 88,
+      "index": 82,
       "text": "They committed less crimes.",
       "start": 290.2605263157895,
       "duration": 2.6194736842105044,
@@ -1080,22 +1008,22 @@
       "readability_score": "A2"
     },
     {
-      "index": 89,
-      "text": ">> Maybe they were afraid.",
+      "index": 83,
+      "text": "Maybe they were afraid.",
       "start": 291.44,
-      "duration": 3.1200000000000196,
-      "end": 294.56,
+      "duration": 3.066666666666686,
+      "end": 294.50666666666666,
       "original_segments": 1,
       "sentence_complete": false,
       "break_reason": "unknown",
-      "word_count": 5,
+      "word_count": 4,
       "readability_score": "A2"
     },
     {
-      "index": 90,
+      "index": 84,
       "text": "His organization,",
-      "start": 294.56,
-      "duration": -0.48202531645569024,
+      "start": 294.50666666666666,
+      "duration": -0.4286919831223486,
       "end": 294.0779746835443,
       "original_segments": 2,
       "sentence_complete": true,
@@ -1104,7 +1032,7 @@
       "readability_score": "A2"
     },
     {
-      "index": 91,
+      "index": 85,
       "text": "founded when he was just 18,",
       "start": 294.1701265822785,
       "duration": 2.5802531645569724,
@@ -1116,7 +1044,7 @@
       "readability_score": "A2"
     },
     {
-      "index": 92,
+      "index": 86,
       "text": "helped to make conservatism cool and accessible.",
       "start": 296.65822784810126,
       "duration": 5.501772151898763,
@@ -1128,7 +1056,7 @@
       "readability_score": "A2"
     },
     {
-      "index": 93,
+      "index": 87,
       "text": "President Trump has said he would not be back in the White House without Charlie Kirk.",
       "start": 300.16,
       "duration": 4.834843749999948,
@@ -1140,7 +1068,7 @@
       "readability_score": "A2"
     },
     {
-      "index": 94,
+      "index": 88,
       "text": "He was visibly angry as he addressed the nation and blamed those he holds responsible.",
       "start": 304.99484375,
       "duration": 7.644156250000037,
@@ -1152,46 +1080,58 @@
       "readability_score": "A2"
     },
     {
-      "index": 95,
-      "text": ">> For years,",
+      "index": 89,
+      "text": "For years,",
       "start": 309.68,
-      "duration": 1.4931666666666672,
-      "end": 311.1731666666667,
+      "duration": 1.1945333333333337,
+      "end": 310.8745333333333,
       "original_segments": 1,
       "sentence_complete": false,
       "break_reason": "unknown",
-      "word_count": 3,
+      "word_count": 2,
       "readability_score": "A2"
     },
     {
-      "index": 96,
-      "text": "those on the radical left have compared wonderful Americans like Charlie to",
-      "start": 311.1731666666667,
-      "duration": 6.93460073260074,
-      "end": 318.10776739926746,
+      "index": 90,
+      "text": "those on the radical left have compared wonderful Americans like Charlie",
+      "start": 310.8745333333333,
+      "duration": 6.513144322344335,
+      "end": 317.38767765567763,
       "original_segments": 1,
       "sentence_complete": false,
       "break_reason": "unknown",
-      "word_count": 12,
+      "word_count": 11,
       "readability_score": "A2"
     },
     {
-      "index": 97,
-      "text": "Nazisand the world's worst mass murderersand",
-      "start": 318.10776739926746,
-      "duration": 3.4673003663003215,
-      "end": 321.5750677655678,
-      "original_segments": 2,
+      "index": 91,
+      "text": "to Nazisand",
+      "start": 317.38767765567763,
+      "duration": 1.1842080586080783,
+      "end": 318.5718857142857,
+      "original_segments": 1,
       "sentence_complete": false,
-      "break_reason": "single_word_merged_with_unknown",
-      "word_count": 6,
+      "break_reason": "unknown",
+      "word_count": 2,
       "readability_score": "A2"
     },
     {
-      "index": 98,
+      "index": 92,
+      "text": "the world's worst mass murderersand",
+      "start": 318.5718857142857,
+      "duration": 2.9605201465201554,
+      "end": 321.53240586080585,
+      "original_segments": 1,
+      "sentence_complete": false,
+      "break_reason": "unknown",
+      "word_count": 5,
+      "readability_score": "A2"
+    },
+    {
+      "index": 93,
       "text": "criminals. This kind of rhetoric is directly responsible for the terrorism that we're seeing in our country today.",
-      "start": 321.5750677655678,
-      "duration": 10.343932234432202,
+      "start": 321.53240586080585,
+      "duration": 10.38659413919413,
       "end": 331.919,
       "original_segments": 5,
       "sentence_complete": true,
@@ -1200,23 +1140,23 @@
       "readability_score": "A2"
     },
     {
-      "index": 99,
-      "text": ">> On television,",
+      "index": 94,
+      "text": "On television,",
       "start": 328.32,
-      "duration": 3.0871081081081058,
-      "end": 331.4071081081081,
+      "duration": 2.766647058823527,
+      "end": 331.08664705882353,
       "original_segments": 1,
       "sentence_complete": false,
       "break_reason": "unknown",
-      "word_count": 3,
+      "word_count": 2,
       "readability_score": "A2"
     },
     {
-      "index": 100,
+      "index": 95,
       "text": "shock, sadness,",
-      "start": 331.5887027027027,
-      "duration": 2.723918918918912,
-      "end": 334.3126216216216,
+      "start": 331.2842647058823,
+      "duration": 2.9642647058823286,
+      "end": 334.24852941176465,
       "original_segments": 2,
       "sentence_complete": true,
       "break_reason": "recursive_merge_2_segments",
@@ -1224,10 +1164,10 @@
       "readability_score": "A2"
     },
     {
-      "index": 101,
+      "index": 96,
       "text": "and anger.",
-      "start": 333.94943243243245,
-      "duration": -1.0137853736089255,
+      "start": 333.85329411764707,
+      "duration": -0.9176470588235475,
       "end": 332.9356470588235,
       "original_segments": 2,
       "sentence_complete": true,
@@ -1236,7 +1176,7 @@
       "readability_score": "A2"
     },
     {
-      "index": 102,
+      "index": 97,
       "text": "That sounds very combative.",
       "start": 332.9356470588235,
       "duration": 4.744352941176491,
@@ -1248,22 +1188,22 @@
       "readability_score": "A2"
     },
     {
-      "index": 103,
-      "text": ">> They are at war with us.",
+      "index": 98,
+      "text": "They are at war with us.",
       "start": 335.039,
-      "duration": 3.115046511627915,
-      "end": 338.1540465116279,
+      "duration": 2.9766000000000075,
+      "end": 338.0156,
       "original_segments": 1,
       "sentence_complete": false,
       "break_reason": "unknown",
-      "word_count": 7,
+      "word_count": 6,
       "readability_score": "A2"
     },
     {
-      "index": 104,
+      "index": 99,
       "text": "Whether we want to accept it or not,",
-      "start": 338.1540465116279,
-      "duration": 0.7846201550387946,
+      "start": 338.0156,
+      "duration": 0.9230666666666707,
       "end": 338.9386666666667,
       "original_segments": 2,
       "sentence_complete": true,
@@ -1272,7 +1212,7 @@
       "readability_score": "A2"
     },
     {
-      "index": 105,
+      "index": 100,
       "text": "they are at war with us.",
       "start": 339.0016,
       "duration": 1.5103999999999906,
@@ -1284,7 +1224,7 @@
       "readability_score": "A2"
     },
     {
-      "index": 106,
+      "index": 101,
       "text": "What are we going to do about it?",
       "start": 340.4490666666667,
       "duration": 5.390933333333294,
@@ -1296,22 +1236,22 @@
       "readability_score": "A2"
     },
     {
-      "index": 107,
-      "text": ">> Charlie Kirk's a casualty of war.",
+      "index": 102,
+      "text": "Charlie Kirk's a casualty of war.",
       "start": 342.4,
-      "duration": 5.827714285714267,
-      "end": 348.2277142857142,
+      "duration": 5.7529999999999815,
+      "end": 348.15299999999996,
       "original_segments": 1,
       "sentence_complete": false,
       "break_reason": "unknown",
-      "word_count": 7,
+      "word_count": 6,
       "readability_score": "A2"
     },
     {
-      "index": 108,
+      "index": 103,
       "text": "We're the we're we're in this country.",
-      "start": 348.2277142857142,
-      "duration": 2.7322857142857515,
+      "start": 348.15299999999996,
+      "duration": 2.8070000000000164,
       "end": 350.96,
       "original_segments": 2,
       "sentence_complete": true,
@@ -1320,7 +1260,7 @@
       "readability_score": "A2"
     },
     {
-      "index": 109,
+      "index": 104,
       "text": "We are.",
       "start": 350.96,
       "duration": 1.279999999999995,
@@ -1332,7 +1272,7 @@
       "readability_score": "A2"
     },
     {
-      "index": 110,
+      "index": 105,
       "text": "Charlie Kirk was very big online as was the reaction to his murder,",
       "start": 349.199,
       "duration": 7.101129870129871,
@@ -1344,7 +1284,7 @@
       "readability_score": "A2"
     },
     {
-      "index": 111,
+      "index": 106,
       "text": "including calls to punish left-wing activists.",
       "start": 356.30012987012987,
       "duration": 3.2198701298701167,
@@ -1356,7 +1296,7 @@
       "readability_score": "A2"
     },
     {
-      "index": 112,
+      "index": 107,
       "text": "Right-wing journalist Matt Forn said,",
       "start": 357.36,
       "duration": 4.480000000000018,
@@ -1368,7 +1308,7 @@
       "readability_score": "A2"
     },
     {
-      "index": 113,
+      "index": 108,
       "text": "\"Charlie Kurt being assassinated is the American Reich stag fire.",
       "start": 359.52,
       "duration": 5.924050632911383,
@@ -1380,7 +1320,7 @@
       "readability_score": "A2"
     },
     {
-      "index": 114,
+      "index": 109,
       "text": "It's time for a complete crackdown on the left.",
       "start": 365.44405063291134,
       "duration": 2.7342570593963273,
@@ -1392,7 +1332,7 @@
       "readability_score": "A2"
     },
     {
-      "index": 115,
+      "index": 110,
       "text": "Every Democratic politician must be arrested and the party banned.\" This clip of Kirk defending gun rights has been used by left-wingers online to ridicule his murder.",
       "start": 368.17830769230767,
       "duration": 9.828452871072557,
@@ -1404,7 +1344,7 @@
       "readability_score": "A2"
     },
     {
-      "index": 116,
+      "index": 111,
       "text": "I I think it's I think it's worth it.",
       "start": 378.0067605633802,
       "duration": 1.2198446997776387,
@@ -1416,7 +1356,7 @@
       "readability_score": "A2"
     },
     {
-      "index": 117,
+      "index": 112,
       "text": "I think it's worth to have a cost of unfortunately some gun deaths every single year so that we can have the second amendment to protect our other god-given rights.",
       "start": 379.22660526315786,
       "duration": 11.137031100478453,
@@ -1428,7 +1368,7 @@
       "readability_score": "A2"
     },
     {
-      "index": 118,
+      "index": 113,
       "text": "That is a prudent deal.",
       "start": 390.3636363636363,
       "duration": 3.5553636363636656,
@@ -1440,31 +1380,31 @@
       "readability_score": "A2"
     },
     {
-      "index": 119,
-      "text": ">> A prominent Democrat directly blamed politicians who'd voted against gun control.",
+      "index": 114,
+      "text": "A prominent Democrat directly blamed politicians who'd voted against gun control.",
       "start": 391.6,
       "duration": 7.67999999999995,
       "end": 399.28,
       "original_segments": 3,
       "sentence_complete": true,
       "break_reason": "punctuation",
-      "word_count": 12,
+      "word_count": 11,
       "readability_score": "A2"
     },
     {
-      "index": 120,
-      "text": ">> People can fingerpoint all they want.",
+      "index": 115,
+      "text": "People can fingerpoint all they want.",
       "start": 396.639,
       "duration": 6.0,
       "end": 402.639,
       "original_segments": 1,
       "sentence_complete": true,
       "break_reason": "punctuation",
-      "word_count": 7,
+      "word_count": 6,
       "readability_score": "A2"
     },
     {
-      "index": 121,
+      "index": 116,
       "text": "Look at the record.",
       "start": 399.28,
       "duration": 2.53284615384616,
@@ -1476,7 +1416,7 @@
       "readability_score": "A2"
     },
     {
-      "index": 122,
+      "index": 117,
       "text": "Look at the actions of what we are doing.",
       "start": 401.8128461538461,
       "duration": 3.0964241164241457,
@@ -1488,7 +1428,7 @@
       "readability_score": "A2"
     },
     {
-      "index": 123,
+      "index": 118,
       "text": "I don't think a single person who has dedicated their entire career to preventing gun safety",
       "start": 404.90927027027027,
       "duration": 6.706990990990986,
@@ -1500,7 +1440,7 @@
       "readability_score": "A2"
     },
     {
-      "index": 124,
+      "index": 119,
       "text": "legislation from getting passed in this house has any right to blame anybody elsebut",
       "start": 411.61626126126123,
       "duration": 5.8686171171171395,
@@ -1512,7 +1452,7 @@
       "readability_score": "A2"
     },
     {
-      "index": 125,
+      "index": 120,
       "text": "themselves for what is happening.",
       "start": 417.48487837837837,
       "duration": 2.0959346846846847,
@@ -1524,19 +1464,19 @@
       "readability_score": "A2"
     },
     {
-      "index": 126,
-      "text": ">> The liberalleleaning TV network MSNBC has fired a political analyst who seemed to blame Kirk's killing on Kirk himself.",
+      "index": 121,
+      "text": "The liberalleleaning TV network MSNBC has fired a political analyst who seemed to blame Kirk's killing on Kirk himself.",
       "start": 417.12,
       "duration": 9.91900000000004,
       "end": 427.03900000000004,
       "original_segments": 3,
       "sentence_complete": true,
       "break_reason": "punctuation",
-      "word_count": 20,
+      "word_count": 19,
       "readability_score": "A2"
     },
     {
-      "index": 127,
+      "index": 122,
       "text": "He's been one of the most divisive,",
       "start": 424.88,
       "duration": 4.240000000000009,
@@ -1548,7 +1488,7 @@
       "readability_score": "A2"
     },
     {
-      "index": 128,
+      "index": 123,
       "text": "especially divisive younger figures in this who is constantly sort of pushing this sort of hate speech or sort of aimed at certain groups.",
       "start": 427.039,
       "duration": 10.290230769230789,
@@ -1560,7 +1500,7 @@
       "readability_score": "A2"
     },
     {
-      "index": 129,
+      "index": 124,
       "text": "Just you can't stop with these sort of awful thoughts you have and then saying these awful words and not expect awful actions to take place.",
       "start": 437.3292307692308,
       "duration": 8.670769230769224,
@@ -1572,22 +1512,22 @@
       "readability_score": "A2"
     },
     {
-      "index": 130,
-      "text": ">> You should be allowed to say outrageous things.",
+      "index": 125,
+      "text": "You should be allowed to say outrageous things.",
       "start": 444.0,
-      "duration": 3.6962025316455542,
-      "end": 447.69620253164555,
+      "duration": 3.6115789473684057,
+      "end": 447.6115789473684,
       "original_segments": 1,
       "sentence_complete": false,
       "break_reason": "unknown",
-      "word_count": 9,
+      "word_count": 8,
       "readability_score": "A2"
     },
     {
-      "index": 131,
+      "index": 126,
       "text": "You should be allowed to say contrarian things.",
-      "start": 447.69620253164555,
-      "duration": 1.6806395736176114,
+      "start": 447.6115789473684,
+      "duration": 1.7652631578947648,
       "end": 449.37684210526317,
       "original_segments": 2,
       "sentence_complete": true,
@@ -1596,7 +1536,7 @@
       "readability_score": "A2"
     },
     {
-      "index": 132,
+      "index": 127,
       "text": "Kirk's organization said he had received many threats against him,",
       "start": 449.37684210526317,
       "duration": 4.077032894736817,
@@ -1608,7 +1548,7 @@
       "readability_score": "A2"
     },
     {
-      "index": 133,
+      "index": 128,
       "text": "but believed in the power of good faith debate to bring people to mutual understanding,",
       "start": 453.453875,
       "duration": 4.902586538461549,
@@ -1620,7 +1560,7 @@
       "readability_score": "A2"
     },
     {
-      "index": 134,
+      "index": 129,
       "text": "if not agreement.",
       "start": 458.35646153846153,
       "duration": 2.363538461538453,
@@ -1632,7 +1572,7 @@
       "readability_score": "A2"
     },
     {
-      "index": 135,
+      "index": 130,
       "text": "They say he's now become a martyr to free speech.",
       "start": 458.639,
       "duration": 5.070520000000015,
@@ -1644,7 +1584,7 @@
       "readability_score": "A2"
     },
     {
-      "index": 136,
+      "index": 131,
       "text": "Meanwhile, new details in the investigation emerged.",
       "start": 463.81300000000005,
       "duration": 2.7469999999999573,
@@ -1656,7 +1596,7 @@
       "readability_score": "A2"
     },
     {
-      "index": 137,
+      "index": 132,
       "text": "The FBI said they'd recovered a high-powered bolt-action rifle,",
       "start": 466.56,
       "duration": 4.94476190476189,
@@ -1668,7 +1608,7 @@
       "readability_score": "A2"
     },
     {
-      "index": 138,
+      "index": 133,
       "text": "and they now had a timeline of the gunman's movements.",
       "start": 471.5047619047619,
       "duration": 5.61523809523811,
@@ -1680,7 +1620,7 @@
       "readability_score": "A2"
     },
     {
-      "index": 139,
+      "index": 134,
       "text": "Starting at 11:52 a.m.,",
       "start": 473.52,
       "duration": 2.2749090909090897,
@@ -1692,7 +1632,7 @@
       "readability_score": "A2"
     },
     {
-      "index": 140,
+      "index": 135,
       "text": "this subject arrived on campus shortly away from campus.",
       "start": 475.8938181818182,
       "duration": 5.538909090909088,
@@ -1704,7 +1644,7 @@
       "readability_score": "A2"
     },
     {
-      "index": 141,
+      "index": 136,
       "text": "We have tracked his movements onto the campus,",
       "start": 481.3338181818182,
       "duration": 1.9131818181818403,
@@ -1716,7 +1656,7 @@
       "readability_score": "A2"
     },
     {
-      "index": 142,
+      "index": 137,
       "text": "through the stairwells,",
       "start": 483.247,
       "duration": 3.0720000000000027,
@@ -1728,7 +1668,7 @@
       "readability_score": "A2"
     },
     {
-      "index": 143,
+      "index": 138,
       "text": "up to the roof,",
       "start": 484.4,
       "duration": 1.6800000000000066,
@@ -1740,7 +1680,7 @@
       "readability_score": "A2"
     },
     {
-      "index": 144,
+      "index": 139,
       "text": "across the roof to a shooting location.",
       "start": 486.08,
       "duration": 4.480000000000018,
@@ -1752,7 +1692,7 @@
       "readability_score": "A2"
     },
     {
-      "index": 145,
+      "index": 140,
       "text": "After the shooting,",
       "start": 489.199,
       "duration": 1.3764729729729703,
@@ -1764,7 +1704,7 @@
       "readability_score": "A2"
     },
     {
-      "index": 146,
+      "index": 141,
       "text": "we were able to track his movements as he moved to the other side of the building,",
       "start": 490.575472972973,
       "duration": 4.966065488565505,
@@ -1776,7 +1716,7 @@
       "readability_score": "A2"
     },
     {
-      "index": 147,
+      "index": 142,
       "text": "jumped off of the building,",
       "start": 495.64307692307693,
       "duration": 2.741538461538467,
@@ -1788,7 +1728,7 @@
       "readability_score": "A2"
     },
     {
-      "index": 148,
+      "index": 143,
       "text": "and fled um off of the campus and into a neighborhood.",
       "start": 498.2830769230769,
       "duration": 3.6556862348177788,
@@ -1800,7 +1740,7 @@
       "readability_score": "A2"
     },
     {
-      "index": 149,
+      "index": 144,
       "text": "At the same news conference late on Thursday,",
       "start": 501.9387631578947,
       "duration": 3.1812368421053066,
@@ -1812,7 +1752,7 @@
       "readability_score": "A2"
     },
     {
-      "index": 150,
+      "index": 145,
       "text": "the governor of Utah made this plea for any information that could help catch the shooter.",
       "start": 502.72,
       "duration": 7.999999999999943,
@@ -1824,22 +1764,22 @@
       "readability_score": "A2"
     },
     {
-      "index": 151,
-      "text": ">> We cannot do our job without the public's help right now.",
+      "index": 146,
+      "text": "We cannot do our job without the public's help right now.",
       "start": 508.639,
-      "duration": 6.035142857142903,
-      "end": 514.6741428571429,
+      "duration": 5.990104477611986,
+      "end": 514.629104477612,
       "original_segments": 1,
       "sentence_complete": false,
       "break_reason": "unknown",
-      "word_count": 12,
+      "word_count": 11,
       "readability_score": "A2"
     },
     {
-      "index": 152,
+      "index": 147,
       "text": "We uh the public has answered our call for action.",
-      "start": 514.6741428571429,
-      "duration": 3.9658571428570895,
+      "start": 514.629104477612,
+      "duration": 4.010895522387955,
       "end": 518.64,
       "original_segments": 2,
       "sentence_complete": true,
@@ -1848,7 +1788,7 @@
       "readability_score": "A2"
     },
     {
-      "index": 153,
+      "index": 148,
       "text": "So far,",
       "start": 515.68,
       "duration": 0.7272727272727273,
@@ -1860,7 +1800,7 @@
       "readability_score": "A2"
     },
     {
-      "index": 154,
+      "index": 149,
       "text": "we've received more than 7,000 leads and tips.",
       "start": 516.5111688311688,
       "duration": 4.779220779220779,
@@ -1872,7 +1812,7 @@
       "readability_score": "A2"
     },
     {
-      "index": 155,
+      "index": 150,
       "text": "Uh I I would just note that the FBI hasn't received this many digital media tips from the public since the Boston Marathon bombing.",
       "start": 521.1864935064934,
       "duration": 10.573506493506557,
@@ -1884,7 +1824,7 @@
       "readability_score": "A2"
     },
     {
-      "index": 156,
+      "index": 151,
       "text": "With this new information came a clearer picture of how the assassination unfolded.",
       "start": 529.2,
       "duration": 7.666181818181708,
@@ -1896,7 +1836,7 @@
       "readability_score": "A2"
     },
     {
-      "index": 157,
+      "index": 152,
       "text": "BBC Verifi's Nick Beak was piecing together what we knew on the ground in Utah.",
       "start": 536.8661818181818,
       "duration": 7.133818181818242,
@@ -1908,19 +1848,19 @@
       "readability_score": "A2"
     },
     {
-      "index": 158,
-      "text": ">> Footage released by the FBI shows a figure running across a roof from where Charlie Kirk was shot dead,",
+      "index": 153,
+      "text": "Footage released by the FBI shows a figure running across a roof from where Charlie Kirk was shot dead,",
       "start": 541.6,
       "duration": 8.123544303797416,
       "end": 549.7235443037974,
       "original_segments": 3,
       "sentence_complete": true,
       "break_reason": "recursive_merge_2_segments",
-      "word_count": 20,
+      "word_count": 19,
       "readability_score": "A2"
     },
     {
-      "index": 159,
+      "index": 154,
       "text": "reaching the edge and then jumping down,",
       "start": 549.8288607594936,
       "duration": 4.212658227848127,
@@ -1932,7 +1872,7 @@
       "readability_score": "A2"
     },
     {
-      "index": 160,
+      "index": 155,
       "text": "apparently carrying a bag before briskly walking away from the chaos unfolding on campus.",
       "start": 553.9362025316456,
       "duration": 6.543797468354455,
@@ -1944,7 +1884,7 @@
       "readability_score": "A2"
     },
     {
-      "index": 161,
+      "index": 156,
       "text": "The hunt for Charlie Kirk's killer entered a second night.",
       "start": 558.64,
       "duration": 5.084931506849297,
@@ -1956,7 +1896,7 @@
       "readability_score": "A2"
     },
     {
-      "index": 162,
+      "index": 157,
       "text": "Special agents gathering evidence here at Utah Valley University and elsewhere.",
       "start": 563.7249315068493,
       "duration": 5.4072203918848345,
@@ -1968,7 +1908,7 @@
       "readability_score": "A2"
     },
     {
-      "index": 163,
+      "index": 158,
       "text": "So, what do we know about the investigation so far?",
       "start": 569.2273417721518,
       "duration": 3.02065822784823,
@@ -1980,7 +1920,7 @@
       "readability_score": "A2"
     },
     {
-      "index": 164,
+      "index": 159,
       "text": "The FBI have released these new sharper images of someone they're calling a person of interest.",
       "start": 572.248,
       "duration": 6.4682962962962165,
@@ -1992,7 +1932,7 @@
       "readability_score": "A2"
     },
     {
-      "index": 165,
+      "index": 160,
       "text": "The FBI says the bullet was fired from this building,",
       "start": 578.7162962962963,
       "duration": 3.7637037037037544,
@@ -2004,7 +1944,7 @@
       "readability_score": "A2"
     },
     {
-      "index": 166,
+      "index": 161,
       "text": "the Lucy Center,",
       "start": 582.6,
       "duration": 1.9200000000000046,
@@ -2016,7 +1956,7 @@
       "readability_score": "A2"
     },
     {
-      "index": 167,
+      "index": 162,
       "text": "some 130 m away from where Charlie Kirk was speaking.",
       "start": 584.4,
       "duration": 3.8133333333333894,
@@ -2028,7 +1968,7 @@
       "readability_score": "A2"
     },
     {
-      "index": 168,
+      "index": 163,
       "text": "The new CCTV appears to show a person heading for this road called Campus Drive.",
       "start": 588.2133333333334,
       "duration": 6.745666666666693,
@@ -2040,7 +1980,7 @@
       "readability_score": "A2"
     },
     {
-      "index": 169,
+      "index": 164,
       "text": "Investigators say they recovered a weapon,",
       "start": 592.88,
       "duration": 4.495135135135111,
@@ -2052,7 +1992,7 @@
       "readability_score": "A2"
     },
     {
-      "index": 170,
+      "index": 165,
       "text": "a rifle over the road.",
       "start": 597.4821621621621,
       "duration": 2.3545945945945825,
@@ -2064,7 +2004,7 @@
       "readability_score": "A2"
     },
     {
-      "index": 171,
+      "index": 166,
       "text": "We think it could be in this wooded area here.",
       "start": 599.7297297297297,
       "duration": 2.9902702702703436,
@@ -2076,7 +2016,7 @@
       "readability_score": "A2"
     },
     {
-      "index": 172,
+      "index": 167,
       "text": "Beyond the campus,",
       "start": 600.8,
       "duration": 1.4272566371681474,
@@ -2088,7 +2028,7 @@
       "readability_score": "A2"
     },
     {
-      "index": 173,
+      "index": 168,
       "text": "investigators have been working to pick up the killer's trail.",
       "start": 602.3065486725664,
       "duration": 4.916106194690285,
@@ -2100,7 +2040,7 @@
       "readability_score": "A2"
     },
     {
-      "index": 174,
+      "index": 169,
       "text": "But there are clues left behind at the scene.",
       "start": 607.1433628318584,
       "duration": 2.1878804113847536,
@@ -2112,7 +2052,7 @@
       "readability_score": "A2"
     },
     {
-      "index": 175,
+      "index": 170,
       "text": "Drone footage shows the campus frozen in time.",
       "start": 609.3312432432432,
       "duration": 3.5420388080387966,
@@ -2124,7 +2064,7 @@
       "readability_score": "A2"
     },
     {
-      "index": 176,
+      "index": 171,
       "text": "Here on the roof of the Lucy Center,",
       "start": 612.873282051282,
       "duration": 1.9838608058608997,
@@ -2136,7 +2076,7 @@
       "readability_score": "A2"
     },
     {
-      "index": 177,
+      "index": 172,
       "text": "you can see these indentations highlighted with these orange markers.",
       "start": 614.9485714285714,
       "duration": 6.308571428571365,
@@ -2148,7 +2088,7 @@
       "readability_score": "A2"
     },
     {
-      "index": 178,
+      "index": 173,
       "text": "The FBI have said they found palm prints and footprints.",
       "start": 621.1657142857142,
       "duration": 4.712180451127892,
@@ -2160,7 +2100,7 @@
       "readability_score": "A2"
     },
     {
-      "index": 179,
+      "index": 174,
       "text": "From this elevated spot,",
       "start": 625.8778947368421,
       "duration": -0.026091458153587155,
@@ -2172,7 +2112,7 @@
       "readability_score": "A2"
     },
     {
-      "index": 180,
+      "index": 175,
       "text": "it was a clear shot towards Charlie Kirk.",
       "start": 625.8518032786885,
       "duration": 5.508196721311475,
@@ -2184,22 +2124,22 @@
       "readability_score": "A2"
     },
     {
-      "index": 181,
-      "text": ">> As the manhunt continued,",
+      "index": 176,
+      "text": "As the manhunt continued,",
       "start": 629.36,
-      "duration": 2.2698666666666822,
-      "end": 631.6298666666667,
+      "duration": 2.1111111111111254,
+      "end": 631.4711111111111,
       "original_segments": 1,
       "sentence_complete": false,
       "break_reason": "unknown",
-      "word_count": 5,
+      "word_count": 4,
       "readability_score": "A2"
     },
     {
-      "index": 182,
+      "index": 177,
       "text": "the US president led tributes to Charlie Kirk,",
-      "start": 631.6298666666667,
-      "duration": 3.8101333333333587,
+      "start": 631.4711111111111,
+      "duration": 3.9688888888889156,
       "end": 635.44,
       "original_segments": 1,
       "sentence_complete": false,
@@ -2208,7 +2148,7 @@
       "readability_score": "A2"
     },
     {
-      "index": 183,
+      "index": 178,
       "text": "postumously awarding him America's highest civilian honor.",
       "start": 633.44,
       "duration": 7.360000000000014,
@@ -2220,22 +2160,22 @@
       "readability_score": "A2"
     },
     {
-      "index": 184,
-      "text": ">> We miss him greatly.",
+      "index": 179,
+      "text": "We miss him greatly.",
       "start": 638.56,
-      "duration": 2.517894736842086,
-      "end": 641.077894736842,
+      "duration": 2.377142857142839,
+      "end": 640.9371428571428,
       "original_segments": 1,
       "sentence_complete": false,
       "break_reason": "unknown",
-      "word_count": 5,
+      "word_count": 4,
       "readability_score": "A2"
     },
     {
-      "index": 185,
+      "index": 180,
       "text": "Yet, I have no doubt that Charlie's voice and the courage he put into the hearts of countless people,",
-      "start": 641.1873684210526,
-      "duration": 8.829660705161018,
+      "start": 641.0559999999999,
+      "duration": 8.961029126213703,
       "end": 650.0170291262136,
       "original_segments": 3,
       "sentence_complete": true,
@@ -2244,7 +2184,7 @@
       "readability_score": "A2"
     },
     {
-      "index": 186,
+      "index": 181,
       "text": "especially young people,",
       "start": 650.0170291262136,
       "duration": -0.7681402373248147,
@@ -2256,7 +2196,7 @@
       "readability_score": "A2"
     },
     {
-      "index": 187,
+      "index": 182,
       "text": "will live on.",
       "start": 649.4044444444444,
       "duration": 2.0222222222222306,
@@ -2268,7 +2208,7 @@
       "readability_score": "A2"
     },
     {
-      "index": 188,
+      "index": 183,
       "text": "I'm pleased to announce that I will soon be awarding Charlie Kirk postumously the Presidential Medal of Freedom.",
       "start": 651.271111111111,
       "duration": 9.541196581196687,
@@ -2280,7 +2220,7 @@
       "readability_score": "A2"
     },
     {
-      "index": 189,
+      "index": 184,
       "text": "The date of the ceremony will be announced and I can only guarantee you one thing that we will have a very big crowd.",
       "start": 660.8123076923077,
       "duration": 8.227692307692223,
@@ -2292,7 +2232,7 @@
       "readability_score": "A2"
     },
     {
-      "index": 190,
+      "index": 185,
       "text": "And a further distinction for Charlie Kirk came later on Thursday.",
       "start": 667.279,
       "duration": 5.577464788732394,
@@ -2304,7 +2244,7 @@
       "readability_score": "A2"
     },
     {
-      "index": 191,
+      "index": 186,
       "text": "Vice President JD Vance flying to Utah to collect the casket,",
       "start": 672.8564647887324,
       "duration": 2.588569694026205,
@@ -2316,7 +2256,7 @@
       "readability_score": "A2"
     },
     {
-      "index": 192,
+      "index": 187,
       "text": "carrying it aboard Air Force 2 to Charlie Kirk's home state of Arizona.",
       "start": 675.4450344827586,
       "duration": 3.797506057782016,
@@ -2328,7 +2268,7 @@
       "readability_score": "A2"
     },
     {
-      "index": 193,
+      "index": 188,
       "text": "The vice president's wife was seen comforting his widow.",
       "start": 679.2425405405406,
       "duration": 6.14251209103827,
@@ -2340,7 +2280,7 @@
       "readability_score": "A2"
     },
     {
-      "index": 194,
+      "index": 189,
       "text": "He also leaves behind two young children.",
       "start": 685.3850526315789,
       "duration": 3.8939473684210952,
@@ -2352,7 +2292,7 @@
       "readability_score": "A2"
     },
     {
-      "index": 195,
+      "index": 190,
       "text": "Friday came and America was gripped by a huge manhunt involving thousands of law enforcement officials.",
       "start": 686.8,
       "duration": 7.898652892561981,
@@ -2364,7 +2304,7 @@
       "readability_score": "A2"
     },
     {
-      "index": 196,
+      "index": 191,
       "text": "As Americans were waking up,",
       "start": 694.6986528925619,
       "duration": 0.7487681600696305,
@@ -2376,7 +2316,7 @@
       "readability_score": "A2"
     },
     {
-      "index": 197,
+      "index": 192,
       "text": "President Trump appeared on Fox News.",
       "start": 695.4474210526315,
       "duration": 1.603578947368419,
@@ -2388,7 +2328,7 @@
       "readability_score": "A2"
     },
     {
-      "index": 198,
+      "index": 193,
       "text": "And this was the moment,",
       "start": 697.159,
       "duration": 2.59200000000003,
@@ -2400,7 +2340,7 @@
       "readability_score": "A2"
     },
     {
-      "index": 199,
+      "index": 194,
       "text": "a key development.",
       "start": 699.643,
       "duration": 3.3159999999999172,
@@ -2412,35 +2352,35 @@
       "readability_score": "A2"
     },
     {
-      "index": 200,
-      "text": ">> I think uh with a high degree of certainty,",
+      "index": 195,
+      "text": "I think uh with a high degree of certainty,",
       "start": 700.399,
-      "duration": 6.535965517241368,
-      "end": 706.9349655172414,
+      "duration": 6.442963636363626,
+      "end": 706.8419636363636,
       "original_segments": 1,
       "sentence_complete": false,
       "break_reason": "unknown",
-      "word_count": 10,
+      "word_count": 9,
       "readability_score": "A2"
     },
     {
-      "index": 201,
-      "text": "we have him >> in custody,",
-      "start": 706.9349655172414,
-      "duration": 0.1710900383141052,
-      "end": 707.1060555555555,
+      "index": 196,
+      "text": "we have him in custody,",
+      "start": 706.8419636363636,
+      "duration": -0.0426303030303643,
+      "end": 706.7993333333333,
       "original_segments": 2,
       "sentence_complete": true,
       "break_reason": "recursive_merge_2_segments",
-      "word_count": 6,
+      "word_count": 5,
       "readability_score": "A2"
     },
     {
-      "index": 202,
+      "index": 197,
       "text": "right? In custody.",
-      "start": 707.2594166666665,
-      "duration": 2.7605000000000928,
-      "end": 710.0199166666666,
+      "start": 706.9666363636363,
+      "duration": 3.0114545454545123,
+      "end": 709.9780909090908,
       "original_segments": 2,
       "sentence_complete": true,
       "break_reason": "recursive_merge_2_segments",
@@ -2448,10 +2388,10 @@
       "readability_score": "A2"
     },
     {
-      "index": 203,
+      "index": 198,
       "text": "Uh everyone did a great job.",
-      "start": 709.7131944444443,
-      "duration": 1.4268055555556884,
+      "start": 709.6434848484847,
+      "duration": 1.4965151515152684,
       "end": 711.14,
       "original_segments": 2,
       "sentence_complete": true,
@@ -2460,7 +2400,7 @@
       "readability_score": "A2"
     },
     {
-      "index": 204,
+      "index": 199,
       "text": "We worked with the local police,",
       "start": 711.14,
       "duration": 1.8845161290322494,
@@ -2472,7 +2412,7 @@
       "readability_score": "A2"
     },
     {
-      "index": 205,
+      "index": 200,
       "text": "the governor,",
       "start": 713.0245161290322,
       "duration": 2.095483870967736,
@@ -2484,7 +2424,7 @@
       "readability_score": "A2"
     },
     {
-      "index": 206,
+      "index": 201,
       "text": "everybody did a great job,",
       "start": 712.64,
       "duration": 3.177777777777761,
@@ -2496,7 +2436,7 @@
       "readability_score": "A2"
     },
     {
-      "index": 207,
+      "index": 202,
       "text": "you know,",
       "start": 715.8177777777778,
       "duration": 1.222222222222216,
@@ -2508,7 +2448,7 @@
       "readability_score": "A2"
     },
     {
-      "index": 208,
+      "index": 203,
       "text": "getting somebody that you start off with absolutely nothing.",
       "start": 715.12,
       "duration": 4.559999999999945,
@@ -2520,22 +2460,22 @@
       "readability_score": "A2"
     },
     {
-      "index": 209,
-      "text": "We started off with the clip that made him look like an ant >> that was almost useless.",
+      "index": 204,
+      "text": "We started off with the clip that made him look like an ant that was almost useless.",
       "start": 719.68,
-      "duration": 5.521873417721622,
-      "end": 725.2018734177216,
+      "duration": 5.477736842105401,
+      "end": 725.1577368421054,
       "original_segments": 2,
       "sentence_complete": true,
       "break_reason": "recursive_merge_2_segments",
-      "word_count": 18,
+      "word_count": 17,
       "readability_score": "A2"
     },
     {
-      "index": 210,
+      "index": 205,
       "text": "We just saw there was somebody up there and uh so much work has been done over the last two and a half days.",
-      "start": 725.2018734177216,
-      "duration": 4.549660828853803,
+      "start": 725.1577368421054,
+      "duration": 4.593797404470024,
       "end": 729.7515342465754,
       "original_segments": 3,
       "sentence_complete": true,
@@ -2544,7 +2484,7 @@
       "readability_score": "A2"
     },
     {
-      "index": 211,
+      "index": 206,
       "text": "You know,",
       "start": 729.810698630137,
       "duration": 0.5324794520547895,
@@ -2556,7 +2496,7 @@
       "readability_score": "A2"
     },
     {
-      "index": 212,
+      "index": 207,
       "text": "it's amazing actually when you start off with that and then all of a sudden you uh you get lucky or talent or whatever it is.",
       "start": 730.2840136986301,
       "duration": 8.755986301369944,
@@ -2568,22 +2508,22 @@
       "readability_score": "A2"
     },
     {
-      "index": 213,
-      "text": ">> Soon after,",
+      "index": 208,
+      "text": "Soon after,",
       "start": 736.48,
-      "duration": 1.469090909090896,
-      "end": 737.949090909091,
+      "duration": 1.2010810810810704,
+      "end": 737.6810810810811,
       "original_segments": 1,
       "sentence_complete": false,
       "break_reason": "unknown",
-      "word_count": 3,
+      "word_count": 2,
       "readability_score": "A2"
     },
     {
-      "index": 214,
+      "index": 209,
       "text": "officials in Utah confirmed 22year-old Tyler Robinson had been arrested late on Thursday night after a manhunt of 33 hours.",
-      "start": 737.949090909091,
-      "duration": 9.6100757575756,
+      "start": 737.6810810810811,
+      "duration": 9.878085585585495,
       "end": 747.5591666666666,
       "original_segments": 2,
       "sentence_complete": true,
@@ -2592,7 +2532,7 @@
       "readability_score": "A2"
     },
     {
-      "index": 215,
+      "index": 210,
       "text": "The state's governor said the suspect had been turned in by a friend of his family.",
       "start": 747.5591666666666,
       "duration": 6.2798333333334995,
@@ -2604,7 +2544,7 @@
       "readability_score": "A2"
     },
     {
-      "index": 216,
+      "index": 211,
       "text": "We got him.",
       "start": 751.839,
       "duration": 4.880999999999972,
@@ -2616,7 +2556,7 @@
       "readability_score": "A2"
     },
     {
-      "index": 217,
+      "index": 212,
       "text": "On the evening of September 11th,",
       "start": 753.839,
       "duration": 2.753793103448262,
@@ -2628,7 +2568,7 @@
       "readability_score": "A2"
     },
     {
-      "index": 218,
+      "index": 213,
       "text": "a family member of Tyler Robinson reached out to a family friend who contacted the Washington County Sheriff's",
       "start": 756.5927931034483,
       "duration": 6.874245899739148,
@@ -2640,7 +2580,7 @@
       "readability_score": "A2"
     },
     {
-      "index": 219,
+      "index": 214,
       "text": "Office with information that Robinson had confessed to them or implied that he had committed the incident.",
       "start": 763.4670390031874,
       "duration": 6.492343349753696,
@@ -2652,7 +2592,7 @@
       "readability_score": "A2"
     },
     {
-      "index": 220,
+      "index": 215,
       "text": "This information was relayed to the Utah County Sheriff's Office and scene investigators at Utah Valley University.",
       "start": 769.9593823529411,
       "duration": 8.47679156010247,
@@ -2664,7 +2604,7 @@
       "readability_score": "A2"
     },
     {
-      "index": 221,
+      "index": 216,
       "text": "This information was also conveyed to the FBI.",
       "start": 778.4361739130436,
       "duration": 4.283826086956424,
@@ -2676,7 +2616,7 @@
       "readability_score": "A2"
     },
     {
-      "index": 222,
+      "index": 217,
       "text": "And so they got him.",
       "start": 780.16,
       "duration": 2.6000000000000227,
@@ -2688,7 +2628,7 @@
       "readability_score": "A2"
     },
     {
-      "index": 223,
+      "index": 218,
       "text": "But the governor of Utah had more to say about politics and violence and the sorrow he felt in recent days.",
       "start": 782.76,
       "duration": 7.247777777777856,
@@ -2700,7 +2640,7 @@
       "readability_score": "A2"
     },
     {
-      "index": 224,
+      "index": 219,
       "text": "He had this to say about what Charlie Kirk was known for,",
       "start": 790.0077777777778,
       "duration": 3.5442222222221744,
@@ -2712,7 +2652,7 @@
       "readability_score": "A2"
     },
     {
-      "index": 225,
+      "index": 220,
       "text": "what he died doing,",
       "start": 793.663,
       "duration": 2.1089999999999987,
@@ -2724,7 +2664,7 @@
       "readability_score": "A2"
     },
     {
-      "index": 226,
+      "index": 221,
       "text": "debating with young people.",
       "start": 795.661,
       "duration": 3.2189999999999985,
@@ -2736,19 +2676,19 @@
       "readability_score": "A2"
     },
     {
-      "index": 227,
-      "text": ">> Young people loved Charlie and young people hated Charlie.",
+      "index": 222,
+      "text": "Young people loved Charlie and young people hated Charlie.",
       "start": 795.6,
       "duration": 10.0,
       "end": 805.6,
       "original_segments": 2,
       "sentence_complete": true,
       "break_reason": "punctuation",
-      "word_count": 10,
+      "word_count": 9,
       "readability_score": "A2"
     },
     {
-      "index": 228,
+      "index": 223,
       "text": "And Charlie went into those places anyway.",
       "start": 802.24,
       "duration": 8.080000000000041,
@@ -2760,7 +2700,7 @@
       "readability_score": "A2"
     },
     {
-      "index": 229,
+      "index": 224,
       "text": "And these are the words that have helped me.",
       "start": 807.68,
       "duration": 8.000000000000114,
@@ -2772,7 +2712,7 @@
       "readability_score": "A2"
     },
     {
-      "index": 230,
+      "index": 225,
       "text": "Charlie said, \"When people stop talking,",
       "start": 812.32,
       "duration": 6.958999999999946,
@@ -2784,7 +2724,7 @@
       "readability_score": "A2"
     },
     {
-      "index": 231,
+      "index": 226,
       "text": "that's when you get violence.\" He said, \"The weak can never forgive.",
       "start": 815.68,
       "duration": 7.680000000000064,
@@ -2796,7 +2736,7 @@
       "readability_score": "A2"
     },
     {
-      "index": 232,
+      "index": 227,
       "text": "Forgiveness is the attribute of the strong.",
       "start": 821.6,
       "duration": 5.339701492537272,
@@ -2808,7 +2748,7 @@
       "readability_score": "A2"
     },
     {
-      "index": 233,
+      "index": 228,
       "text": "The only way out of the labyrinth of suffering is to forgive.",
       "start": 826.9397014925373,
       "duration": 5.139298507462627,
@@ -2820,7 +2760,7 @@
       "readability_score": "A2"
     },
     {
-      "index": 234,
+      "index": 229,
       "text": "Welcome without judgment.",
       "start": 829.92,
       "duration": 3.947368421052632,
@@ -2832,7 +2772,7 @@
       "readability_score": "A2"
     },
     {
-      "index": 235,
+      "index": 230,
       "text": "Love without condition.",
       "start": 833.8673684210526,
       "duration": 0.2119256965944487,
@@ -2844,7 +2784,7 @@
       "readability_score": "A2"
     },
     {
-      "index": 236,
+      "index": 231,
       "text": "Forgive without limit.\" He said, \"Always forgive your enemies.",
       "start": 834.079294117647,
       "duration": 7.439705882352996,
@@ -2856,22 +2796,22 @@
       "readability_score": "A2"
     },
     {
-      "index": 237,
-      "text": "Nothing annoys them so much.\" >> Charlie Kirk was a divisive figure.",
+      "index": 232,
+      "text": "Nothing annoys them so much.\" Charlie Kirk was a divisive figure.",
       "start": 838.88,
-      "duration": 7.303013698630166,
-      "end": 846.1830136986301,
+      "duration": 7.28000000000003,
+      "end": 846.1600000000001,
       "original_segments": 1,
       "sentence_complete": false,
       "break_reason": "unknown",
-      "word_count": 12,
+      "word_count": 11,
       "readability_score": "A2"
     },
     {
-      "index": 238,
+      "index": 233,
       "text": "Now, as America prepares for his funeral,",
-      "start": 846.1830136986301,
-      "duration": 2.206459985580409,
+      "start": 846.1600000000001,
+      "duration": 2.229473684210461,
       "end": 848.3894736842105,
       "original_segments": 2,
       "sentence_complete": true,
@@ -2880,7 +2820,7 @@
       "readability_score": "A2"
     },
     {
-      "index": 239,
+      "index": 234,
       "text": "his fans and critics alike will have to contend with his legacy.",
       "start": 848.3894736842105,
       "duration": 4.610526315789457,
@@ -2892,7 +2832,7 @@
       "readability_score": "A2"
     },
     {
-      "index": 240,
+      "index": 235,
       "text": "[Music]",
       "start": 853.33,
       "duration": 3.25,
